@@ -1,0 +1,29 @@
+{
+  "name": "LagosFit",
+  "short_name": "LagosFit",
+  "description": "Find your perfect neighborhood in Lagos.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-package/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-package/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "lifestyle"
+  ],
+  "lang": "en",
+  "dir": "ltr"
+}
