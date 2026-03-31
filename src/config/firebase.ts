@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage'; // Added Storage import
 
 // IMPORTANT: Replace these with your actual Firebase project credentials
 // Go to https://console.firebase.google.com → Create Project → Project Settings → "Your apps" → Web app
@@ -16,6 +17,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app); // Added storage export
 export const googleProvider = new GoogleAuthProvider();
 
 // Configure Google provider for best UX

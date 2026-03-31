@@ -6,56 +6,99 @@ import {
     Search, MapPin, Navigation,
     Home, Clock,
     X, Map, ExternalLink, Activity, Compass,
-    Utensils, Dribbble
+    Utensils, Dribbble, Heart
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import { PLACES_TO_VISIT, WHAT_TO_EAT } from '../data/lifestyle_data';
 import { calculateDistance } from '../utils/distance';
+import PaywallCard from './PaywallCard';
+import SolarSolutions from './SolarSolutions';
+import ReviewSection from './ReviewSection';
+import SEO from './SEO';
 
 const ExplorePage = () => {
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const location = useLocation();
     const navigate = useNavigate();
+    const { user, toggleFavorite } = useAuth();
     const [searchTerm, setSearchTerm] = useState('');
+    const [sortBy, setSortBy] = useState<'name-asc' | 'name-desc' | 'price-asc' | 'price-desc'>('name-asc');
     const [selectedAreaId, setSelectedAreaId] = useState<string | null>(location.state?.selectedId || null);
     const [activeSubLocality, setActiveSubLocality] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'reviews' | 'perks'>('reviews');
 
-    const filteredAreas = AREAS.filter(area =>
-        area.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        area.description[language].toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredAreas = AREAS
+        .filter(area =>
+            area.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            area.description[language].toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .sort((a, b) => {
+            switch (sortBy) {
+                case 'name-asc': return a.name.localeCompare(b.name);
+                case 'name-desc': return b.name.localeCompare(a.name);
+                case 'price-asc': return a.minPrice - b.minPrice;
+                case 'price-desc': return b.minPrice - a.minPrice;
+                default: return 0;
+            }
+        });
 
     const selectedArea = selectedAreaId ? AREAS.find(a => a.id === selectedAreaId) : null;
 
     return (
         <div className="container" style={{ padding: '40px 24px' }}>
+            <SEO 
+                title={selectedArea ? `${selectedArea.name} Area Guide` : "Explore Lagos Neighborhoods"} 
+                description={selectedArea ? `Complete guide to ${selectedArea.name}. Explore hotspots, commute times, and living vibes.` : "Discover the best areas to live in Lagos. Search, sort, and filter through neighborhoods to find your perfect match."}
+            />
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                <h1 style={{ fontSize: '3rem', marginBottom: '16px' }}>Explore Lagos Areas</h1>
+                <h1 style={{ fontSize: '3rem', marginBottom: '16px' }}>{t('explore.title')}</h1>
                 <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem' }}>
-                    {language === 'en' ? 'Discover detailed insights about every neighborhood.' : 'Check everything about every area inside Lagos.'}
+                    {t('explore.subtitle')}
                 </p>
             </div>
 
             {/* Search Bar */}
-            <div style={{ maxWidth: '600px', margin: '0 auto 60px', position: 'relative' }}>
-                <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-                <input
-                    type="text"
-                    placeholder={language === 'en' ? "Search for an area (e.g. Yaba, Lekki)..." : "Find area (e.g. Yaba, Lekki)..."}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+            <div className="explore-filters" style={{ maxWidth: '800px', margin: '0 auto 60px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                <div style={{ position: 'relative', flex: 1 }}>
+                    <Search size={20} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                    <input
+                        type="text"
+                        placeholder={t('explore.search_placeholder')}
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        style={{
+                            width: '100%',
+                            padding: '16px 16px 16px 48px',
+                            fontSize: '1rem',
+                            borderRadius: '30px',
+                            border: '1px solid var(--border-color)',
+                            background: 'var(--secondary-bg)',
+                            color: 'var(--text-color)',
+                            outline: 'none'
+                        }}
+                    />
+                </div>
+                <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
                     style={{
-                        width: '100%',
-                        padding: '16px 16px 16px 48px',
-                        fontSize: '1rem',
+                        padding: '16px 20px',
                         borderRadius: '30px',
                         border: '1px solid var(--border-color)',
                         background: 'var(--secondary-bg)',
                         color: 'var(--text-color)',
+                        fontSize: '0.9rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
                         outline: 'none'
                     }}
-                />
+                >
+                    <option value="name-asc">{t('explore.sort.alpha_asc')}</option>
+                    <option value="name-desc">{t('explore.sort.alpha_desc')}</option>
+                    <option value="price-asc">{t('explore.sort.price_asc')}</option>
+                    <option value="price-desc">{t('explore.sort.price_desc')}</option>
+                </select>
             </div>
 
             {/* Grid */}
@@ -74,9 +117,44 @@ const ExplorePage = () => {
                         <div style={{ height: '160px', background: 'var(--primary-color)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundImage: 'url(/lagos_cityscape_illustration.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)' }} />
                             <div style={{ position: 'relative', textAlign: 'center', color: 'white' }}>
-                                <MapPin size={32} color="var(--accent-color)" />
-                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>{area.name}</h3>
+                                <MapPin size={32} color="var(--accent-color)" strokeWidth={1.5} />
+                                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, textShadow: '0 2px 4px rgba(0,0,0,0.5)', color: 'white' }}>{area.name}</h3>
                             </div>
+                            {/* Favorite Button */}
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!user) {
+                                        navigate('/login', { state: { from: location.pathname } });
+                                        return;
+                                    }
+                                    toggleFavorite(area.id);
+                                }}
+                                style={{
+                                    position: 'absolute',
+                                    top: '16px',
+                                    right: '16px',
+                                    background: 'rgba(255,255,255,0.2)',
+                                    backdropFilter: 'blur(8px)',
+                                    border: 'none',
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    color: (user?.favorites?.includes(area.id)) ? '#FFD700' : 'white',
+                                    transition: 'all 0.2s ease',
+                                    zIndex: 10
+                                }}
+                            >
+                                <Heart
+                                    size={18}
+                                    fill={(user?.favorites?.includes(area.id)) ? 'var(--accent-color)' : 'none'}
+                                    strokeWidth={1.5}
+                                />
+                            </button>
                         </div>
                         <div style={{ padding: '24px' }}>
                             <p style={{ color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: '20px', minHeight: '3em' }}>
@@ -84,7 +162,7 @@ const ExplorePage = () => {
                             </p>
 
                             <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid var(--border-color)' }}>
-                                <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>Avg. Rent</span>
+                                <span style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>{t('explore.avg_rent')}</span>
                                 <span style={{ fontWeight: 600, color: 'var(--primary-color)' }}>{area.priceRange[language]}</span>
                             </div>
 
@@ -100,11 +178,16 @@ const ExplorePage = () => {
                 ))}
             </div>
 
+            {/* Solar Solutions Section */}
+            <div style={{ marginTop: '80px' }}>
+                <SolarSolutions />
+            </div>
+
             {/* Explore More Section */}
             <div style={{ marginTop: '100px', borderTop: '1px solid var(--border-color)', paddingTop: '60px' }}>
                 <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>Experience Lagos</h2>
-                    <p style={{ color: 'var(--text-muted)' }}>Curated lists of where to go and what to eat.</p>
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('explore.experience_title')}</h2>
+                    <p style={{ color: 'var(--text-muted)' }}>{t('explore.experience_subtitle')}</p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
@@ -112,7 +195,7 @@ const ExplorePage = () => {
                     {/* Places to Visit */}
                     <div className="card" style={{ padding: '32px' }}>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <Map size={24} color="var(--primary-color)" /> Places You Need to Visit
+                            <Map size={24} color="var(--primary-color)" strokeWidth={1.5} /> {t('explore.visit_title')}
                         </h3>
                         <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                             {PLACES_TO_VISIT.map((item, i) => (
@@ -143,7 +226,7 @@ const ExplorePage = () => {
                     {/* What to Eat */}
                     <div className="card" style={{ padding: '32px' }}>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <Utensils size={24} color="var(--primary-color)" /> What to Eat
+                            <Utensils size={24} color="var(--primary-color)" strokeWidth={1.5} /> {t('explore.eat_title')}
                         </h3>
                         <div style={{ overflowY: 'auto', maxHeight: '400px', paddingRight: '12px' }}>
                             {Object.entries(WHAT_TO_EAT).map(([category, items]) => (
@@ -226,33 +309,33 @@ const ExplorePage = () => {
                                 {selectedArea.description[language]}
                             </p>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                                 <div>
-                                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>Price Range</h4>
+                                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>{t('explore.details.price_range')}</h4>
                                     <div style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--primary-color)' }}>
                                         {selectedArea.priceRange[language]}
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>Vibe / Noise</h4>
+                                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>{t('explore.details.vibe')}</h4>
                                     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                                         {selectedArea.attributes.noise.map(n => <span key={n} className="tag">{n}</span>)}
                                     </div>
                                 </div>
                             </div>
 
-                            <div style={{ marginTop: '32px', padding: '24px', background: 'var(--secondary-bg)', borderRadius: '16px' }}>
+                             <div style={{ marginTop: '32px', padding: '24px', background: 'var(--secondary-bg)', borderRadius: '16px' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                    <Clock size={16} color="var(--primary-color)" />
-                                    <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>Estimated Commute (Driving)</h4>
+                                    <Clock size={16} color="var(--primary-color)" strokeWidth={1.5} />
+                                    <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{t('explore.details.commute')}</h4>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <div>
-                                        <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)' }}>To Victoria Island</span>
+                                        <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t('explore.details.to_vi')}</span>
                                         <span style={{ fontWeight: 600 }}>{selectedArea.commuteTo.vi}</span>
                                     </div>
                                     <div>
-                                        <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)' }}>To Ikeja (Central)</span>
+                                        <span style={{ display: 'block', fontSize: '0.8rem', color: 'var(--text-muted)' }}>{t('explore.details.to_ikeja')}</span>
                                         <span style={{ fontWeight: 600 }}>{selectedArea.commuteTo.ikeja}</span>
                                     </div>
                                 </div>
@@ -260,9 +343,9 @@ const ExplorePage = () => {
 
                             {selectedArea.innerLocalities && selectedArea.innerLocalities.length > 0 && (
                                 <div style={{ marginTop: '32px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                        <MapPin size={16} color="var(--primary-color)" />
-                                        <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>Inner Localities & Areas</h4>
+                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                        <MapPin size={16} color="var(--primary-color)" strokeWidth={1.5} />
+                                        <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{t('explore.details.localities')}</h4>
                                     </div>
                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', position: 'relative' }}>
                                         {selectedArea.innerLocalities.map((loc, i) => (
@@ -330,7 +413,7 @@ const ExplorePage = () => {
                                                                 fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s'
                                                             }}
                                                         >
-                                                            STREET TALK
+                                                            {t('explore.details.street_talk')}
                                                         </button>
                                                         <button
                                                             onClick={() => setViewMode('perks')}
@@ -341,37 +424,57 @@ const ExplorePage = () => {
                                                                 fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s'
                                                             }}
                                                         >
-                                                            LOCAL PERKS
+                                                            {t('explore.details.local_perks')}
                                                         </button>
                                                     </div>
 
                                                     {viewMode === 'reviews' ? (
-                                                        <div style={{ background: 'rgba(var(--accent-rgb), 0.05)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(var(--accent-rgb), 0.1)' }}>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
-                                                                <Activity size={16} color="var(--accent-color)" />
-                                                                <strong style={{ fontSize: '0.8rem', color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>Map Talk (Street Reviews)</strong>
+                                                        <div style={{ position: 'relative' }}>
+                                                            <div style={{ 
+                                                                background: 'rgba(var(--accent-rgb), 0.05)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(var(--accent-rgb), 0.1)',
+                                                                filter: !user?.isPremium ? 'blur(8px)' : 'none',
+                                                                pointerEvents: !user?.isPremium ? 'none' : 'auto',
+                                                                userSelect: !user?.isPremium ? 'none' : 'auto'
+                                                            }}>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                                                                    <Activity size={16} color="var(--accent-color)" strokeWidth={1.5} />
+                                                                    <strong style={{ fontSize: '0.8rem', color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '1px' }}>Map Talk (Street Reviews)</strong>
+                                                                </div>
+                                                                <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
+                                                                    {
+                                                                        selectedArea.subLocalityInsights?.[activeSubLocality] ?
+                                                                            selectedArea.subLocalityInsights[activeSubLocality][language] :
+                                                                            (activeSubLocality.toLowerCase().includes('estate') ?
+                                                                                `"This is a strictly gated community. Security is 10/10 but you'll need a code for every visitor. Very quiet and elite vibe."` :
+                                                                                activeSubLocality.toLowerCase().includes('road') ?
+                                                                                    `"The main heartbeat of this area. Move here if you love being in the center of things, but expect some traffic during rush hours."` :
+                                                                                    `"This pocket of ${selectedArea.name} has a strong community feel. Residents highlight the ${language === 'en' ? 'accessibility and unique local character' : 'how things set for here and neighbors get sense'}."`)
+                                                                    }
+                                                                </p>
                                                             </div>
-                                                            <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.6, margin: 0, fontStyle: 'italic' }}>
-                                                                {
-                                                                    selectedArea.subLocalityInsights?.[activeSubLocality] ?
-                                                                        selectedArea.subLocalityInsights[activeSubLocality][language] :
-                                                                        (activeSubLocality.toLowerCase().includes('estate') ?
-                                                                            `"This is a strictly gated community. Security is 10/10 but you'll need a code for every visitor. Very quiet and elite vibe."` :
-                                                                            activeSubLocality.toLowerCase().includes('road') ?
-                                                                                `"The main heartbeat of this area. Move here if you love being in the center of things, but expect some traffic during rush hours."` :
-                                                                                `"This pocket of ${selectedArea.name} has a strong community feel. Residents highlight the ${language === 'en' ? 'accessibility and unique local character' : 'how things set for here and neighbors get sense'}."`)
-                                                                }
-                                                            </p>
+                                                            {!user?.isPremium && (
+                                                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                    <PaywallCard 
+                                                                        title="Unlock Street Talk" 
+                                                                        description="Get real, unedited reviews from residents in this exact pocket of the city." 
+                                                                    />
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     ) : (
-                                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                                        <div style={{ position: 'relative' }}>
+                                                            <div style={{ 
+                                                                display: 'flex', flexDirection: 'column', gap: '24px',
+                                                                filter: !user?.isPremium ? 'blur(8px)' : 'none',
+                                                                pointerEvents: !user?.isPremium ? 'none' : 'auto'
+                                                            }}>
                                                             {selectedArea.subLocalityDetails?.[activeSubLocality] ? (
                                                                 <>
 
                                                                     {selectedArea.subLocalityDetails[activeSubLocality].placesToVisit && (
                                                                         <div className="perk-section">
                                                                             <h6 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', color: 'var(--text-color)', marginBottom: '16px', fontWeight: 800 }}>
-                                                                                <Compass size={20} color="var(--primary-color)" /> Places to Visit
+                                                                                <Compass size={20} color="var(--primary-color)" strokeWidth={1.5} /> Places to Visit
                                                                             </h6>
                                                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                                                                 {selectedArea.subLocalityDetails[activeSubLocality].placesToVisit.map((p, i) => (
@@ -398,7 +501,7 @@ const ExplorePage = () => {
                                                                     {selectedArea.subLocalityDetails[activeSubLocality].whatToEat && (
                                                                         <div className="perk-section">
                                                                             <h6 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', color: 'var(--text-color)', marginBottom: '16px', fontWeight: 800 }}>
-                                                                                <Utensils size={20} color="var(--primary-color)" /> What to Eat
+                                                                                <Utensils size={20} color="var(--primary-color)" strokeWidth={1.5} /> What to Eat
                                                                             </h6>
                                                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                                                                 {selectedArea.subLocalityDetails[activeSubLocality].whatToEat.map((food, i) => (
@@ -422,7 +525,7 @@ const ExplorePage = () => {
                                                                                             e.currentTarget.style.transform = 'translateY(0)';
                                                                                         }}
                                                                                     >
-                                                                                        {food.name} {food.url && <ExternalLink size={12} opacity={0.6} />}
+                                                                                        {food.name} {food.url && <ExternalLink size={12} strokeWidth={1.5} opacity={0.6} />}
                                                                                     </a>
                                                                                 ))}
                                                                             </div>
@@ -431,7 +534,7 @@ const ExplorePage = () => {
                                                                     {selectedArea.subLocalityDetails[activeSubLocality].sports && (
                                                                         <div className="perk-section">
                                                                             <h6 style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1.1rem', color: 'var(--text-color)', marginBottom: '16px', fontWeight: 800 }}>
-                                                                                <Dribbble size={20} color="var(--primary-color)" /> Sports & Fitness
+                                                                                <Dribbble size={20} color="var(--primary-color)" strokeWidth={1.5} /> Sports & Fitness
                                                                             </h6>
                                                                             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '12px' }}>
                                                                                 {selectedArea.subLocalityDetails[activeSubLocality].sports.map((sport, i) => (
@@ -466,10 +569,19 @@ const ExplorePage = () => {
                                                                 </>
                                                             ) : (
                                                                 <p style={{ fontSize: '0.85rem', textAlign: 'center', padding: '20px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                                                                    We're still mapping the best spots in {activeSubLocality}. Check back soon for food and sport recommendations!
+                                                                    {t('explore.details.mapping_note').replace('{0}', activeSubLocality)}
                                                                 </p>
                                                             )}
                                                         </div>
+                                                        {!user?.isPremium && (
+                                                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                                <PaywallCard 
+                                                                    title="Unlock Local Perks" 
+                                                                    description="See the best-kept secrets, exclusive eateries, and sports clubs in this area." 
+                                                                />
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                     )}
                                                 </motion.div>
                                             )}
@@ -479,15 +591,15 @@ const ExplorePage = () => {
                             )}
 
                             <div style={{ marginTop: '32px' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                    <Map size={16} color="var(--primary-color)" />
-                                    <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>Popular Hotspots</h4>
-                                </div>
+                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                        <Map size={16} color="var(--primary-color)" strokeWidth={1.5} />
+                                        <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{t('explore.details.hotspots')}</h4>
+                                    </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
                                     {selectedArea.hotspots.map((spot, i) => (
                                         <div key={i} style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                                             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Utensils size={14} color="var(--text-muted)" />
+                                                <Utensils size={14} color="var(--text-muted)" strokeWidth={1.5} />
                                             </div>
                                             <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>{spot.name}</span>
                                         </div>
@@ -497,9 +609,9 @@ const ExplorePage = () => {
 
                             {selectedArea.coords && (
                                 <div style={{ marginTop: '32px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
-                                        <Navigation size={16} color="var(--primary-color)" />
-                                        <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>Proximity to Other Areas</h4>
+                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                                        <Navigation size={16} color="var(--primary-color)" strokeWidth={1.5} />
+                                        <h4 style={{ fontSize: '1rem', fontWeight: 600 }}>{t('explore.details.proximity')}</h4>
                                     </div>
                                     <div style={{ background: 'var(--secondary-bg)', borderRadius: '16px', padding: '20px' }}>
                                         <div style={{ display: 'grid', gap: '12px' }}>
@@ -524,31 +636,42 @@ const ExplorePage = () => {
                                                 ))
                                             }
                                         </div>
-                                        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '12px', fontStyle: 'italic' }}>
-                                            *Distances are approximate "as the crow flies".
+                                         <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '12px', fontStyle: 'italic' }}>
+                                            {t('explore.details.distance_note')}
                                         </p>
                                     </div>
                                 </div>
                             )}
 
-                            <div style={{ marginTop: '32px', padding: '32px', border: '2px dashed var(--accent-color)', borderRadius: '24px', textAlign: 'center' }}>
-                                <Home size={32} color="var(--accent-color)" style={{ marginBottom: '12px' }} />
-                                <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Ready to move to {selectedArea.name}?</h3>
+                            <ReviewSection targetId={selectedArea.id} targetType="area" />
+
+                             <div style={{ marginTop: '32px', padding: '32px', border: '2px dashed var(--accent-color)', borderRadius: '24px', textAlign: 'center' }}>
+                                <Home size={32} color="var(--accent-color)" strokeWidth={1.5} style={{ marginBottom: '12px' }} />
+                                <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>{t('explore.details.ready_title').replace('{0}', selectedArea.name)}</h3>
                                 <p style={{ color: 'var(--text-muted)', marginBottom: '20px', fontSize: '0.95rem' }}>
-                                    Connect with verified agents and browse available apartments in {selectedArea.name} right now.
+                                    {t('explore.details.ready_text').replace('{0}', selectedArea.name)}
                                 </p>
                                 <button
                                     onClick={() => navigate('/market', { state: { areaId: selectedArea.id } })}
                                     className="btn btn-primary"
                                     style={{ background: 'var(--accent-color)', width: '100%', fontWeight: 700 }}
                                 >
-                                    Find an Apartment
+                                    {t('explore.details.find_btn')}
                                 </button>
                             </div>
 
-                            <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid var(--border-color)', textAlign: 'center' }}>
+                             <div style={{ marginTop: '40px', paddingTop: '24px', borderTop: '1px solid var(--border-color)', textAlign: 'center' }}>
                                 <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                                    Does this sound like you? <Link to="/quiz" style={{ color: 'var(--primary-color)', fontWeight: 600 }}>Take the quiz</Link> to be sure!
+                                    {t('explore.details.quiz_note').split('{0}').map((part, i, arr) => (
+                                        <span key={i}>
+                                            {part}
+                                            {i < arr.length - 1 && (
+                                                <Link to="/quiz" style={{ color: 'var(--primary-color)', fontWeight: 600 }}>
+                                                    {t('explore.details.take_quiz')}
+                                                </Link>
+                                            )}
+                                        </span>
+                                    ))}
                                 </p>
                             </div>
 
@@ -556,6 +679,19 @@ const ExplorePage = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+            <style>{`
+                @media (max-width: 600px) {
+                    .explore-filters {
+                        flex-direction: column !important;
+                        align-items: stretch !important;
+                        gap: 12px !important;
+                    }
+                    .explore-filters > div, .explore-filters > select {
+                        width: 100% !important;
+                    }
+                    h1 { font-size: 2.2rem !important; }
+                }
+            `}</style>
         </div>
     );
 }

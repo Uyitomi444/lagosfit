@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
-import { Sun, Moon, Globe, LogIn, LogOut, ChevronDown, History, Menu, X } from 'lucide-react';
+import { Sun, Moon, Globe, LogIn, LogOut, ChevronDown, History, Menu, X, User, ShieldCheck, CheckCircle } from 'lucide-react';
 
 const NavBar = () => {
     const { theme, toggleTheme } = useTheme();
@@ -12,14 +12,19 @@ const NavBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [langDropdownOpen, setLangDropdownOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const langRef = useRef<HTMLDivElement>(null);
 
     // Close dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
                 setDropdownOpen(false);
+            }
+            if (langRef.current && !langRef.current.contains(e.target as Node)) {
+                setLangDropdownOpen(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -44,7 +49,8 @@ const NavBar = () => {
     const navLinks = [
         { to: '/', label: t('nav.home') },
         { to: '/explore', label: t('nav.explore') },
-        { to: '/market', label: 'Market' },
+        { to: '/market', label: t('nav.market') },
+        { to: '/pricing', label: t('nav.pricing') },
         { to: '/about', label: t('nav.about') },
     ];
 
@@ -97,14 +103,54 @@ const NavBar = () => {
 
                     {/* Right side controls */}
                     <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexShrink: 0 }}>
-                        <button
-                            onClick={() => setLanguage(language === 'en' ? 'pidgin' : 'en')}
-                            className="nav-icon-btn"
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-main)', padding: '6px' }}
-                        >
-                            <Globe size={18} />
-                            <span className="nav-hide-xs" style={{ fontSize: '0.75rem', fontWeight: 600 }}>{language.toUpperCase()}</span>
-                        </button>
+                        <div ref={langRef} style={{ position: 'relative' }} className="hide-on-mobile">
+                            <button
+                                onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+                                className="nav-icon-btn"
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-main)', padding: '6px' }}
+                            >
+                                <Globe size={18} />
+                                <span className="nav-hide-xs" style={{ fontSize: '0.75rem', fontWeight: 600 }}>{language.toUpperCase()}</span>
+                                <ChevronDown size={12} style={{ transition: 'transform 0.2s', transform: langDropdownOpen ? 'rotate(180deg)' : 'rotate(0)' }} />
+                            </button>
+
+                            {langDropdownOpen && (
+                                <div style={{
+                                    position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                                    width: '160px', background: 'var(--card-bg)',
+                                    border: '1px solid var(--border-color)', borderRadius: '12px',
+                                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: '6px',
+                                    zIndex: 200, animation: 'dropdownIn 0.2s ease'
+                                }}>
+                                    {[
+                                        { code: 'en', label: 'English' },
+                                        { code: 'pidgin', label: 'Pidgin' },
+                                        { code: 'yo', label: 'Yoruba' },
+                                        { code: 'ig', label: 'Igbo' },
+                                        { code: 'ha', label: 'Hausa' }
+                                    ].map((lang) => (
+                                        <button
+                                            key={lang.code}
+                                            onClick={() => {
+                                                setLanguage(lang.code as any);
+                                                setLangDropdownOpen(false);
+                                            }}
+                                            style={{
+                                                width: '100%', padding: '10px 12px', border: 'none',
+                                                background: language === lang.code ? 'var(--secondary-bg)' : 'transparent',
+                                                color: language === lang.code ? 'var(--primary-color)' : 'var(--text-main)',
+                                                textAlign: 'left', borderRadius: '8px', cursor: 'pointer',
+                                                fontSize: '0.85rem', fontWeight: language === lang.code ? 700 : 500,
+                                                display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+                                            }}
+                                        >
+                                            {lang.label}
+                                            {language === lang.code && <CheckCircle size={14} />}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
                         <button
                             onClick={toggleTheme}
@@ -121,24 +167,24 @@ const NavBar = () => {
                                     onClick={() => setDropdownOpen(!dropdownOpen)}
                                     className="user-avatar-btn"
                                     style={{
-                                        display: 'flex', alignItems: 'center', gap: '6px',
-                                        background: 'var(--primary-color)', color: 'white',
-                                        border: 'none', borderRadius: '50px',
+                                        display: 'flex', alignItems: 'center', gap: '8px',
+                                        background: 'var(--secondary-bg)', color: 'var(--text-main)',
+                                        border: '1px solid var(--border-color)', borderRadius: '50px',
                                         padding: '4px 12px 4px 4px', cursor: 'pointer',
-                                        transition: 'all 0.2s ease', fontWeight: 600, fontSize: '0.82rem'
+                                        transition: 'all 0.2s ease', fontWeight: 500, fontSize: '0.82rem'
                                     }}
                                 >
                                     {user.photoURL ? (
                                         <img src={user.photoURL} alt={displayName} style={{
-                                            width: '28px', height: '28px', borderRadius: '50%',
-                                            objectFit: 'cover', border: '2px solid rgba(255,255,255,0.3)'
+                                            width: '24px', height: '24px', borderRadius: '50%',
+                                            objectFit: 'cover'
                                         }} />
                                     ) : (
                                         <div style={{
-                                            width: '28px', height: '28px', borderRadius: '50%',
-                                            background: 'rgba(255,255,255,0.25)',
+                                            width: '24px', height: '24px', borderRadius: '50%',
+                                            background: 'var(--primary-color)', color: 'white',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontSize: '0.8rem', fontWeight: 700
+                                            fontSize: '0.75rem', fontWeight: 700
                                         }}>{initial}</div>
                                     )}
                                     <span className="nav-hide-mobile">{displayName.split(' ')[0]}</span>
@@ -178,12 +224,31 @@ const NavBar = () => {
                                             </div>
                                         </div>
 
+                                        <Link to="/profile" onClick={() => setDropdownOpen(false)} className="dropdown-item" style={{
+                                            display: 'flex', alignItems: 'center', gap: '10px',
+                                            padding: '10px 16px', fontSize: '0.9rem', color: 'var(--text-main)',
+                                            borderRadius: '10px', textDecoration: 'none', transition: 'background 0.15s'
+                                        }}>
+                                            <User size={16} /> {t('nav.profile')}
+                                        </Link>
+
+                                        {user.isAdmin && (
+                                            <Link to="/admin" onClick={() => setDropdownOpen(false)} className="dropdown-item" style={{
+                                                display: 'flex', alignItems: 'center', gap: '10px',
+                                                padding: '10px 16px', fontSize: '0.9rem', color: 'var(--primary-color)',
+                                                borderRadius: '10px', textDecoration: 'none', transition: 'background 0.15s',
+                                                fontWeight: 700
+                                            }}>
+                                                <ShieldCheck size={16} /> {t('nav.admin')}
+                                            </Link>
+                                        )}
+
                                         <Link to="/history" onClick={() => setDropdownOpen(false)} className="dropdown-item" style={{
                                             display: 'flex', alignItems: 'center', gap: '10px',
                                             padding: '10px 16px', fontSize: '0.9rem', color: 'var(--text-main)',
                                             borderRadius: '10px', textDecoration: 'none', transition: 'background 0.15s'
                                         }}>
-                                            <History size={16} /> My History
+                                            <History size={16} /> {t('nav.history')}
                                         </Link>
 
                                         <button onClick={handleLogout} className="dropdown-item" style={{
@@ -192,13 +257,13 @@ const NavBar = () => {
                                             borderRadius: '10px', background: 'none', border: 'none',
                                             cursor: 'pointer', width: '100%', textAlign: 'left', transition: 'background 0.15s'
                                         }}>
-                                            <LogOut size={16} /> Sign Out
+                                            <LogOut size={16} /> {t('nav.signout')}
                                         </button>
                                     </div>
                                 )}
                             </div>
                         ) : (
-                            <Link to="/login" className="nav-signin-btn" style={{
+                            <Link to="/login" className="nav-signin-btn hide-on-mobile" style={{
                                 display: 'flex', alignItems: 'center', gap: '6px',
                                 background: 'var(--primary-color)', color: 'white',
                                 border: 'none', borderRadius: '50px',
@@ -207,7 +272,7 @@ const NavBar = () => {
                                 boxShadow: '0 2px 8px rgba(56, 102, 104, 0.25)'
                             }}>
                                 <LogIn size={15} />
-                                <span className="nav-hide-xs">Sign In</span>
+                                <span className="nav-hide-xs">{t('nav.signin')}</span>
                             </Link>
                         )}
 
@@ -262,7 +327,20 @@ const NavBar = () => {
                     </Link>
                 ))}
                 {user && (
-                    <Link
+                    <>
+                        <Link
+                            to="/profile"
+                            onClick={() => setMobileMenuOpen(false)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '8px',
+                                padding: '12px 0', fontSize: '1rem', fontWeight: 500,
+                                color: 'var(--text-main)', textDecoration: 'none',
+                                borderBottom: '1px solid var(--border-color)'
+                            }}
+                        >
+                            <User size={16} /> {t('nav.profile')}
+                        </Link>
+                        <Link
                         to="/history"
                         onClick={() => setMobileMenuOpen(false)}
                         style={{
@@ -271,9 +349,65 @@ const NavBar = () => {
                             color: 'var(--text-main)', textDecoration: 'none'
                         }}
                     >
-                        <History size={16} /> My History
+                        <History size={16} /> {t('nav.history')}
                     </Link>
+                    </>
                 )}
+                
+                {/* Mobile-only language and auth items */}
+                <div className="show-on-mobile" style={{ marginTop: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+                        {[
+                            { code: 'en', label: 'English' },
+                            { code: 'pidgin', label: 'Pidgin' },
+                            { code: 'yo', label: 'Yoruba' },
+                            { code: 'ig', label: 'Igbo' },
+                            { code: 'ha', label: 'Hausa' }
+                        ].map((lang) => (
+                            <button
+                                key={lang.code}
+                                onClick={() => setLanguage(lang.code as any)}
+                                style={{
+                                    padding: '6px 12px', borderRadius: '20px', border: '1px solid var(--border-color)',
+                                    background: language === lang.code ? 'var(--primary-color)' : 'var(--secondary-bg)',
+                                    color: language === lang.code ? 'white' : 'var(--text-main)',
+                                    fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer'
+                                }}
+                            >
+                                {lang.label}
+                            </button>
+                        ))}
+                    </div>
+                    
+                    {!user && (
+                        <Link
+                            to="/login"
+                            onClick={() => setMobileMenuOpen(false)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '8px',
+                                padding: '12px 16px', fontSize: '1rem', fontWeight: 600,
+                                color: 'white', textDecoration: 'none',
+                                background: 'var(--primary-color)', borderRadius: '12px', justifyContent: 'center'
+                            }}
+                        >
+                            <LogIn size={18} /> {t('nav.signin')}
+                        </Link>
+                    )}
+                    
+                    {user && (
+                        <button
+                            onClick={handleLogout}
+                            style={{
+                                width: '100%', display: 'flex', alignItems: 'center', gap: '8px',
+                                padding: '12px 16px', fontSize: '1rem', fontWeight: 600,
+                                color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)',
+                                border: 'none', borderRadius: '12px', cursor: 'pointer', justifyContent: 'center'
+                            }}
+                        >
+                            <LogOut size={18} /> {t('nav.signout')}
+                        </button>
+                    )}
+                </div>
             </div>
 
             <style>{`
@@ -296,6 +430,16 @@ const NavBar = () => {
                     .nav-hamburger { display: flex !important; }
                     .nav-mobile-menu { display: block !important; }
                     .nav-hide-mobile { display: none !important; }
+                }
+
+                /* Mobile breakpoint */
+                @media (max-width: 540px) {
+                    .hide-on-mobile { display: none !important; }
+                    .show-on-mobile { display: block !important; }
+                }
+                
+                @media (min-width: 541px) {
+                    .show-on-mobile { display: none !important; }
                 }
 
                 /* Small phone breakpoint */

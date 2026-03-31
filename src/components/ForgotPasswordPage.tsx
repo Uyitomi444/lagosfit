@@ -1,9 +1,12 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Loader2, ArrowLeft, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const ForgotPasswordPage = () => {
+    const { t } = useLanguage();
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
@@ -13,10 +16,10 @@ const ForgotPasswordPage = () => {
 
     const getReadableError = (code: string) => {
         switch (code) {
-            case 'auth/user-not-found': return 'No account found with this email.';
-            case 'auth/invalid-email': return 'Please enter a valid email address.';
-            case 'auth/too-many-requests': return 'Too many requests. Please wait a bit.';
-            default: return 'Something went wrong. Please try again.';
+            case 'auth/user-not-found': return t('auth.error.user_not_found');
+            case 'auth/invalid-email': return t('auth.error.invalid_email');
+            case 'auth/too-many-requests': return t('auth.error.too_many_requests');
+            default: return t('auth.error.generic');
         }
     };
 
@@ -42,19 +45,6 @@ const ForgotPasswordPage = () => {
             padding: '24px', background: 'var(--bg-main)',
             position: 'relative', overflow: 'hidden'
         }}>
-            {/* Background blobs */}
-            <div style={{
-                position: 'absolute', top: '-10%', right: '-5%',
-                width: '400px', height: '400px',
-                background: 'radial-gradient(circle, var(--accent-color) 0%, transparent 70%)',
-                opacity: 0.1, filter: 'blur(60px)', zIndex: 0
-            }} />
-            <div style={{
-                position: 'absolute', bottom: '-10%', left: '-5%',
-                width: '400px', height: '400px',
-                background: 'radial-gradient(circle, var(--primary-color) 0%, transparent 70%)',
-                opacity: 0.1, filter: 'blur(60px)', zIndex: 0
-            }} />
 
             <div className="card" style={{
                 width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1,
@@ -68,7 +58,7 @@ const ForgotPasswordPage = () => {
                     color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '24px',
                     textDecoration: 'none'
                 }}>
-                    <ArrowLeft size={16} /> Back to Sign In
+                    <ArrowLeft size={16} /> {t('auth.back_to_login')}
                 </Link>
 
                 {sent ? (
@@ -76,24 +66,24 @@ const ForgotPasswordPage = () => {
                     <div style={{ textAlign: 'center' }}>
                         <div style={{
                             width: '64px', height: '64px', borderRadius: '50%',
-                            background: 'rgba(16, 185, 129, 0.1)',
+                            background: 'rgba(var(--primary-rgb), 0.1)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             margin: '0 auto 24px'
                         }}>
-                            <CheckCircle2 size={32} color="#10b981" />
+                            <CheckCircle2 size={32} color="var(--success-color)" strokeWidth={1.5} />
                         </div>
                         <h2 style={{
                             fontSize: '1.5rem', fontWeight: 800, marginBottom: '12px',
                             color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif'
                         }}>
-                            Check Your Email
+                            {t('auth.reset_check_email')}
                         </h2>
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '32px' }}>
-                            We sent a password reset link to <strong style={{ color: 'var(--text-main)' }}>{email}</strong>.
-                            Click the link in the email to reset your password.
+                            {t('auth.reset_sent_to').replace('{0}', email)}<br />
+                            {t('auth.reset_instruction')}
                         </p>
                         <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                            Didn't get it? Check your spam folder or{' '}
+                            {t('auth.reset_not_received')} {t('auth.reset_spam_note')}{' '}
                             <button
                                 onClick={() => { setSent(false); setEmail(''); }}
                                 style={{
@@ -102,7 +92,7 @@ const ForgotPasswordPage = () => {
                                     fontWeight: 600, fontSize: '0.8rem', padding: 0
                                 }}
                             >
-                                try again
+                                {t('auth.reset_try_again')}
                             </button>
                         </p>
                     </div>
@@ -114,29 +104,29 @@ const ForgotPasswordPage = () => {
                                 fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px',
                                 color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif'
                             }}>
-                                Reset Password
+                                {t('auth.forgot_title')}
                             </h1>
                             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-                                Enter your email and we'll send you a reset link.
+                                {t('auth.forgot_subtitle')}
                             </p>
                         </div>
 
                         {error && (
                             <div style={{
                                 padding: '12px 16px',
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                border: '1px solid rgba(239, 68, 68, 0.2)',
-                                borderRadius: '12px', color: '#ef4444', fontSize: '0.85rem',
+                                background: 'rgba(var(--secondary-rgb), 0.05)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '12px', color: 'var(--error-color)', fontSize: '0.85rem',
                                 display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px'
                             }}>
-                                <AlertCircle size={16} />
+                                <AlertCircle size={16} strokeWidth={1.5} />
                                 {error}
                             </div>
                         )}
 
                         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>Email Address</label>
+                                <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{t('auth.email_label')}</label>
                                 <div style={{ position: 'relative' }}>
                                     <Mail size={18} style={{
                                         position: 'absolute', left: '16px', top: '50%',
@@ -168,13 +158,13 @@ const ForgotPasswordPage = () => {
                                     cursor: 'pointer',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                                     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    boxShadow: '0 4px 12px rgba(56, 102, 104, 0.3)'
+                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                                 }}
                             >
                                 {isLoading ? (
                                     <Loader2 size={20} className="animate-spin" />
                                 ) : (
-                                    'Send Reset Link'
+                                    t('auth.reset_btn')
                                 )}
                             </button>
                         </form>
@@ -189,11 +179,11 @@ const ForgotPasswordPage = () => {
                 }
                 .auth-input:focus {
                     border-color: var(--primary-color) !important;
-                    box-shadow: 0 0 0 4px rgba(56, 102, 104, 0.1);
+                    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
                 }
                 .auth-btn:hover:not(:disabled) {
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(56, 102, 104, 0.4);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
                 }
                 .animate-spin { animation: spin 1s linear infinite; }
                 @keyframes spin {

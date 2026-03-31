@@ -4,15 +4,18 @@ import { useQuiz } from '../context/QuizContext';
 import { getRecommendations } from '../utils/recommendation';
 import type { Area } from '../types';
 import { motion } from 'framer-motion';
-import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp } from 'lucide-react';
+import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp, Heart } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { calculateDistance } from '../utils/distance';
 import { AREAS } from '../data/quiz_data';
 import TruthCard from './TruthCard';
+import SolarSolutions from './SolarSolutions';
+import { useAuth } from '../context/AuthContext';
 
 const ResultPage = () => {
     const { answers: currentAnswers, resetQuiz, saveResult } = useQuiz();
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
+    const { user, toggleFavorite } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -65,8 +68,8 @@ const ResultPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 style={{ textAlign: 'center', marginBottom: '60px' }}
             >
-                <span style={{ color: 'var(--primary-color)', fontWeight: 600, fontSize: '1.2rem' }}>Based on your answers</span>
-                <h1 style={{ fontSize: '3rem', margin: '16px 0' }}>We Found Your Perfect Match</h1>
+                <span style={{ color: 'var(--primary-color)', fontWeight: 600, fontSize: '1.2rem' }}>{t('result.based_on')}</span>
+                <h1 style={{ fontSize: '3rem', margin: '16px 0' }}>{t('result.perfect_match')}</h1>
             </motion.div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px', alignItems: 'start' }}>
@@ -88,14 +91,43 @@ const ResultPage = () => {
                             <div style={{ padding: '8px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%' }}>
                                 <Star size={24} fill="var(--accent-color)" stroke="none" />
                             </div>
-                            <span style={{ fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>TOP RECOMMENDATION</span>
+                             <span style={{ fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>{t('result.top_rec')}</span>
                         </div>
 
-                        <h2 style={{ fontSize: '3.5rem', marginBottom: '8px', color: 'white' }}>{currentArea.name}</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                            <h2 style={{ fontSize: '3.5rem', marginBottom: '8px', color: 'white', flex: 1 }}>{currentArea.name}</h2>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (!user) {
+                                        navigate('/login', { state: { from: location.pathname } });
+                                        return;
+                                    }
+                                    toggleFavorite(currentArea.id);
+                                }}
+                                style={{
+                                    background: 'rgba(255,255,255,0.2)',
+                                    border: 'none',
+                                    width: '48px',
+                                    height: '48px',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                }}
+                            >
+                                <Heart
+                                    size={24}
+                                    fill={(user?.favorites?.includes(currentArea.id)) ? 'var(--accent-color)' : 'none'}
+                                    strokeWidth={1.5}
+                                />
+                            </button>
+                        </div>
 
                         {currentArea.innerLocalities && currentArea.innerLocalities.length > 0 && (
                             <div style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', width: '100%', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 600 }}>Try these specific spots:</span>
+                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', width: '100%', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 600 }}>{t('result.specific_spots')}</span>
                                 {currentArea.innerLocalities.slice(0, 3).map((loc, i) => (
                                     <motion.span
                                         key={i}
@@ -116,28 +148,28 @@ const ResultPage = () => {
                                 {(() => {
                                     const matchedRent = answers.rent && currentArea.attributes.rent.includes(answers.rent) ? answers.rent : null;
                                     const displayRent = matchedRent || currentArea.attributes.rent.join(', ');
-                                    return <span className="tag">Rent: {displayRent.charAt(0).toUpperCase() + displayRent.slice(1)}</span>;
+                                    return <span className="tag">{t('result.rent')}: {displayRent.charAt(0).toUpperCase() + displayRent.slice(1)}</span>;
                                 })()}
 
                                 {/* Noise */}
                                 {(() => {
                                     const matchedNoise = answers.noise && currentArea.attributes.noise.includes(answers.noise) ? answers.noise : null;
                                     const displayNoise = matchedNoise || currentArea.attributes.noise.join(', ');
-                                    return <span className="tag">Noise: {displayNoise.charAt(0).toUpperCase() + displayNoise.slice(1)}</span>;
+                                    return <span className="tag">{t('result.noise')}: {displayNoise.charAt(0).toUpperCase() + displayNoise.slice(1)}</span>;
                                 })()}
 
                                 {/* Lifestyle (New) */}
                                 {currentArea.attributes.lifestyle && (() => {
                                     const matchedLifestyle = answers.lifestyle && currentArea.attributes.lifestyle.includes(answers.lifestyle) ? answers.lifestyle : null;
                                     const displayLifestyle = matchedLifestyle || currentArea.attributes.lifestyle[0]; // Just show first if multiple/no match to save space
-                                    return <span className="tag">Lifestyle: {displayLifestyle.charAt(0).toUpperCase() + displayLifestyle.slice(1)}</span>;
+                                    return <span className="tag">{t('result.lifestyle')}: {displayLifestyle.charAt(0).toUpperCase() + displayLifestyle.slice(1)}</span>;
                                 })()}
 
                                 {/* Electricity (New) */}
                                 {currentArea.attributes.electricity && (() => {
                                     const matchedElec = answers.electricity && currentArea.attributes.electricity.includes(answers.electricity) ? answers.electricity : null;
                                     const displayElec = matchedElec || currentArea.attributes.electricity[0];
-                                    return <span className="tag">Power: {displayElec.charAt(0).toUpperCase() + displayElec.slice(1)}</span>;
+                                    return <span className="tag">{t('result.power')}: {displayElec.charAt(0).toUpperCase() + displayElec.slice(1)}</span>;
                                 })()}
                             </div>
                         </div>
@@ -158,26 +190,26 @@ const ResultPage = () => {
                             >
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
                                     <MessageSquare size={18} color="var(--accent-color)" />
-                                    <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase' }}>Street Talk</span>
-                                    <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'var(--accent-color)', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>TRENDING</span>
+                                    <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase' }}>{t('result.street_talk')}</span>
+                                    <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'var(--accent-color)', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>{t('result.trending')}</span>
                                 </div>
                                 <p style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '20px', fontStyle: 'italic', color: 'white' }}>"{currentArea.socialBuzz.trending}"</p>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <div>
-                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Complaints</span>
+                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.complaints')}</span>
                                         {currentArea.socialBuzz.complaints.slice(0, 2).map((c, i) => (
                                             <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
-                                                <AlertCircle size={14} color="#ff4d4d" style={{ flexShrink: 0, marginTop: '2px' }} />
+                                                <AlertCircle size={14} color="var(--error-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
                                                 <span>{c}</span>
                                             </div>
                                         ))}
                                     </div>
                                     <div>
-                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>Compliments</span>
+                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.compliments')}</span>
                                         {currentArea.socialBuzz.compliments.slice(0, 2).map((c, i) => (
                                             <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
-                                                <ThumbsUp size={14} color="#10b981" style={{ flexShrink: 0, marginTop: '2px' }} />
+                                                <ThumbsUp size={14} color="var(--success-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
                                                 <span>{c}</span>
                                             </div>
                                         ))}
@@ -191,7 +223,7 @@ const ResultPage = () => {
                             onClick={() => navigate('/explore', { state: { selectedId: currentArea.id } })}
                             style={{ background: 'white', color: 'var(--primary-color)', width: '100%', marginBottom: '12px' }}
                         >
-                            Explore {currentArea.name}
+                            {t('result.explore_btn').replace('{0}', currentArea.name)}
                         </button>
 
                         <button
@@ -199,7 +231,7 @@ const ResultPage = () => {
                             onClick={() => navigate('/market', { state: { areaId: currentArea.id } })}
                             style={{ background: 'var(--accent-color)', color: 'white', width: '100%', fontWeight: 700 }}
                         >
-                            Find an Apartment
+                            {t('result.find_apt')}
                         </button>
                     </div>
                 </motion.div>
@@ -207,6 +239,7 @@ const ResultPage = () => {
                 {/* Truth Metrics side column */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <TruthCard area={currentArea} />
+                    <SolarSolutions />
 
                     {/* Alternatives & Map Placeholder */}
                     <div>
@@ -224,7 +257,7 @@ const ResultPage = () => {
                         {currentArea.coords && (
                             <div className="card" style={{ marginBottom: '24px', padding: '24px' }}>
                                 <h3 style={{ fontSize: '1.2rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    <Navigation size={20} color="var(--primary-color)" /> Closest Neighbors
+                                    <Navigation size={20} color="var(--primary-color)" /> {t('result.neighbors')}
                                 </h3>
                                 <div style={{ display: 'grid', gap: '12px' }}>
                                     {AREAS
@@ -251,7 +284,7 @@ const ResultPage = () => {
                             </div>
                         )}
 
-                        <h3 style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>Other great options</h3>
+                        <h3 style={{ marginBottom: '20px', color: 'var(--text-muted)' }}>{t('result.other_options')}</h3>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             {/* Filter out currentArea from others if needed, but for now just show original 'others' logic or better yet: 
@@ -284,13 +317,13 @@ const ResultPage = () => {
                                         <h4 style={{ fontSize: '1.2rem' }}>{area.name}</h4>
                                         <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Match Score: {area.matchScore}</p>
                                     </div>
-                                    <ArrowRight size={20} color="var(--primary-color)" />
+                                    <ArrowRight size={20} color="var(--primary-color)" strokeWidth={1.5} />
                                 </motion.div>
                             ))}
 
                             <div style={{ marginTop: '40px', textAlign: 'center' }}>
                                 <button onClick={handleRetake} className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 500, border: 'none', background: 'transparent', color: 'var(--text-muted)' }}>
-                                    <RefreshCw size={16} /> Retake Quiz
+                                    <RefreshCw size={16} /> {t('result.retake')}
                                 </button>
                             </div>
                         </div>

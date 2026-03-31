@@ -27,6 +27,8 @@ export interface AppUser {
     name: string | null;
     photoURL: string | null;
     isPremium: boolean;
+    isAdmin: boolean; // Added
+    favorites?: string[];
 }
 
 interface AuthContextType {
@@ -40,17 +42,21 @@ interface AuthContextType {
     saveQuizHistory: (item: QuizHistoryItem) => Promise<void>;
     getQuizHistory: () => Promise<QuizHistoryItem[]>;
     upgradeToPremium: (paymentReference: string) => Promise<void>;
+    toggleFavorite: (areaId: string) => Promise<void>; // Added
+    updateUserInfo: (name: string, photoURL?: string) => Promise<void>; // Added
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Helper: map Firebase user to our AppUser shape
-const mapUser = (firebaseUser: FirebaseUser, premium = false): AppUser => ({
+const mapUser = (firebaseUser: FirebaseUser, premium = false, admin = false, favorites: string[] = [], firestoreData: any = {}): AppUser => ({
     uid: firebaseUser.uid,
     email: firebaseUser.email,
-    name: firebaseUser.displayName,
-    photoURL: firebaseUser.photoURL,
+    name: firestoreData.name !== undefined ? firestoreData.name : firebaseUser.displayName,
+    photoURL: firestoreData.photoURL !== undefined ? firestoreData.photoURL : firebaseUser.photoURL,
     isPremium: premium,
+    isAdmin: admin, // Added
+    favorites: favorites, 
 });
 
 // Helper: ensure a user doc exists in Firestore
@@ -77,17 +83,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
                 await ensureUserDoc(firebaseUser);
-                // Check premium status from Firestore
+                // Check status from Firestore
                 let isPremium = false;
+                let isAdmin = false; // Added
+                let favorites: string[] = [];
+                let firestoreData = {};
                 try {
                     const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
                     if (snap.exists()) {
-                        isPremium = snap.data().isPremium === true;
+                        const data = snap.data();
+                        isPremium = data.isPremium === true;
+                        isAdmin = data.isAdmin === true; // Fetch from doc
+                        
+                        // Fallback: Check for specific admin email (Development/Initial setup)
+                        if (!isAdmin && firebaseUser.email === 'admin@lagosfit.com') {
+                            isAdmin = true;
+                        }
+
+                        favorites = data.favorites || [];
+                        firestoreData = {
+                            name: data.name,
+                            photoURL: data.photoURL
+                        };
                     }
                 } catch (err) {
-                    console.error('Failed to check premium status:', err);
+                    console.error('Failed to check user status:', err);
                 }
-                setUser(mapUser(firebaseUser, isPremium));
+                setUser(mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData));
             } else {
                 setUser(null);
             }
@@ -174,11 +196,73 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [user]);
 
+    // Added: Shortlist/Favorites toggle
+    const toggleFavorite = useCallback(async (areaId: string) => {
+        if (!user) return;
+        try {
+            const userRef = doc(db, 'users', user.uid);
+            const currentFavorites = user.favorites || [];
+            const isFav = currentFavorites.includes(areaId);
+            const newFavorites = isFav
+                ? currentFavorites.filter(id => id !== areaId)
+                : [...currentFavorites, areaId];
+
+            await updateDoc(userRef, {
+                favorites: newFavorites
+            });
+
+            // Update local state for immediate feedback
+            setUser(prev => prev ? { ...prev, favorites: newFavorites } : null);
+        } catch (err) {
+            console.error('Failed to toggle favorite:', err);
+            throw err;
+        }
+    }, [user]);
+
+    // Added: Update basic profile info
+    const updateUserInfo = useCallback(async (name: string, photoURL?: string) => {
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('No user authenticated');
+
+        try {
+            const isDataUrl = photoURL?.startsWith('data:');
+            
+            // 1. Update auth profile (Skip photoURL if it's too long for Auth system)
+            await updateProfile(currentUser, {
+                displayName: name || currentUser.displayName,
+                // Only send to Auth if it's a standard URL (not a massive base64)
+                photoURL: isDataUrl ? currentUser.photoURL : (photoURL || currentUser.photoURL)
+            });
+
+            // 2. Update Firestore doc (No size limit issues for standard profile images)
+            const userRef = doc(db, 'users', currentUser.uid);
+            await updateDoc(userRef, {
+                name: name || currentUser.displayName || '',
+                photoURL: photoURL || currentUser.photoURL || ''
+            });
+
+            // 3. Update local state explicitly to trigger immediate re-renders
+            setUser(prev => {
+                if (!prev) return null;
+                return {
+                    ...prev,
+                    name: name || currentUser.displayName || '',
+                    photoURL: photoURL || currentUser.photoURL || ''
+                };
+            });
+            
+            console.log('Profile updated in Firestore & Local State (Auth photo update skipped if too large)');
+        } catch (err) {
+            console.error('Failed to update user profile:', err);
+            throw err;
+        }
+    }, []); // Removed [user] dependency to avoid stale closure or recreation loops
+
     return (
         <AuthContext.Provider value={{
             user, loading, login, register, loginWithGoogle,
             logout, resetPassword, saveQuizHistory, getQuizHistory,
-            upgradeToPremium
+            upgradeToPremium, toggleFavorite, updateUserInfo
         }}>
             {children}
         </AuthContext.Provider>

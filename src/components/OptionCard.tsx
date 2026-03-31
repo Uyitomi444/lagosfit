@@ -45,7 +45,7 @@ const OptionCard = ({ label, selected, onSelect, multiSelect }: OptionCardProps)
                             exit={{ opacity: 0, scale: 0.5 }}
                             style={{ color: 'white' }}
                         >
-                            <Check size={18} strokeWidth={3} />
+                            <Check size={18} strokeWidth={1.5} />
                         </motion.div>
                     ) : !multiSelect && (
                         <motion.div

@@ -1,47 +1,17 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { Mail, Heart, Globe, Users } from 'lucide-react';
+import SEO from './SEO';
 
 const AboutPage = () => {
-    const { language } = useLanguage();
-
-    const content = {
-        en: {
-            title: "About LagosFit",
-            subtitle: "Helping you find your place in the chaos and charm of Lagos.",
-            storyTitle: "Our Story",
-            storyText: "Lagos is vibrant, fast-paced, and sometimes overwhelming. With over 20 million people and dozens of unique neighborhoods, finding the right place to call home is a challenge. LagosFit was born out of a simple idea: What if you could find your perfect neighborhood in just 30 seconds? We combine data on rent, commute times, and lifestyle vibes to match you with your ideal Lagos area.",
-            valuesTitle: "Why We Do This",
-            values: [
-                { title: "Empowerment", text: "Giving you the info you need to make smart housing decisions." },
-                { title: "Authenticity", text: "Real data about real Lagos areas. No sugar-coating." },
-                { title: "Simplicity", text: "House hunting is hard. This quiz shouldn't be." }
-            ],
-            contactTitle: "Get in Touch",
-            contactText: "Have suggestions or just want to say hello? drop us a message.",
-            btn: "Contact Us"
-        },
-        pidgin: {
-            title: "About LagosFit",
-            subtitle: "We dey help you find your corner inside the sweet wahala/enjoyment of Lagos.",
-            storyTitle: "Who We Be?",
-            storyText: "Lagos logic no be for everybody. E big, e busy, and sometimes e dey turn person eye. With plenti people and area wey different, finding house na serious work. Na why we create LagosFit: make you fit know where conform for you inside 30 seconds. We look rent money, waka distance, and how the area be generally to tell you true.",
-            valuesTitle: "Why We Dey Run Am",
-            values: [
-                { title: "We Dey For You", text: "We wan give you correct info make you no enter 'one chance' for house matter." },
-                { title: "No Film Trick", text: "Real gist about Lagos areas. As e dey be, na im we talk." },
-                { title: "No Stress", text: "Looking for house hard enough. This quiz suppose dey easy." }
-            ],
-            contactTitle: "Holla At Us",
-            contactText: "You get gist, advice, or you just wan greet? Send us mail.",
-            btn: "Send Mail"
-        }
-    };
-
-    const t = content[language];
+    const { t } = useLanguage();
 
     return (
         <div style={{ paddingBottom: '80px', overflowX: 'hidden' }}>
+            <SEO 
+                title={t('about.title')} 
+                description="Learn about LagosFit, our mission to simplify the Lagos housing market, and our commitment to transparency and community."
+            />
             {/* Hero Section */}
             <div style={{
                 background: 'var(--primary-color)',
@@ -57,8 +27,8 @@ const AboutPage = () => {
                     transition={{ duration: 0.8 }}
                     style={{ position: 'relative', zIndex: 2, maxWidth: '800px', margin: '0 auto' }}
                 >
-                    <h1 style={{ fontSize: '3.5rem', marginBottom: '24px', fontWeight: 800 }}>{t.title}</h1>
-                    <p style={{ fontSize: '1.4rem', opacity: 0.9, lineHeight: 1.5 }}>{t.subtitle}</p>
+                    <h1 style={{ fontSize: '3.5rem', marginBottom: '24px', fontWeight: 800 }}>{t('about.title')}</h1>
+                    <p style={{ fontSize: '1.4rem', opacity: 0.9, lineHeight: 1.5 }}>{t('about.subtitle')}</p>
                 </motion.div>
 
                 {/* Decorative circles */}
@@ -87,24 +57,24 @@ const AboutPage = () => {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
                     >
-                        <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', color: 'var(--primary-color)' }}>{t.storyTitle}</h2>
+                        <h2 style={{ fontSize: '2.5rem', marginBottom: '24px', color: 'var(--primary-color)' }}>{t('about.story_title')}</h2>
                         <p style={{ fontSize: '1.1rem', lineHeight: 1.8, color: 'var(--text-muted)' }}>
-                            {t.storyText}
+                            {t('about.story_text')}
                         </p>
                     </motion.div>
                 </div>
 
                 <div style={{ marginTop: '100px' }}>
                     <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t.valuesTitle}</h2>
+                        <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.values_title')}</h2>
                         <div style={{ width: '60px', height: '4px', background: 'var(--accent-color)', margin: '0 auto' }} />
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
                         {[
-                            { icon: <Globe size={32} />, ...t.values[0] },
-                            { icon: <Heart size={32} />, ...t.values[1] },
-                            { icon: <Users size={32} />, ...t.values[2] }
+                            { icon: <Globe size={32} />, title: t('about.value1_title'), text: t('about.value1_text') },
+                            { icon: <Heart size={32} />, title: t('about.value2_title'), text: t('about.value2_text') },
+                            { icon: <Users size={32} />, title: t('about.value3_title'), text: t('about.value3_text') }
                         ].map((item, index) => (
                             <motion.div
                                 key={index}
@@ -134,12 +104,12 @@ const AboutPage = () => {
 
                 <div style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px', textAlign: 'center' }}>
                     <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t.contactTitle}</h2>
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
                     <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
-                        {t.contactText}
+                        {t('about.contact_text')}
                     </p>
                     <a href="mailto:hello@lagosfit.com" className="btn btn-primary" style={{ padding: '16px 40px' }}>
-                        {t.btn}
+                        {t('about.contact_btn')}
                     </a>
                 </div>
             </div>

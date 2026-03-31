@@ -4,12 +4,15 @@ import { useLanguage } from '../context/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, ArrowRight, CheckCircle, Clock } from 'lucide-react';
 import { useQuiz } from '../context/QuizContext';
+import { useAuth } from '../context/AuthContext';
 import { AREAS } from '../data/quiz_data';
+import SEO from './SEO';
 
 const LandingPage = () => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const navigate = useNavigate();
     const { resetQuiz } = useQuiz();
+    const { user } = useAuth();
 
     // Reset quiz when landing on the home page
     useEffect(() => {
@@ -18,6 +21,10 @@ const LandingPage = () => {
 
     return (
         <div style={{ overflowX: 'hidden' }}>
+            <SEO 
+                title="Find Your Perfect Neighborhood" 
+                description="Discover the ideal Lagos neighborhood that matches your lifestyle, budget, and vibe with our AI-powered area finder."
+            />
             {/* Hero Section */}
             <section style={{
                 position: 'relative',
@@ -66,6 +73,10 @@ const LandingPage = () => {
                     >
                         <button
                             onClick={() => {
+                                if (!user) {
+                                    navigate('/login', { state: { from: '/quiz' } });
+                                    return;
+                                }
                                 resetQuiz();
                                 navigate('/quiz');
                             }}
@@ -79,7 +90,7 @@ const LandingPage = () => {
                             className="btn btn-outline"
                             style={{ padding: '16px 28px', fontSize: '1rem', background: 'rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '8px' }}
                         >
-                            <Clock size={20} /> View History
+                            <Clock size={20} /> {t('landing.view_history')}
                         </button>
                     </motion.div>
 
@@ -93,20 +104,20 @@ const LandingPage = () => {
             <section style={{ padding: '80px 24px', backgroundColor: 'var(--secondary-bg)' }}>
                 <div className="container">
                     <div style={{ textAlign: 'center', marginBottom: '60px' }}>
-                        <h2 style={{ fontSize: '2rem', marginBottom: '16px' }}>How it Works</h2>
-                        <p style={{ color: 'var(--text-muted)' }}>Get your perfect match in 3 easy steps</p>
+                        <h2 style={{ fontSize: '2rem', marginBottom: '16px' }}>{t('landing.how.title')}</h2>
+                        <p style={{ color: 'var(--text-muted)' }}>{t('landing.how.subtitle')}</p>
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px' }}>
                         {[
-                            { icon: <CheckCircle size={40} color="var(--primary-color)" />, title: 'Answer Questions', text: 'Tell us about your budget, work location, and lifestyle.' },
-                            { icon: <MapPin size={40} color="var(--primary-color)" />, title: 'Get Matched', text: 'Our algorithm finds the best areas for you instantly.' },
-                            { icon: <ArrowRight size={40} color="var(--primary-color)" />, title: 'Explore', text: 'See detailed stats about your new potential home.' }
+                            { icon: <CheckCircle size={32} strokeWidth={1.5} />, title: t('landing.how.step1.title'), text: t('landing.how.step1.text') },
+                            { icon: <MapPin size={32} strokeWidth={1.5} />, title: t('landing.how.step2.title'), text: t('landing.how.step2.text') },
+                            { icon: <ArrowRight size={32} strokeWidth={1.5} />, title: t('landing.how.step3.title'), text: t('landing.how.step3.text') }
                         ].map((item, i) => (
-                            <div key={i} className="card" style={{ textAlign: 'center', padding: '40px 24px' }}>
-                                <div style={{ marginBottom: '20px' }}>{item.icon}</div>
-                                <h3 style={{ marginBottom: '12px' }}>{item.title}</h3>
-                                <p style={{ color: 'var(--text-muted)' }}>{item.text}</p>
+                            <div key={i} className="card" style={{ textAlign: 'center', padding: '40px 24px', border: '1px solid var(--border-color)' }}>
+                                <div style={{ marginBottom: '20px', color: 'var(--primary-color)', opacity: 0.8 }}>{item.icon}</div>
+                                <h3 style={{ marginBottom: '12px', fontSize: '1.25rem' }}>{item.title}</h3>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>{item.text}</p>
                             </div>
                         ))}
                     </div>
@@ -118,9 +129,9 @@ const LandingPage = () => {
                 <div className="container">
                     <div style={{ textAlign: 'center', marginBottom: '60px' }}>
                         <h2 style={{ fontSize: '2rem', marginBottom: '16px', fontWeight: 800 }}>
-                            Trending Areas
+                            {t('landing.trending.title')}
                         </h2>
-                        <p style={{ color: 'var(--text-muted)' }}>Top picks everyone is talking about this week.</p>
+                        <p style={{ color: 'var(--text-muted)' }}>{t('landing.trending.subtitle')}</p>
                     </div>
 
                     <div style={{
@@ -133,7 +144,13 @@ const LandingPage = () => {
                                 key={area.id}
                                 className="card"
                                 whileHover={{ y: -8 }}
-                                onClick={() => navigate('/explore', { state: { selectedId: area.id } })}
+                                onClick={() => {
+                                    if (!user) {
+                                        navigate('/login', { state: { from: '/explore' } });
+                                        return;
+                                    }
+                                    navigate('/explore', { state: { selectedId: area.id } });
+                                }}
                                 transition={{ type: 'spring', stiffness: 300 }}
                                 style={{
                                     padding: 0,
@@ -156,19 +173,19 @@ const LandingPage = () => {
                                     <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)' }} />
                                     <h3 style={{ position: 'absolute', bottom: '20px', left: '24px', color: 'white', fontWeight: 700, fontSize: '1.6rem' }}>{area.name}</h3>
                                     <div style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(8px)', padding: '6px 12px', borderRadius: '20px', color: 'white', fontSize: '0.8rem', fontWeight: 600 }}>
-                                        Trending
+                                        {t('landing.trending.label')}
                                     </div>
                                 </div>
                                 <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                                     <div>
                                         <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '20px' }}>
-                                            {area.description[t('landing.title').includes('Fit You') ? 'pidgin' : 'en']}
+                                            {area.description[language] || area.description['en']}
                                         </p>
                                     </div>
                                     <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                         <div>
-                                            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>Starts from</span>
-                                            <span style={{ fontWeight: 700, color: 'var(--primary-color)', fontSize: '1rem' }}>{area.priceRange[t('landing.title').includes('Fit You') ? 'pidgin' : 'en'].split('(')[0]}</span>
+                                            <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', display: 'block' }}>{t('landing.trending.starts')}</span>
+                                            <span style={{ fontWeight: 700, color: 'var(--primary-color)', fontSize: '1rem' }}>{area.priceRange[language].split('(')[0]}</span>
                                         </div>
                                         <button
                                             onClick={() => navigate('/explore')}

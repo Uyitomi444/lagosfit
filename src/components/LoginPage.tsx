@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, Loader2, ArrowRight, AlertCircle } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 
 const GoogleIcon = () => (
     <svg width="18" height="18" viewBox="0 0 48 48">
@@ -13,6 +15,7 @@ const GoogleIcon = () => (
 );
 
 const LoginPage = () => {
+    const { t } = useLanguage();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -26,13 +29,13 @@ const LoginPage = () => {
 
     const getReadableError = (code: string) => {
         switch (code) {
-            case 'auth/user-not-found': return 'No account found with this email.';
-            case 'auth/wrong-password': return 'Incorrect password. Try again.';
-            case 'auth/invalid-credential': return 'Invalid email or password.';
-            case 'auth/too-many-requests': return 'Too many attempts. Please wait a bit.';
-            case 'auth/popup-closed-by-user': return 'Sign-in popup was closed. Try again.';
-            case 'auth/network-request-failed': return 'Network error. Check your connection.';
-            default: return 'Sign-in failed. Please try again.';
+            case 'auth/user-not-found': return t('auth.error.user_not_found');
+            case 'auth/wrong-password': return t('auth.error.wrong_password');
+            case 'auth/invalid-credential': return t('auth.error.invalid_credential');
+            case 'auth/too-many-requests': return t('auth.error.too_many_requests');
+            case 'auth/popup-closed-by-user': return t('auth.error.popup_closed');
+            case 'auth/network-request-failed': return t('auth.error.network_failed');
+            default: return t('auth.error.generic');
         }
     };
 
@@ -76,19 +79,6 @@ const LoginPage = () => {
             position: 'relative',
             overflow: 'hidden'
         }}>
-            {/* Background blobs */}
-            <div style={{
-                position: 'absolute', top: '-10%', right: '-5%',
-                width: '400px', height: '400px',
-                background: 'radial-gradient(circle, var(--accent-color) 0%, transparent 70%)',
-                opacity: 0.1, filter: 'blur(60px)', zIndex: 0
-            }} />
-            <div style={{
-                position: 'absolute', bottom: '-10%', left: '-5%',
-                width: '400px', height: '400px',
-                background: 'radial-gradient(circle, var(--primary-color) 0%, transparent 70%)',
-                opacity: 0.1, filter: 'blur(60px)', zIndex: 0
-            }} />
 
             <div className="card" style={{
                 width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1,
@@ -102,22 +92,22 @@ const LoginPage = () => {
                         fontSize: '1.8rem', fontWeight: 800, marginBottom: '8px',
                         color: 'var(--text-main)', fontFamily: 'Outfit, sans-serif'
                     }}>
-                        Welcome Back
+                        {t('auth.login_title')}
                     </h1>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
-                        Ready to find your perfect Lagos neighborhood?
+                        {t('auth.login_subtitle')}
                     </p>
                 </div>
 
                 {error && (
                     <div style={{
                         padding: '12px 16px',
-                        background: 'rgba(239, 68, 68, 0.1)',
-                        border: '1px solid rgba(239, 68, 68, 0.2)',
-                        borderRadius: '12px', color: '#ef4444', fontSize: '0.85rem',
+                        background: 'rgba(var(--secondary-rgb), 0.05)',
+                        border: '1px solid var(--border-color)',
+                        borderRadius: '12px', color: 'var(--error-color)', fontSize: '0.85rem',
                         display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px'
                     }}>
-                        <AlertCircle size={16} />
+                        <AlertCircle size={16} strokeWidth={1.5} />
                         {error}
                     </div>
                 )}
@@ -145,7 +135,7 @@ const LoginPage = () => {
                     ) : (
                         <>
                             <GoogleIcon />
-                            Continue with Google
+                            {t('auth.google_btn')}
                         </>
                     )}
                 </button>
@@ -155,13 +145,13 @@ const LoginPage = () => {
                     display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'
                 }}>
                     <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }} />
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>or sign in with email</span>
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 500 }}>{t('auth.or_email')}</span>
                     <div style={{ flex: 1, height: '1px', background: 'var(--border-color)' }} />
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>Email Address</label>
+                        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{t('auth.email_label')}</label>
                         <div style={{ position: 'relative' }}>
                             <Mail size={18} style={{
                                 position: 'absolute', left: '16px', top: '50%',
@@ -184,7 +174,7 @@ const LoginPage = () => {
                     </div>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>Password</label>
+                        <label style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)' }}>{t('auth.password_label')}</label>
                         <div style={{ position: 'relative' }}>
                             <Lock size={18} style={{
                                 position: 'absolute', left: '16px', top: '50%',
@@ -216,13 +206,13 @@ const LoginPage = () => {
                             cursor: 'pointer',
                             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                            boxShadow: '0 4px 12px rgba(234, 46, 123, 0.3)'
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
                         }}
                     >
                         {isLoading ? (
                             <Loader2 size={20} className="animate-spin" />
                         ) : (
-                            <>Sign In <ArrowRight size={18} /></>
+                            <>{t('auth.login_btn')} <ArrowRight size={18} /></>
                         )}
                     </button>
                 </form>
@@ -232,7 +222,7 @@ const LoginPage = () => {
                         color: 'var(--text-muted)', fontSize: '0.85rem',
                         textDecoration: 'none', fontWeight: 500
                     }}>
-                        Forgot your password?
+                        {t('auth.forgot_password')}
                     </Link>
                 </div>
 
@@ -240,11 +230,11 @@ const LoginPage = () => {
                     marginTop: '24px', textAlign: 'center',
                     fontSize: '0.9rem', color: 'var(--text-muted)'
                 }}>
-                    Don't have an account?{' '}
+                    {t('auth.no_account')}{' '}
                     <Link to="/register" style={{
                         color: 'var(--primary-color)', fontWeight: 600, textDecoration: 'none'
                     }}>
-                        Register here
+                        {t('auth.register_link')}
                     </Link>
                 </div>
             </div>
@@ -256,11 +246,11 @@ const LoginPage = () => {
                 }
                 .auth-input:focus {
                     border-color: var(--primary-color) !important;
-                    box-shadow: 0 0 0 4px rgba(234, 46, 123, 0.1);
+                    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
                 }
                 .auth-btn:hover:not(:disabled) {
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(234, 46, 123, 0.4);
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
                 }
                 .auth-btn:active:not(:disabled) { transform: translateY(0); }
                 .google-btn:hover:not(:disabled) {

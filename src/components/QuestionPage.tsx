@@ -8,7 +8,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const QuestionPage = () => {
     const { step, nextStep, prevStep, answers, setAnswer, toggleAnswer, isAnswerSelected } = useQuiz();
-    const { language } = useLanguage();
+    const { language, t } = useLanguage();
     const navigate = useNavigate();
 
     // Ensure step is valid
@@ -72,11 +72,11 @@ const QuestionPage = () => {
                 >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '12px' }}>
                         <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>
-                            Question {step} of {QUESTIONS.length}
+                            {t('quiz.progress').replace('{0}', step.toString()).replace('{1}', QUESTIONS.length.toString())}
                         </span>
                         {question.multiSelect && (
                             <span style={{ fontSize: '0.8rem', color: 'var(--primary-color)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <Info size={14} /> Multi-select enabled
+                                <Info size={14} /> {t('quiz.multi_select')}
                             </span>
                         )}
                     </div>
@@ -96,8 +96,12 @@ const QuestionPage = () => {
                                         if (isRentQuestion) setAnswer('customBudget', undefined as any);
                                     } else {
                                         setAnswer(question.id, opt.value);
-                                        if (isLast) navigate('/result'); // Auto-advance for single select if it's the last one? No, wait for Next button for consistency.
                                         if (isRentQuestion) setAnswer('customBudget', undefined as any);
+                                        // Auto-advance
+                                        setTimeout(() => {
+                                            if (isLast) navigate('/result');
+                                            else nextStep();
+                                        }, 400);
                                     }
                                 }}
                             />
@@ -106,11 +110,11 @@ const QuestionPage = () => {
                         {isRentQuestion && (
                             <div style={{ marginTop: '20px', padding: '24px', background: 'rgba(var(--primary-rgb), 0.03)', borderRadius: '16px', border: '1px dashed var(--border-color)' }}>
                                 <label style={{ display: 'block', marginBottom: '12px', fontSize: '0.95rem', fontWeight: 500, color: 'var(--text-main)' }}>
-                                    {language === 'en' ? 'Or type your annual budget (₦):' : 'Or write your budget per year (₦):'}
+                                    {t('quiz.budget_label')}
                                 </label>
                                 <input
                                     type="text"
-                                    placeholder="e.g. 1,500,000"
+                                    placeholder={t('quiz.budget_placeholder')}
                                     value={customBudgetAnswer ? customBudgetAnswer.toLocaleString() : ''}
                                     onChange={handleCustomBudgetChange}
                                     style={{
@@ -138,7 +142,7 @@ const QuestionPage = () => {
                             onClick={step <= 1 ? () => navigate('/') : prevStep}
                             style={{ flex: 1, height: '56px' }}
                         >
-                            <ArrowLeft size={18} /> {language === 'en' ? 'Back' : 'Back'}
+                            <ArrowLeft size={18} /> {t('quiz.back')}
                         </button>
                         <button
                             className="btn btn-primary"
@@ -146,7 +150,7 @@ const QuestionPage = () => {
                             disabled={!currentAnswer && !customBudgetAnswer}
                             style={{ flex: 1, height: '56px', opacity: (currentAnswer || customBudgetAnswer) ? 1 : 0.5 }}
                         >
-                            {isLast ? (language === 'en' ? 'See Results' : 'Show Result') : (language === 'en' ? 'Next' : 'Next')} <ArrowRight size={18} />
+                            {isLast ? t('quiz.results') : t('quiz.next')} <ArrowRight size={18} />
                         </button>
                     </div>
                 </motion.div>

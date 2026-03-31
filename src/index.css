@@ -19,6 +19,8 @@
   --font-main: 'Inter', system-ui, sans-serif;
   --font-heading: 'Poppins', sans-serif;
   /* Increased for desktop feel */
+  --error-color: #D64545;
+  --success-color: #3B8E5F;
   --nav-height: 80px;
   --nav-bg: rgba(255, 255, 255, 0.9);
 }
@@ -36,6 +38,8 @@
   --accent-color: #FFC857;
   --border-color: #333333;
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --error-color: #E57373;
+  --success-color: #81C784;
   --nav-bg: rgba(18, 18, 18, 0.9);
 }
 
@@ -237,10 +241,106 @@ a {
   }
 }
 
+.hide-on-mobile {
+  @media (max-width: 600px) {
+    display: none !important;
+  }
+}
+
+.show-on-mobile {
+  @media (min-width: 601px) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 20px 16px !important;
+  }
+  
+  .container {
+    padding: 0 12px;
+  }
+}
+
 @media (max-width: 480px) {
 
   /* Stack password fields on register page */
   div[style*="display: flex"][style*="gap: 16px"] {
     flex-direction: column !important;
   }
+}
+
+/* Toggle Switch Styles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

@@ -14,14 +14,18 @@ export interface QuizAnswers {
     transport?: TransportPref | TransportPref[];
     lifestyle?: LifestylePref | LifestylePref[];
     electricity?: ElectricityPref | ElectricityPref[];
+    workLocation?: string;
     date?: string; // For history
 }
 
-export type Language = 'en' | 'pidgin';
+export type Language = 'en' | 'pidgin' | 'yo' | 'ig' | 'ha';
 
 export interface LocalizedString {
     en: string;
     pidgin: string;
+    yo: string;
+    ig: string;
+    ha: string;
 }
 
 export type SubscriptionTier = 'free' | 'standard' | 'premium';
@@ -82,6 +86,9 @@ export interface Area {
     funFact?: {
         en: string;
         pidgin: string;
+        yo: string;
+        ig: string;
+        ha: string;
     };
     matchScore?: number;
     coords?: {
@@ -121,6 +128,7 @@ export interface User {
     id: string;
     email: string;
     name: string;
-    password?: string; // Only for local mock auth
+    isPremium?: boolean; // Added for mock
+    isAdmin?: boolean; // Added for mock
     history: QuizHistoryItem[];
 }
