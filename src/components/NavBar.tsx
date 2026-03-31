@@ -301,7 +301,7 @@ const NavBar = () => {
                     zIndex: 99,
                     background: 'var(--card-bg)',
                     borderBottom: mobileMenuOpen ? '1px solid var(--border-color)' : 'none',
-                    maxHeight: mobileMenuOpen ? '300px' : '0',
+                    maxHeight: mobileMenuOpen ? '600px' : '0',
                     overflow: 'hidden',
                     transition: 'max-height 0.3s ease, padding 0.3s ease',
                     padding: mobileMenuOpen ? '12px 20px 16px' : '0 20px',
@@ -355,8 +355,11 @@ const NavBar = () => {
                 )}
                 
                 {/* Mobile-only language and auth items */}
-                <div className="show-on-mobile" style={{ marginTop: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+                <div className="show-on-mobile" style={{ marginTop: '12px', borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                        Language Selection
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
                         {[
                             { code: 'en', label: 'English' },
                             { code: 'pidgin', label: 'Pidgin' },
