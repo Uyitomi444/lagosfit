@@ -120,7 +120,8 @@ const NavBar = () => {
                                     width: '160px', background: 'var(--card-bg)',
                                     border: '1px solid var(--border-color)', borderRadius: '12px',
                                     boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: '6px',
-                                    zIndex: 200, animation: 'dropdownIn 0.2s ease'
+                                    zIndex: 200, animation: 'dropdownIn 0.2s ease',
+                                    maxHeight: '70vh', overflowY: 'auto'
                                 }}>
                                     {[
                                         { code: 'en', label: 'English' },
@@ -301,11 +302,12 @@ const NavBar = () => {
                     zIndex: 99,
                     background: 'var(--card-bg)',
                     borderBottom: mobileMenuOpen ? '1px solid var(--border-color)' : 'none',
-                    maxHeight: mobileMenuOpen ? '600px' : '0',
-                    overflow: 'hidden',
+                    maxHeight: mobileMenuOpen ? 'calc(100vh - var(--nav-height))' : '0',
+                    overflowY: mobileMenuOpen ? 'auto' : 'hidden',
                     transition: 'max-height 0.3s ease, padding 0.3s ease',
-                    padding: mobileMenuOpen ? '12px 20px 16px' : '0 20px',
-                    boxShadow: mobileMenuOpen ? '0 8px 24px rgba(0,0,0,0.1)' : 'none'
+                    padding: mobileMenuOpen ? '12px 20px 32px' : '0 20px',
+                    boxShadow: mobileMenuOpen ? '0 8px 24px rgba(0,0,0,0.1)' : 'none',
+                    WebkitOverflowScrolling: 'touch'
                 }}
             >
                 {navLinks.map(link => (
@@ -428,7 +430,7 @@ const NavBar = () => {
                 .nav-mobile-menu { display: none; }
 
                 /* Tablet breakpoint */
-                @media (max-width: 768px) {
+                @media (max-width: 991px) {
                     .nav-desktop-links { display: none !important; }
                     .nav-hamburger { display: flex !important; }
                     .nav-mobile-menu { display: block !important; }
@@ -436,12 +438,12 @@ const NavBar = () => {
                 }
 
                 /* Mobile breakpoint */
-                @media (max-width: 540px) {
+                @media (max-width: 991px) {
                     .hide-on-mobile { display: none !important; }
                     .show-on-mobile { display: block !important; }
                 }
                 
-                @media (min-width: 541px) {
+                @media (min-width: 992px) {
                     .show-on-mobile { display: none !important; }
                 }
 

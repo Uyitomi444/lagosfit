@@ -82,7 +82,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
             if (firebaseUser) {
-                await ensureUserDoc(firebaseUser);
+                try {
+                    await ensureUserDoc(firebaseUser);
+                } catch (err) {
+                    console.error('Failed to ensure user doc on auth state change:', err);
+                }
                 // Check status from Firestore
                 let isPremium = false;
                 let isAdmin = false; // Added
@@ -133,8 +137,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Google Sign-In
     const loginWithGoogle = async () => {
-        const result = await signInWithPopup(auth, googleProvider);
-        await ensureUserDoc(result.user);
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            await ensureUserDoc(result.user);
+        } catch (err) {
+            console.error('Google Sign-In Error:', err);
+            throw err; // Re-throw to handle in UI
+        }
     };
 
     // Logout
