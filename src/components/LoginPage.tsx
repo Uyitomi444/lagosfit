@@ -49,11 +49,14 @@ const LoginPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
+        console.log('Initiating Google Sign-In...');
 
         try {
             await loginWithGoogle();
+            console.log('Google Sign-In successful!');
             navigate(redirectTo);
         } catch (err: any) {
+            console.error('Google Sign-In Failure:', err);
             setError(getReadableError(err.code));
         } finally {
             setIsGoogleLoading(false);
