@@ -49,7 +49,7 @@ const LoginPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
-        console.log('Initiating Google Sign-In...');
+        console.log('Initiating Google Sign-In (Popup)...');
 
         try {
             await loginWithGoogle();
