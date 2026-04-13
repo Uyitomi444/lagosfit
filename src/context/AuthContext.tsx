@@ -110,6 +110,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 return;
             }
 
+            // Handle Redirect Result (catch errors from signInWithRedirect)
+            try {
+                const result = await getRedirectResult(auth);
+                if (result?.user) {
+                    await ensureUserDoc(result.user);
+                    console.log('Redirect Sign-In Success');
+                }
+            } catch (err: any) {
+                console.error('Redirect Sign-In Error:', err);
+            }
+
             if (firebaseUser) {
                 try {
                     await ensureUserDoc(firebaseUser);

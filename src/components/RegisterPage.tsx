@@ -60,11 +60,12 @@ const RegisterPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
+        console.log('Initiating Google Sign-In (Redirect)...');
 
         try {
             await loginWithGoogle();
-            navigate('/');
         } catch (err: any) {
+            console.error('Google Register Failure:', err);
             setError(getReadableError(err.code));
         } finally {
             setIsGoogleLoading(false);
