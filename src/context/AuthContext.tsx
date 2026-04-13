@@ -59,18 +59,29 @@ const mapUser = (firebaseUser: FirebaseUser, premium = false, admin = false, fav
     favorites: favorites, 
 });
 
-// Helper: ensure a user doc exists in Firestore
-const ensureUserDoc = async (firebaseUser: FirebaseUser) => {
+// Helper: ensure a user doc exists in Firestore with correct initial data
+const ensureUserDoc = async (firebaseUser: FirebaseUser, additionalData: { name?: string; photoURL?: string } = {}) => {
     const userRef = doc(db, 'users', firebaseUser.uid);
     const snap = await getDoc(userRef);
+    
+    // Always update if missing, or create if new
     if (!snap.exists()) {
         await setDoc(userRef, {
             email: firebaseUser.email,
-            name: firebaseUser.displayName || '',
-            photoURL: firebaseUser.photoURL || '',
+            name: additionalData.name || firebaseUser.displayName || 'Anonymous User',
+            photoURL: additionalData.photoURL || firebaseUser.photoURL || '',
             createdAt: serverTimestamp(),
-            quizHistory: []
+            quizHistory: [],
+            isAdmin: false,
+            isPremium: false,
+            favorites: []
         });
+    } else if (additionalData.name || additionalData.photoURL) {
+        // If doc exists but we have new data (like after a register/profile update)
+        const updateObj: any = {};
+        if (additionalData.name) updateObj.name = additionalData.name;
+        if (additionalData.photoURL) updateObj.photoURL = additionalData.photoURL;
+        await updateDoc(userRef, updateObj);
     }
 };
 
@@ -141,8 +152,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const register = async (name: string, email: string, password: string) => {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(cred.user, { displayName: name });
-        await ensureUserDoc(cred.user);
-        setUser(mapUser(cred.user));
+        // Passing name explicitly to ensure it's saved to Firestore immediately
+        await ensureUserDoc(cred.user, { name });
+        setUser(mapUser(cred.user, false, false, [], { name }));
     };
 
     // Email + Password Login
