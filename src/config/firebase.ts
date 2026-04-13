@@ -3,8 +3,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; // Added Storage import
 
-// IMPORTANT: Replace these with your actual Firebase project credentials
-// Go to https://console.firebase.google.com → Create Project → Project Settings → "Your apps" → Web app
+// Production Fallbacks for Vercel (Auto-pushed)
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBnIqUuqY1TKZTNAVv-jDoPT57BynDV3V0",
     authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "lagosfit-ec59a.firebaseapp.com",
