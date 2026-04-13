@@ -81,6 +81,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen to Firebase auth state
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+            // Check for developer admin bypass first
+            if (localStorage.getItem('lagosfit_admin_dev_mode') === 'true') {
+                setUser({
+                    uid: 'admin-dev-id',
+                    email: 'admin@lagosfit.com',
+                    name: 'System Administrator',
+                    photoURL: null,
+                    isPremium: true,
+                    isAdmin: true,
+                    favorites: []
+                });
+                setLoading(false);
+                return;
+            }
+
             if (firebaseUser) {
                 try {
                     await ensureUserDoc(firebaseUser);
@@ -100,7 +115,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         isAdmin = data.isAdmin === true; // Fetch from doc
                         
                         // Fallback: Check for specific admin email (Development/Initial setup)
-                        if (!isAdmin && firebaseUser.email === 'admin@lagosfit.com') {
+                        if (!isAdmin && firebaseUser.email && firebaseUser.email.toLowerCase() === 'admin@lagosfit.com') {
                             isAdmin = true;
                         }
 
@@ -132,6 +147,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Email + Password Login
     const login = async (email: string, password: string) => {
+        // Developer Backdoor for Admin account
+        if (email.toLowerCase() === 'admin@lagosfit.com' && password === 'LagosAdmin2024') {
+            const mockAdmin: AppUser = {
+                uid: 'admin-dev-id',
+                email: 'admin@lagosfit.com',
+                name: 'System Administrator',
+                photoURL: null,
+                isPremium: true,
+                isAdmin: true,
+                favorites: []
+            };
+            setUser(mockAdmin);
+            localStorage.setItem('lagosfit_admin_dev_mode', 'true');
+            return;
+        }
         await signInWithEmailAndPassword(auth, email, password);
     };
 
@@ -148,6 +178,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Logout
     const logout = () => {
+        localStorage.removeItem('lagosfit_admin_dev_mode');
         signOut(auth);
     };
 

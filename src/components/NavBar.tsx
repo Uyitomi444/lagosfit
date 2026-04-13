@@ -343,16 +343,30 @@ const NavBar = () => {
                             <User size={16} /> {t('nav.profile')}
                         </Link>
                         <Link
-                        to="/history"
-                        onClick={() => setMobileMenuOpen(false)}
-                        style={{
-                            display: 'flex', alignItems: 'center', gap: '8px',
-                            padding: '12px 0', fontSize: '1rem', fontWeight: 500,
-                            color: 'var(--text-main)', textDecoration: 'none'
-                        }}
-                    >
-                        <History size={16} /> {t('nav.history')}
-                    </Link>
+                            to="/history"
+                            onClick={() => setMobileMenuOpen(false)}
+                            style={{
+                                display: 'flex', alignItems: 'center', gap: '8px',
+                                padding: '12px 0', fontSize: '1rem', fontWeight: 500,
+                                color: 'var(--text-main)', textDecoration: 'none',
+                                borderBottom: user.isAdmin ? '1px solid var(--border-color)' : 'none'
+                            }}
+                        >
+                            <History size={16} /> {t('nav.history')}
+                        </Link>
+                        {user.isAdmin && (
+                            <Link
+                                to="/admin"
+                                onClick={() => setMobileMenuOpen(false)}
+                                style={{
+                                    display: 'flex', alignItems: 'center', gap: '8px',
+                                    padding: '12px 0', fontSize: '1rem', fontWeight: 500,
+                                    color: 'var(--primary-color)', textDecoration: 'none'
+                                }}
+                            >
+                                <ShieldCheck size={16} /> {t('nav.admin')}
+                            </Link>
+                        )}
                     </>
                 )}
                 
