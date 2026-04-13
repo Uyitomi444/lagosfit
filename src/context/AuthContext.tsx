@@ -6,7 +6,7 @@ import {
     signOut,
     updateProfile,
     sendPasswordResetEmail,
-    signInWithRedirect,
+    signInWithPopup,
     getRedirectResult
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -90,6 +90,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<AppUser | null>(null);
     const [loading, setLoading] = useState(true);
 
+    // Handle Redirect Result on mount (catch errors from any previous signInWithRedirect)
+    useEffect(() => {
+        const handleRedirect = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                if (result?.user) {
+                    await ensureUserDoc(result.user);
+                    console.log('Redirect Sign-In Success');
+                }
+            } catch (err: any) {
+                console.error('Redirect Sign-In Error:', err);
+            }
+        };
+        handleRedirect();
+    }, []);
+
     // Listen to Firebase auth state
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -106,17 +122,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 });
                 setLoading(false);
                 return;
-            }
-
-            // Handle Redirect Result (catch errors from signInWithRedirect)
-            try {
-                const result = await getRedirectResult(auth);
-                if (result?.user) {
-                    await ensureUserDoc(result.user);
-                    console.log('Redirect Sign-In Success');
-                }
-            } catch (err: any) {
-                console.error('Redirect Sign-In Error:', err);
             }
 
             if (firebaseUser) {
@@ -192,8 +197,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Google Sign-In
     const loginWithGoogle = async () => {
         try {
-            await signInWithRedirect(auth, googleProvider);
-            // The result will be handled in the onAuthStateChanged listener
+            const result = await signInWithPopup(auth, googleProvider);
+            await ensureUserDoc(result.user);
         } catch (err) {
             console.error('Google Sign-In Error:', err);
             throw err;
