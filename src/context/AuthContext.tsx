@@ -3,11 +3,9 @@ import {
     onAuthStateChanged,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signInWithPopup,
     signOut,
     updateProfile,
     sendPasswordResetEmail,
-    GoogleAuthProvider,
     signInWithRedirect,
     getRedirectResult
 } from 'firebase/auth';

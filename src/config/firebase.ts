@@ -3,14 +3,15 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage'; // Added Storage import
 
-// Production Fallbacks for Vercel (Auto-pushed)
+// IMPORTANT: Replace these with your actual Firebase project credentials
+// Go to https://console.firebase.google.com → Create Project → Project Settings → "Your apps" → Web app
 const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyBnIqUuqY1TKZTNAVv-jDoPT57BynDV3V0",
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "lagosfit-ec59a.firebaseapp.com",
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "lagosfit-ec59a",
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "lagosfit-ec59a.firebasestorage.app",
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "653857150490",
-    appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:653857150490:web:ec23fd5c4a1296b29363a3"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
