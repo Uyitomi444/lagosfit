@@ -189,9 +189,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     // Logout
-    const logout = () => {
+    const logout = async () => {
         localStorage.removeItem('lagosfit_admin_dev_mode');
-        signOut(auth);
+        try {
+            await signOut(auth);
+        } catch (err) {
+            console.error('Error during signOut:', err);
+        }
+        setUser(null);
     };
 
     // Forgot Password
