@@ -7,6 +7,9 @@ import {
     signOut,
     updateProfile,
     sendPasswordResetEmail,
+    GoogleAuthProvider,
+    signInWithRedirect,
+    getRedirectResult
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
 import {
@@ -180,11 +183,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Google Sign-In
     const loginWithGoogle = async () => {
         try {
-            const result = await signInWithPopup(auth, googleProvider);
-            await ensureUserDoc(result.user);
+            await signInWithRedirect(auth, googleProvider);
+            // The result will be handled in the onAuthStateChanged listener
         } catch (err) {
             console.error('Google Sign-In Error:', err);
-            throw err; // Re-throw to handle in UI
+            throw err;
         }
     };
 
