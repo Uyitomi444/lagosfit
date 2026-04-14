@@ -90,6 +90,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<AppUser | null>(null);
     const [loading, setLoading] = useState(true);
 
+    // Configuration Health Check (Masked for security)
+    useEffect(() => {
+        const checkConfig = () => {
+            const config = auth.app.options;
+            const health = {
+                apiKey: config.apiKey && config.apiKey.length > 10 ? 'VALID' : 'MISSING/TOO_SHORT',
+                authDomain: config.authDomain && !config.authDomain.includes('%') ? 'VALID' : 'CORRUPTED',
+                projectId: config.projectId && !config.projectId.includes('%') ? 'VALID' : 'CORRUPTED',
+            };
+            console.log('Firebase Config Health Check:', health);
+            if (Object.values(health).includes('CORRUPTED') || Object.values(health).includes('MISSING/TOO_SHORT')) {
+                console.warn('CRITICAL: Firebase configuration is unhealthy. Admin bypass is still active.');
+            }
+        };
+        checkConfig();
+    }, []);
+
     // Handle Redirect Result on mount (catch errors from any previous signInWithRedirect)
     useEffect(() => {
         const handleRedirect = async () => {
