@@ -56,26 +56,24 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
+            if (!import.meta.env.VITE_GEMINI_API_KEY) {
+                throw new Error("Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your settings.");
+            }
+
             const systemPrompt = `
                 You are "LagosFit Buddy", a friendly and street-smart AI mascot for the LagosFit platform.
                 
-                YOUR KNOWLEDGE BASE:
-                - AREAS: ${AREAS.map(a => `${a.name}: ${a.description.en}`).join(' | ')}
-                - AGENTS: ${AGENTS.slice(0, 5).map(a => a.name).join(', ')}
-                - SPOTS: ${PLACES_TO_VISIT.slice(0, 3).map(p => p.name).join(', ')}
+                KNOWLEDGE:
+                - We help people move to Lagos. We have areas like ${AREAS.slice(0, 10).map(a => a.name).join(', ')}.
+                - Features: Market (listings), Lagos on a Budget (PRO guide), Finding a home Quiz.
                 
-                FEATURES:
-                - Market: Listing search.
-                - Budget Explorer (PRO): 45+ budget spots.
-                - Quiz: Finding a home.
+                TONE: Friendly, local Lagosian style. Use light pidgin ("Abeg", "Beta", "Sharp").
                 
-                TONE: Helpful, professional yet local (use occasional light Nigerian English like "Abeg", "Beta", "Sharp sharp").
-                Always encourage Upgrading to Pro for direct agent contacts.
-                
-                USER: ${input}
+                TASK: Answer accurately about Lagos. Encourage Upgrading to Pro for extra features.
             `;
 
-            const result = await model.generateContent(systemPrompt);
+            const fullPrompt = `${systemPrompt}\n\nUser Question: ${input}`;
+            const result = await model.generateContent(fullPrompt);
             const response = await result.response;
             const text = response.text();
 
@@ -87,11 +85,23 @@ const ChatBot = () => {
             };
 
             setMessages(prev => [...prev, botMsg]);
-        } catch (error) {
-            console.error('Gemini Error:', error);
+        } catch (error: any) {
+            console.error('Gemini Error Details:', error);
+            
+            let errorMessage = "Ah, my network is dragging a bit. Please try asking again!";
+            
+            // Detailed debugging for the user
+            if (error.message?.includes('API_KEY_INVALID')) {
+                errorMessage = "Error: Your Gemini API Key looks invalid. Please check it in Vercel/DOTENV.";
+            } else if (error.message?.includes('Missing Gemini')) {
+                errorMessage = "Error: I can't find your Gemini API Key in the settings!";
+            } else if (error.message) {
+                errorMessage = `Buddy is struggling: ${error.message.substring(0, 50)}...`;
+            }
+
             setMessages(prev => [...prev, {
-                id: 'error',
-                text: "Ah, my network is dragging a bit. Please try asking again in a second!",
+                id: 'error-' + Date.now(),
+                text: errorMessage,
                 sender: 'bot',
                 timestamp: new Date()
             }]);
