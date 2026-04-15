@@ -267,6 +267,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 console.log('Popup restricted. Trying Redirect flow...');
                 await signInWithRedirect(auth, googleProvider);
             } else {
+                // Show a clear alert for production debugging
+                const diagnosticInfo = `
+Auth Error: ${err.code}
+Domain: ${window.location.hostname}
+Message: ${err.message}
+                `.trim();
+                
+                if (err.code === 'auth/unauthorized-domain') {
+                    alert(`ACCESS BLOCKED: This domain (${window.location.hostname}) is not authorized in your Firebase Project skip settings. Please add it to "Authorized Domains" in the Firebase Console.`);
+                } else {
+                    alert(diagnosticInfo);
+                }
                 throw err;
             }
         }
