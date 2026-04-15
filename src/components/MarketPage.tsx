@@ -8,11 +8,13 @@ import {
     OFFICE_AGENTS as STATIC_OFFICES,
     TIKTOK_HANDLES as STATIC_TIKTOK
 } from '../data/agents_data';
+import { BUDGET_OUTINGS, type BudgetOuting } from '../data/budget_outings';
 import { db } from '../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { RefreshCw } from 'lucide-react';
 import {
     Search, ExternalLink, Building2, Home, Globe,
     MapPin, Smartphone, Lock, Crown, Phone, MessageSquare,
@@ -27,7 +29,7 @@ const MarketPage = () => {
     const { language, t } = useLanguage();
     const location = useLocation();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, refreshUserStatus } = useAuth();
     
     const isPremium = user?.isPremium === true;
 
@@ -37,35 +39,35 @@ const MarketPage = () => {
             description: t("market.platform.propertypro.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().replace(/\s+/g, "-")}`
+            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().replace(/\s+/g, "-")}?utm_source=lagosfit`
         },
         {
             name: "NaijaHouses",
             description: t("market.platform.naijahouses.desc"),
             icon: <Home size={18} strokeWidth={1.5} />,
             color: "#2C3E50",
-            urlBuilder: (area: string) => `https://naijahouses.com/property/for-rent/lagos/${area.toLowerCase().replace(/\s+/g, "-")}`
+            urlBuilder: (area: string) => `https://naijahouses.com/property/for-rent/lagos/${area.toLowerCase().replace(/\s+/g, "-")}?utm_source=lagosfit`
         },
         {
             name: "MyPlace.ng",
             description: t("market.platform.myplace.desc"),
             icon: <Globe size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://myplace.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://myplace.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
         },
         {
             name: "ListProperty Nigeria",
             description: t("market.platform.listproperty.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "#454545",
-            urlBuilder: (area: string) => `https://listproperty.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://listproperty.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
         },
         {
             name: "Property Marketplace",
             description: t("market.platform.marketplace.desc"),
             icon: <MapPin size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
         },
         {
             name: "TikTok Apartment Hunting",
@@ -82,7 +84,8 @@ const MarketPage = () => {
 
     const [selectedArea, setSelectedArea] = useState(initialArea);
     const [searchTerm, setSearchTerm] = useState('');
-    const [activeTab, setActiveTab] = useState<'platforms' | 'agents'>('platforms');
+    const [activeTab, setActiveTab] = useState<'platforms' | 'agents' | 'budget'>('platforms');
+    const [budgetFilter, setBudgetFilter] = useState<string>('all');
     const [agentSection, setAgentSection] = useState<'individual' | 'agencies' | 'offices' | 'social'>('individual');
     const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
     const [dbAgents, setDbAgents] = useState<any[]>([]); 
@@ -189,9 +192,22 @@ const MarketPage = () => {
                 <button 
                     className="btn btn-primary"
                     onClick={() => navigate('/pricing')}
-                    style={{ padding: '14px 32px', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 auto' }}
+                    style={{ padding: '14px 32px', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '8px', margin: '0 auto 24px' }}
                 >
                     <Crown size={18} /> {t('market.premium.btn')}
+                </button>
+
+                <button 
+                    onClick={() => refreshUserStatus()}
+                    style={{ 
+                        background: 'none', border: 'none', color: 'var(--text-muted)', 
+                        fontSize: '0.85rem', cursor: 'pointer', display: 'flex', 
+                        alignItems: 'center', gap: '6px', margin: '0 auto',
+                        fontWeight: 600, padding: '8px 16px', borderRadius: '8px',
+                        transition: 'color 0.2s'
+                    }}
+                >
+                    <RefreshCw size={14} /> Think you're already Pro? Sync Status
                 </button>
             </motion.div>
         );
@@ -260,10 +276,11 @@ const MarketPage = () => {
                                                     <Phone size={16} /> {agent.phone}
                                                 </a>
                                                 {agent.whatsapp && (
-                                                    <a href={`https://wa.me/${agent.whatsapp}`} target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'rgba(37, 211, 102, 0.1)', color: '#25d366', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                                                    <a href={`https://wa.me/${agent.whatsapp}?text=${encodeURIComponent("Hello! I found your contact on LagosFit and I'm interested in your property listings.")}`} target="_blank" rel="noopener noreferrer" className="btn" style={{ background: 'rgba(37, 211, 102, 0.1)', color: '#25d366', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
                                                         <MessageSquare size={16} /> {t('market.whatsapp')}
                                                     </a>
                                                 )}
+                                                <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textAlign: 'center', margin: '4px 0 0' }}>Tip: Tell them you found them on LagosFit!</p>
                                             </div>
                                         </motion.div>
                                     )}
@@ -284,7 +301,7 @@ const MarketPage = () => {
                                     <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '20px' }}>{agency.description}</p>
                                     <div style={{ display: 'flex', gap: '12px' }}>
                                         <a href={`tel:${agency.phone}`} className="btn" style={{ padding: '8px', flex: 1, textDecoration: 'none', background: 'var(--secondary-bg)', color: 'var(--text-main)', fontSize: '0.8rem', textAlign: 'center' }}>{t('market.call')}</a>
-                                        <a href={agency.website} target="_blank" rel="noopener noreferrer" className="btn" style={{ padding: '8px', flex: 1, textDecoration: 'none', background: 'var(--secondary-bg)', color: 'var(--text-main)', fontSize: '0.8rem', textAlign: 'center' }}>{t('market.website')}</a>
+                                        <a href={`${agency.website}${agency.website.includes('?') ? '&' : '?'}utm_source=lagosfit`} target="_blank" rel="noopener noreferrer" className="btn" style={{ padding: '8px', flex: 1, textDecoration: 'none', background: 'var(--secondary-bg)', color: 'var(--text-main)', fontSize: '0.8rem', textAlign: 'center' }}>{t('market.website')}</a>
                                     </div>
                                 </div>
                             ))}
@@ -309,7 +326,7 @@ const MarketPage = () => {
                         <div>
                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
                                 {socialList.map((handle: any) => (
-                                    <a key={handle.handle} href={handle.url} target="_blank" rel="noopener noreferrer" className="card" style={{ padding: '20px', textDecoration: 'none', color: 'var(--text-main)' }}>
+                                    <a key={handle.handle} href={`${handle.url}${handle.url.includes('?') ? '&' : '?'}ref=lagosfit`} target="_blank" rel="noopener noreferrer" className="card" style={{ padding: '20px', textDecoration: 'none', color: 'var(--text-main)' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                                             <span style={{ fontWeight: 700, color: 'var(--primary-color)' }}>{handle.handle}</span>
                                             <ExternalLink size={14} />
@@ -324,6 +341,140 @@ const MarketPage = () => {
             )}
         </div>
     );
+    
+    const BudgetExplorer = () => {
+        const filteredOutings = budgetFilter === 'all' 
+            ? BUDGET_OUTINGS 
+            : BUDGET_OUTINGS.filter(o => o.budget === budgetFilter);
+
+        return (
+            <div>
+                <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+                    <h2 style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '12px', background: 'linear-gradient(135deg, var(--primary-color), var(--accent-color))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                        {t('budget.title')}
+                    </h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
+                        {t('budget.subtitle')}
+                    </p>
+                </div>
+
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    {[
+                        { key: 'all', label: t('budget.category.all') },
+                        { key: 'under_5k', label: t('budget.category.under_5k') },
+                        { key: 'under_15k', label: t('budget.category.under_15k') },
+                        { key: 'under_20k', label: t('budget.category.under_20k') },
+                        { key: 'under_30k', label: t('budget.category.under_30k') }
+                    ].map(btn => (
+                        <button
+                            key={btn.key}
+                            onClick={() => setBudgetFilter(btn.key)}
+                            style={{
+                                padding: '10px 24px', borderRadius: '50px',
+                                border: budgetFilter === btn.key ? 'none' : '1px solid var(--border-color)',
+                                background: budgetFilter === btn.key ? 'var(--primary-color)' : 'var(--card-bg)',
+                                color: budgetFilter === btn.key ? 'white' : 'var(--text-muted)',
+                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem',
+                                transition: 'all 0.3s ease',
+                                boxShadow: budgetFilter === btn.key ? '0 8px 16px rgba(var(--primary-rgb), 0.2)' : 'none'
+                            }}
+                        >
+                            {btn.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+                    {filteredOutings.map(outing => (
+                        <motion.div
+                            key={outing.id}
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="card"
+                            style={{ 
+                                padding: '0', 
+                                overflow: 'hidden', 
+                                display: 'flex', 
+                                flexDirection: 'column',
+                                height: '100%',
+                                position: 'relative'
+                            }}
+                        >
+                            <div style={{ 
+                                padding: '24px 32px', 
+                                background: 'rgba(var(--primary-rgb), 0.03)',
+                                borderBottom: '1px solid var(--border-color)',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center'
+                            }}>
+                                <span style={{ 
+                                    padding: '4px 12px', 
+                                    borderRadius: '50px', 
+                                    background: 'var(--primary-color)', 
+                                    color: 'white', 
+                                    fontSize: '0.75rem', 
+                                    fontWeight: 800,
+                                    textTransform: 'uppercase'
+                                }}>
+                                    {outing.category}
+                                </span>
+                                <span style={{ 
+                                    fontSize: '0.85rem', 
+                                    fontWeight: 700, 
+                                    color: 'var(--accent-color)' 
+                                }}>
+                                    {t(`budget.category.${outing.budget}`)}
+                                </span>
+                            </div>
+
+                            <div style={{ padding: '32px' }}>
+                                <h3 style={{ fontSize: '1.4rem', marginBottom: '12px' }}>{outing.name}</h3>
+                                <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '20px' }}>
+                                    {outing.description}
+                                </p>
+                                
+                                <div style={{ 
+                                    background: 'var(--secondary-bg)', 
+                                    padding: '16px', 
+                                    borderRadius: '16px',
+                                    marginBottom: '24px'
+                                }}>
+                                    <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>
+                                        {t('explore.details.price_range')}
+                                    </h4>
+                                    <p style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>{outing.costBreakdown}</p>
+                                </div>
+
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+                                    {outing.activities.map(act => (
+                                        <span key={act} style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'var(--secondary-bg)', padding: '4px 10px', borderRadius: '6px' }}>
+                                            • {act}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div style={{ 
+                                marginTop: 'auto',
+                                padding: '20px 32px', 
+                                borderTop: '1px solid var(--border-color)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                background: 'rgba(255, 255, 255, 0.01)'
+                            }}>
+                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                                    {t('budget.source_by').replace('{0}', outing.source)}
+                                </span>
+                                <ExternalLink size={14} color="var(--text-muted)" />
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
 
     return (
         <>
@@ -337,10 +488,15 @@ const MarketPage = () => {
                     <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>{t('market.subtitle.main')}</p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '6px', background: 'var(--secondary-bg)', padding: '6px', borderRadius: '16px', maxWidth: '400px', margin: '0 auto 40px' }}>
-                    <button onClick={() => setActiveTab('platforms')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'platforms' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'platforms' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700 }}>{t('market.tabs.platforms')}</button>
-                    <button onClick={() => setActiveTab('agents')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'agents' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'agents' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '6px', background: 'var(--secondary-bg)', padding: '6px', borderRadius: '16px', maxWidth: '600px', margin: '0 auto 40px', overflowX: 'auto' }}>
+                    <button onClick={() => setActiveTab('platforms')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'platforms' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'platforms' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, whiteSpace: 'nowrap' }}>{t('market.tabs.platforms')}</button>
+                    
+                    <button onClick={() => setActiveTab('agents')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'agents' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'agents' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
                         <Crown size={14} /> {t('market.tabs.agents')} {!isPremium && <Lock size={12} />}
+                    </button>
+
+                    <button onClick={() => setActiveTab('budget')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'budget' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'budget' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+                        <Smartphone size={14} /> {t('market.tabs.budget')} {!isPremium && <Lock size={12} />}
                     </button>
                 </div>
 
@@ -373,7 +529,7 @@ const MarketPage = () => {
                             </div>
                         </div>
                     </div>
-                ) : (
+                ) : activeTab === 'agents' ? (
                     <div>
                         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
                             <h2 style={{ fontSize: '2rem' }}>{t('market.directory.title')}</h2>
@@ -381,6 +537,12 @@ const MarketPage = () => {
                         </div>
                         <PremiumGate>
                             <AgentDirectory />
+                        </PremiumGate>
+                    </div>
+                ) : (
+                    <div>
+                        <PremiumGate>
+                            <BudgetExplorer />
                         </PremiumGate>
                     </div>
                 )}

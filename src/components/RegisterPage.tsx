@@ -16,8 +16,15 @@ const RegisterPage = () => {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { register, loginWithGoogle } = useAuth();
+    const { user, register, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
+
+    // Auto-redirect if user is already logged in (e.g. after coming back from Google redirect)
+    React.useEffect(() => {
+        if (user) {
+            navigate('/', { replace: true });
+        }
+    }, [user, navigate]);
 
     const getReadableError = (code: string) => {
         switch (code) {

@@ -14,10 +14,17 @@ const LoginPage = () => {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { login, loginWithGoogle } = useAuth();
+    const { user, login, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const redirectTo = (location.state as any)?.from || '/';
+
+    // Auto-redirect if user is already logged in (e.g. after coming back from Google redirect)
+    React.useEffect(() => {
+        if (user) {
+            navigate(redirectTo, { replace: true });
+        }
+    }, [user, navigate, redirectTo]);
 
     const getReadableError = (code: string) => {
         switch (code) {
@@ -49,7 +56,8 @@ const LoginPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
-        console.log('Initiating Google Sign-In (Popup)...');
+        console.log('Initiating Google Sign-In (Redirect flow)...');
+        console.log('Current Hostname:', window.location.hostname);
 
         try {
             await loginWithGoogle();

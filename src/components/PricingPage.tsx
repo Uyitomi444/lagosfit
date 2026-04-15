@@ -24,10 +24,14 @@ const PricingPage = () => {
             email: user.email || '',
             userId: user.uid,
             plan: plan,
-            onSuccess: (reference: string) => {
+            onSuccess: async (reference: string) => {
                 console.log('Payment Successful:', reference);
-                upgradeToPremium(reference);
-                navigate('/profile', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
+                try {
+                    await upgradeToPremium(reference);
+                    navigate('/profile', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
+                } catch (err: any) {
+                    alert(err.message || 'Payment confirmed but failed to update status. Please try refreshing your profile.');
+                }
             },
             onCancel: () => {
                 console.log('Payment closed');

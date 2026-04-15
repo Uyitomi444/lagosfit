@@ -7,6 +7,7 @@ import {
     updateProfile,
     sendPasswordResetEmail,
     signInWithPopup,
+    signInWithRedirect,
     getRedirectResult
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -43,8 +44,9 @@ interface AuthContextType {
     saveQuizHistory: (item: QuizHistoryItem) => Promise<void>;
     getQuizHistory: () => Promise<QuizHistoryItem[]>;
     upgradeToPremium: (paymentReference: string) => Promise<void>;
-    toggleFavorite: (areaId: string) => Promise<void>; // Added
-    updateUserInfo: (name: string, photoURL?: string) => Promise<void>; // Added
+    toggleFavorite: (areaId: string) => Promise<void>; 
+    updateUserInfo: (name: string, photoURL?: string) => Promise<void>;
+    refreshUserStatus: () => Promise<void>; // Added
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -118,6 +120,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
             } catch (err: any) {
                 console.error('Redirect Sign-In Error:', err);
+                // Temporary debug alert for the user to see the exact error code
+                if (err.code) {
+                    alert(`Firebase Error: ${err.code}\n${err.message}\nHostname: ${window.location.hostname}`);
+                }
+            } finally {
+                setLoading(false);
             }
         };
         handleRedirect();
@@ -173,13 +181,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 } catch (err) {
                     console.error('Failed to check user status:', err);
                 }
-                setUser(mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData));
+                const updatedUser = mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData);
+                setUser(updatedUser);
             } else {
                 setUser(null);
             }
             setLoading(false);
         });
         return () => unsubscribe();
+    }, []);
+
+    // Added: Manual refresh of user status from Firestore
+    const refreshUserStatus = useCallback(async () => {
+        const firebaseUser = auth.currentUser;
+        if (!firebaseUser) return;
+
+        setLoading(true);
+        try {
+            const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
+            if (snap.exists()) {
+                const data = snap.data();
+                const isPremium = data.isPremium === true;
+                const isAdmin = data.isAdmin === true || (firebaseUser.email?.toLowerCase() === 'admin@lagosfit.com');
+                const favorites = data.favorites || [];
+                const firestoreData = { name: data.name, photoURL: data.photoURL };
+                
+                setUser(mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData));
+                console.log('User status manually refreshed from Firestore');
+            }
+        } catch (err) {
+            console.error('Manual refresh failed:', err);
+        } finally {
+            setLoading(false);
+        }
     }, []);
 
     // Email + Password Registration
@@ -214,11 +248,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Google Sign-In
     const loginWithGoogle = async () => {
         try {
+            console.log('Attempting Google Sign-In (Popup mode)...');
+            // We try popup first. If you are in mobile emulation, 
+            // the browser might handle a popup better than a full-page disallowed redirect.
             const result = await signInWithPopup(auth, googleProvider);
             await ensureUserDoc(result.user);
-        } catch (err) {
-            console.error('Google Sign-In Error:', err);
-            throw err;
+            console.log('Google Sign-In Successful');
+        } catch (err: any) {
+            console.error('Google Sign-In Error:', {
+                code: err.code,
+                message: err.message,
+                domain: window.location.hostname
+            });
+
+            // If the popup is blocked OR Google blocks the useragent in popup mode,
+            // we let the user know and try redirect as a last resort.
+            if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+                console.log('Popup restricted. Trying Redirect flow...');
+                await signInWithRedirect(auth, googleProvider);
+            } else {
+                throw err;
+            }
         }
     };
 
@@ -243,12 +293,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (!user) return;
         try {
             const userRef = doc(db, 'users', user.uid);
-            await updateDoc(userRef, {
+            await setDoc(userRef, {
                 quizHistory: arrayUnion({
                     ...item,
                     savedAt: new Date().toISOString()
                 })
-            });
+            }, { merge: true });
         } catch (err) {
             console.error('Failed to save quiz history to Firestore:', err);
         }
@@ -271,21 +321,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Upgrade to premium after successful payment
     const upgradeToPremium = useCallback(async (paymentReference: string) => {
-        if (!user) throw new Error('Must be logged in to upgrade');
+        const currentUser = auth.currentUser;
+        if (!currentUser) throw new Error('Must be logged in to upgrade');
+        
         try {
-            const userRef = doc(db, 'users', user.uid);
-            await updateDoc(userRef, {
+            const userRef = doc(db, 'users', currentUser.uid);
+            
+            console.log('Finalizing Pro Upgrade in Firestore...');
+            
+            await setDoc(userRef, {
                 isPremium: true,
                 premiumUpgradedAt: serverTimestamp(),
                 paymentReference
-            });
-            // Update local user state
+            }, { merge: true });
+
+            // Update local user state immediately
             setUser(prev => prev ? { ...prev, isPremium: true } : null);
-        } catch (err) {
-            console.error('Failed to upgrade to premium:', err);
+            console.log('Pro status updated successfully!');
+        } catch (err: any) {
+            console.error('PRO UPGRADE FAILED:', err);
+            // If it's a permission error, alert the user or log it specifically
+            if (err.code === 'permission-denied') {
+                throw new Error('Database permission denied. Please ensure you have updated your Firebase Security Rules in the console.');
+            }
             throw err;
         }
-    }, [user]);
+    }, []);
 
     // Added: Shortlist/Favorites toggle
     const toggleFavorite = useCallback(async (areaId: string) => {
@@ -298,9 +359,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 ? currentFavorites.filter(id => id !== areaId)
                 : [...currentFavorites, areaId];
 
-            await updateDoc(userRef, {
+            await setDoc(userRef, {
                 favorites: newFavorites
-            });
+            }, { merge: true });
 
             // Update local state for immediate feedback
             setUser(prev => prev ? { ...prev, favorites: newFavorites } : null);
@@ -327,10 +388,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             // 2. Update Firestore doc (No size limit issues for standard profile images)
             const userRef = doc(db, 'users', currentUser.uid);
-            await updateDoc(userRef, {
+            await setDoc(userRef, {
                 name: name || currentUser.displayName || '',
                 photoURL: photoURL || currentUser.photoURL || ''
-            });
+            }, { merge: true });
 
             // 3. Update local state explicitly to trigger immediate re-renders
             setUser(prev => {
@@ -353,7 +414,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         <AuthContext.Provider value={{
             user, loading, login, register, loginWithGoogle,
             logout, resetPassword, saveQuizHistory, getQuizHistory,
-            upgradeToPremium, toggleFavorite, updateUserInfo
+            upgradeToPremium, toggleFavorite, updateUserInfo, refreshUserStatus
         }}>
             {children}
         </AuthContext.Provider>
