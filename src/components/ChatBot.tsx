@@ -162,7 +162,7 @@ const ChatBot = () => {
                         </div>
 
                         {/* Messages Area */}
-                        <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--secondary-bg)' }}>
+                        <div style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px', background: 'var(--bg-color)' }}>
                             {messages.map((msg) => (
                                 <div key={msg.id} style={{
                                     alignSelf: msg.sender === 'user' ? 'flex-end' : 'flex-start',
@@ -173,10 +173,11 @@ const ChatBot = () => {
                                     <div style={{
                                         padding: '12px 16px',
                                         borderRadius: msg.sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                                        background: msg.sender === 'user' ? 'var(--primary-color)' : 'white',
+                                        background: msg.sender === 'user' ? 'var(--primary-color)' : 'var(--card-bg)',
                                         color: msg.sender === 'user' ? 'white' : 'var(--text-main)',
                                         fontSize: '0.9rem',
-                                        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                                        boxShadow: 'var(--shadow)',
+                                        border: msg.sender === 'user' ? 'none' : '1px solid var(--border-color)',
                                         lineHeight: 1.5
                                     }}>
                                         {msg.text}
@@ -184,7 +185,7 @@ const ChatBot = () => {
                                 </div>
                             ))}
                             {isLoading && (
-                                <div style={{ alignSelf: 'flex-start', background: 'white', padding: '12px 16px', borderRadius: '18px', display: 'flex', gap: '4px' }}>
+                                <div style={{ alignSelf: 'flex-start', background: 'var(--card-bg)', padding: '12px 16px', borderRadius: '18px', display: 'flex', gap: '4px', border: '1px solid var(--border-color)' }}>
                                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary-color)' }} />
                                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.2 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary-color)' }} />
                                     <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1, delay: 0.4 }} style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--primary-color)' }} />
@@ -194,7 +195,7 @@ const ChatBot = () => {
                         </div>
 
                         {/* Input Area */}
-                        <div style={{ padding: '16px', background: 'white', borderTop: '1px solid var(--border-color)' }}>
+                        <div style={{ padding: '16px', background: 'var(--card-bg)', borderTop: '1px solid var(--border-color)' }}>
                             <div style={{ display: 'flex', gap: '8px' }}>
                                 <input
                                     type="text"
@@ -206,6 +207,7 @@ const ChatBot = () => {
                                         flex: 1, padding: '12px 16px', borderRadius: '24px',
                                         border: '1px solid var(--border-color)',
                                         background: 'var(--secondary-bg)',
+                                        color: 'var(--text-main)',
                                         fontSize: '0.9rem', outline: 'none'
                                     }}
                                 />
