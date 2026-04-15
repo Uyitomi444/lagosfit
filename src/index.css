@@ -235,9 +235,25 @@ a {
   }
 
   /* Make grid cards not overflow */
-  section {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .mobile-stack {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .tab-scroll {
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    padding-bottom: 8px !important;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -253,13 +269,12 @@ a {
   }
 }
 
-@media (max-width: 480px) {
-  .card {
-    padding: 20px 16px !important;
-  }
-  
   .container {
-    padding: 0 12px;
+    padding: 0 16px;
+  }
+
+  .card {
+    padding: 24px 20px !important;
   }
 }
 

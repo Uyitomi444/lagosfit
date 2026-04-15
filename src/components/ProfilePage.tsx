@@ -128,7 +128,10 @@ const ProfilePage = () => {
 
     return (
         <div className="container" style={{ padding: '60px 24px', maxWidth: '1000px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px' }}>
+            <div 
+                className="grid-responsive"
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px' }}
+            >
                 
                 {/* Left Column: User Card & Settings */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>

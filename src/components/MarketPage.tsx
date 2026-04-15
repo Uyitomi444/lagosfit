@@ -324,7 +324,10 @@ const MarketPage = () => {
 
                     {agentSection === 'social' && (
                         <div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+                            <div 
+                            className="grid-responsive"
+                            style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}
+                        >
                                 {socialList.map((handle: any) => (
                                     <a key={handle.handle} href={`${handle.url}${handle.url.includes('?') ? '&' : '?'}ref=lagosfit`} target="_blank" rel="noopener noreferrer" className="card" style={{ padding: '20px', textDecoration: 'none', color: 'var(--text-main)' }}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -384,7 +387,10 @@ const MarketPage = () => {
                     ))}
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+                <div 
+                    className="grid-responsive"
+                    style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}
+                >
                     {filteredOutings.map(outing => (
                         <motion.div
                             key={outing.id}
@@ -507,7 +513,14 @@ const MarketPage = () => {
                     <p style={{ color: 'var(--text-muted)', fontSize: '1.2rem', maxWidth: '700px', margin: '0 auto' }}>{t('market.subtitle.main')}</p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '6px', background: 'var(--secondary-bg)', padding: '6px', borderRadius: '16px', maxWidth: '600px', margin: '0 auto 40px', overflowX: 'auto' }}>
+                <div 
+                    className="tab-scroll"
+                    style={{ 
+                        display: 'flex', gap: '6px', background: 'var(--secondary-bg)', 
+                        padding: '6px', borderRadius: '16px', maxWidth: '600px', 
+                        margin: '0 auto 40px', overflowX: 'auto' 
+                    }}
+                >
                     <button onClick={() => setActiveTab('platforms')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'platforms' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'platforms' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, whiteSpace: 'nowrap' }}>{t('market.tabs.platforms')}</button>
                     
                     <button onClick={() => setActiveTab('agents')} style={{ flex: 1, padding: '12px', borderRadius: '12px', border: 'none', background: activeTab === 'agents' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'agents' ? 'white' : 'var(--text-muted)', cursor: 'pointer', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
@@ -536,7 +549,10 @@ const MarketPage = () => {
                                 <h2 style={{ fontSize: '2.5rem', color: 'white' }}>{selectedArea.name}</h2>
                                 <p style={{ marginTop: '12px' }}>{selectedArea.description[language] || selectedArea.description['en']}</p>
                             </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+                            <div 
+                                className="grid-responsive"
+                                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}
+                            >
                                 {PLATFORMS.map(platform => (
                                     <div key={platform.name} className="card" style={{ padding: '32px', borderTop: `4px solid ${platform.color}` }}>
                                         <div style={{ marginBottom: '20px' }}>{platform.icon}</div>
