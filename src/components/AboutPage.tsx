@@ -36,8 +36,11 @@ const AboutPage = () => {
                 <div style={{ position: 'absolute', bottom: '-10%', right: '-5%', width: '300px', height: '300px', background: 'rgba(255,255,255,0.05)', borderRadius: '50%' }} />
             </div>
 
-            <div className="container" style={{ padding: '60px 24px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
+            <div className="container" style={{ padding: '40px 24px' }}>
+                <div 
+                    className="grid-responsive"
+                    style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}
+                >
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -70,7 +73,10 @@ const AboutPage = () => {
                         <div style={{ width: '60px', height: '4px', background: 'var(--accent-color)', margin: '0 auto' }} />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+                    <div 
+                        className="grid-responsive"
+                        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}
+                    >
                         {[
                             { icon: <Globe size={32} />, title: t('about.value1_title'), text: t('about.value1_text') },
                             { icon: <Heart size={32} />, title: t('about.value2_title'), text: t('about.value2_text') },
@@ -102,7 +108,10 @@ const AboutPage = () => {
                     </div>
                 </div>
 
-                <div style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px', textAlign: 'center' }}>
+                <div 
+                    className="mobile-stack"
+                    style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px 24px', textAlign: 'center' }}
+                >
                     <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
                     <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
                     <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
