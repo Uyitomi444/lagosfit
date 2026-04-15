@@ -3,8 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, Sparkles } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AREAS } from '../data/quiz_data';
-import { AGENTS } from '../data/agents_data';
-import { PLACES_TO_VISIT } from '../data/lifestyle_data';
 
 const mascotImg = "/lagosfit_mascot_head.png"; 
 
