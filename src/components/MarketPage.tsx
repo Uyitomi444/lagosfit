@@ -8,7 +8,7 @@ import {
     OFFICE_AGENTS as STATIC_OFFICES,
     TIKTOK_HANDLES as STATIC_TIKTOK
 } from '../data/agents_data';
-import { BUDGET_OUTINGS, type BudgetOuting } from '../data/budget_outings';
+import { BUDGET_OUTINGS } from '../data/budget_outings';
 import { db } from '../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
