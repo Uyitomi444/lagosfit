@@ -9,26 +9,32 @@ import { getStorage } from 'firebase/storage'; // Added Storage import
 const sanitize = (val: string | undefined, keyName?: string) => {
     if (!val) return "";
     
-    // 1. Remove literal placeholders and control characters
+    // 1. Aggressive removal of common Vercel corruption patterns
     let cleaned = val
-        .replace(/%H DOMAIN%/g, '')
-        .replace(/%09/g, '')
+        .replace(/%H DOMAIN%/gi, '')
+        .replace(/H_DOMAIN/gi, '')
+        .replace(/%09/gi, '')
         .replace(/YOUR_API_KEY/g, '')
         .replace(/YOUR_PROJECT_ID/g, '')
         .replace(/YOUR_APP_ID/g, '')
+        .replace(/%[0-9A-Z]{2}/g, '') // Remove any URL encoding fragments like %09
         .trim();
 
-    // 2. If it's an authDomain and it still looks corrupted or contains placeholders, reconstruct it
-    if (keyName === 'authDomain' && (cleaned.includes('%') || !cleaned.includes('.') || cleaned.length < 5)) {
-        const projectId = sanitize(import.meta.env.VITE_FIREBASE_PROJECT_ID);
-        if (projectId && !projectId.includes('%')) {
-            cleaned = `${projectId}.firebaseapp.com`;
+    // 2. Specialized extraction for authDomain
+    if (keyName === 'authDomain') {
+        // Find the actual domain part: [project-id].firebaseapp.com
+        const match = cleaned.match(/[a-z0-9-]+\.firebaseapp\.com/i);
+        if (match) {
+            cleaned = match[0];
         } else {
-            // Absolute fallback for this specific project
-            cleaned = "lagosfit-ec59a.firebaseapp.com";
+            const projectId = sanitize(import.meta.env.VITE_FIREBASE_PROJECT_ID);
+            if (projectId && !projectId.includes('%') && !projectId.includes('H_')) {
+                cleaned = `${projectId}.firebaseapp.com`;
+            } else {
+                cleaned = "lagosfit-ec59a.firebaseapp.com";
+            }
         }
     }
-
     return cleaned;
 };
 
