@@ -6,10 +6,6 @@ import { AREAS } from '../data/quiz_data';
 import { AGENTS } from '../data/agents_data';
 import { PLACES_TO_VISIT } from '../data/lifestyle_data';
 
-// Initialize Gemini (User needs to provide VITE_GEMINI_API_KEY)
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || '');
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
 const mascotImg = "/lagosfit_mascot_head.png"; 
 
 interface Message {
@@ -56,9 +52,14 @@ const ChatBot = () => {
         setIsLoading(true);
 
         try {
-            if (!import.meta.env.VITE_GEMINI_API_KEY) {
+            const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+            if (!apiKey || apiKey === 'PASTE_YOUR_GOOGLE_AI_KEY_HERE') {
                 throw new Error("Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your settings.");
             }
+
+            // Initialize inside the function to ensure the key is captured
+            const genAI = new GoogleGenerativeAI(apiKey);
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
             const systemPrompt = `
                 You are "LagosFit Buddy", a friendly and street-smart AI mascot for the LagosFit platform.
