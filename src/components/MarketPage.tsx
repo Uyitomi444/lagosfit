@@ -19,7 +19,7 @@ import {
     Search, ExternalLink, Building2, Home, Globe,
     MapPin, Smartphone, Lock, Crown, Phone, MessageSquare,
     ChevronDown, ChevronUp, Star,
-    Users, Briefcase, Loader2
+    Users, Briefcase, Loader2, Clock
 } from 'lucide-react';
 
 import ReviewSection from './ReviewSection';
@@ -436,14 +436,33 @@ const MarketPage = () => {
                                 
                                 <div style={{ 
                                     background: 'var(--secondary-bg)', 
-                                    padding: '16px', 
+                                    padding: '20px', 
                                     borderRadius: '16px',
-                                    marginBottom: '24px'
+                                    marginBottom: '24px',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '12px'
                                 }}>
-                                    <h4 style={{ fontSize: '0.8rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                                        {t('explore.details.price_range')}
-                                    </h4>
-                                    <p style={{ margin: 0, fontWeight: 600, fontSize: '0.95rem' }}>{outing.costBreakdown}</p>
+                                    <div>
+                                        <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <MapPin size={12} /> {t('explore.details.location')}
+                                        </h4>
+                                        <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{outing.address}</p>
+                                    </div>
+
+                                    <div>
+                                        <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Clock size={12} /> {t('explore.details.best_time')}
+                                        </h4>
+                                        <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{outing.openingHours}</p>
+                                    </div>
+
+                                    <div>
+                                        <h4 style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Smartphone size={12} /> {t('explore.details.price_range')}
+                                        </h4>
+                                        <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{outing.costBreakdown}</p>
+                                    </div>
                                 </div>
 
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
