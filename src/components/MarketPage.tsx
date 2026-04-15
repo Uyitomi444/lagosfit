@@ -39,42 +39,42 @@ const MarketPage = () => {
             description: t("market.platform.propertypro.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}?utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}`
         },
         {
             name: "NaijaHouses",
             description: t("market.platform.naijahouses.desc"),
             icon: <Home size={18} strokeWidth={1.5} />,
             color: "#2C3E50",
-            urlBuilder: (area: string) => `https://naijahouses.com/property/for-rent/lagos/${area.toLowerCase().replace(/\s+/g, "-")}?utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://naijahouses.com/property/for-rent/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}`
         },
         {
             name: "MyPlace.ng",
             description: t("market.platform.myplace.desc"),
             icon: <Globe size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://myplace.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://myplace.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
         },
         {
             name: "ListProperty Nigeria",
             description: t("market.platform.listproperty.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "#454545",
-            urlBuilder: (area: string) => `https://listproperty.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://listproperty.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
         },
         {
             name: "Property Marketplace",
             description: t("market.platform.marketplace.desc"),
             icon: <MapPin size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}&utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
         },
         {
             name: "TikTok Apartment Hunting",
             description: t("market.platform.tiktok.desc"),
             icon: <Smartphone size={18} strokeWidth={1.5} />,
             color: "#000000",
-            urlBuilder: (area: string) => `https://www.tiktok.com/search/video?q=${encodeURIComponent(area + " apartments lagos")}&ref=lagosfit`
+            urlBuilder: (area: string) => `https://www.tiktok.com/search?q=${encodeURIComponent(area + " apartment lagos")}`
         }
     ];
 
