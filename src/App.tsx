@@ -21,7 +21,7 @@ import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './components/AdminDashboard';
-import AIAssistant from './components/AIAssistant';
+import ChatBot from './components/ChatBot';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
@@ -69,7 +69,7 @@ function App() {
                     </Routes>
                   </div>
                   <Footer />
-                  <AIAssistant />
+                  <ChatBot />
                 </div>
               </Router>
             </QuizProvider>
