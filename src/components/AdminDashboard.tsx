@@ -60,14 +60,14 @@ const OverviewTab = ({ stats }: any) => {
 
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '40px' }}>
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '40px' }}>
                 <StatCard label="Total Users" value={stats.totalUsers} icon={<Users size={20} strokeWidth={1.5} />} />
                 <StatCard label="Pro Subscribers" value={stats.premiumUsers} icon={<Crown size={20} strokeWidth={1.5} />} />
                 <StatCard label="Monthly Revenue" value={`₦${mrr.toLocaleString()}`} icon={<TrendingUp size={20} strokeWidth={1.5} />} />
                 <StatCard label="Total Agents" value={stats.totalAgents} icon={<Briefcase size={20} strokeWidth={1.5} />} />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
                 <div className="card" style={{ padding: '32px' }}>
                     <h3 style={{ marginBottom: '24px' }}>Conversion Performance</h3>
                     <div style={{ height: '24px', background: 'var(--secondary-bg)', borderRadius: '12px', overflow: 'hidden', display: 'flex', marginBottom: '16px' }}>
@@ -103,8 +103,11 @@ const UsersTab = ({ users, togglePremium }: any) => {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="card" style={{ padding: '0', overflow: 'hidden' }}>
-            <div style={{ padding: '24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div style={{ position: 'relative', width: '300px' }}>
+            <div 
+                className="mobile-stack"
+                style={{ padding: '24px', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px' }}
+            >
+                <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
                     <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                     <input 
                         type="text" placeholder="Search users by name or email..." 
@@ -113,7 +116,8 @@ const UsersTab = ({ users, togglePremium }: any) => {
                     />
                 </div>
             </div>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <div style={{ overflowX: 'auto' }}>
+                <table style={{ minWidth: '600px', width: '100%', borderCollapse: 'collapse' }}>
                 <thead style={{ background: 'var(--secondary-bg)', color: 'var(--text-muted)', fontSize: '0.8rem', textAlign: 'left' }}>
                     <tr>
                         <th style={{ padding: '16px 24px' }}>USER</th>
@@ -159,7 +163,8 @@ const UsersTab = ({ users, togglePremium }: any) => {
                         </tr>
                     ))}
                 </tbody>
-            </table>
+                </table>
+            </div>
         </motion.div>
     );
 };
@@ -189,7 +194,7 @@ const AnalyticsTab = ({ users }: any) => {
 
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '32px' }}>
+            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '32px' }}>
                 {/* Top Recommendations */}
                 <div className="card" style={{ padding: '32px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
@@ -272,7 +277,10 @@ const AnalyticsTab = ({ users }: any) => {
                         <ShieldCheck size={24} color="var(--success-color)" strokeWidth={1.5} />
                         <h3 style={{ margin: 0 }}>Platform & Revenue Summary</h3>
                     </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+                    <div 
+                        className="grid-responsive"
+                        style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}
+                    >
                         <div style={{ padding: '20px', background: 'var(--secondary-bg)', borderRadius: '16px', textAlign: 'center' }}>
                             <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success-color)', marginBottom: '4px' }}>
                                 ₦{(users.filter((u: any) => u.isPremium).length * 4500).toLocaleString()}
@@ -325,8 +333,8 @@ const AgentsTab = ({ agents, deleteAgent, onMigrate, actionLoading, onEdit, onAd
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-                <div style={{ position: 'relative', width: '300px' }}>
+            <div className="mobile-stack" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px', gap: '16px' }}>
+                <div style={{ position: 'relative', width: '100%', maxWidth: '300px' }}>
                     <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                     <input 
                         type="text" placeholder="Search agents..." 
@@ -334,17 +342,24 @@ const AgentsTab = ({ agents, deleteAgent, onMigrate, actionLoading, onEdit, onAd
                         style={{ width: '100%', padding: '10px 12px 10px 40px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-bg)' }}
                     />
                 </div>
-                <div style={{ display: 'flex', gap: '12px' }}>
+                <div 
+                    className="mobile-stack"
+                    style={{ display: 'flex', gap: '12px', width: '100%', justifyContent: 'flex-end' }}
+                >
                     <button 
                         onClick={onMigrate} 
                         disabled={actionLoading}
                         className="btn btn-outline" 
-                        style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-color)' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-color)', flex: 1, justifyContent: 'center' }}
                     >
-                        <TrendingUp size={18} /> {actionLoading ? 'Working...' : 'Refetch/Migrate'}
+                        <TrendingUp size={18} /> {actionLoading ? 'Working...' : 'Sync'}
                     </button>
-                    <button onClick={onAdd} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <Plus size={18} /> Add New Agent
+                    <button 
+                        onClick={onAdd} 
+                        className="btn btn-primary" 
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, justifyContent: 'center' }}
+                    >
+                        <Plus size={18} /> New Agent
                     </button>
                 </div>
             </div>
@@ -548,14 +563,15 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)' }}>
-            {/* Sidebar */}
+        <div className="mobile-stack" style={{ display: 'flex', minHeight: '100vh', background: 'var(--bg-color)', width: '100%' }}>
+            {/* Sidebar / Navigation */}
             <motion.div 
                 initial={{ x: -250 }} animate={{ x: 0 }}
                 style={{ 
                     width: '260px', background: 'var(--card-bg)', borderRight: '1px solid var(--border-color)',
                     padding: '24px', display: 'flex', flexDirection: 'column'
                 }}
+                className="hide-on-mobile admin-sidebar"
             >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '40px' }}>
                     <div style={{ 
@@ -580,12 +596,26 @@ const AdminDashboard = () => {
                 </div>
             </motion.div>
 
+            {/* Mobile Bottom Navigation (Only visible on Mobile) */}
+            <div className="show-on-mobile" style={{ 
+                position: 'fixed', bottom: 0, left: 0, right: 0, 
+                background: 'var(--card-bg)', borderTop: '1px solid var(--border-color)',
+                display: 'flex', justifyContent: 'space-around', padding: '12px 0 20px',
+                zIndex: 1000, boxShadow: '0 -4px 12px rgba(0,0,0,0.05)'
+            }}>
+                <button onClick={() => setActiveTab('overview')} style={{ background: 'none', border: 'none', color: activeTab === 'overview' ? 'var(--primary-color)' : 'var(--text-muted)' }}><LayoutDashboard size={24} /></button>
+                <button onClick={() => setActiveTab('users')} style={{ background: 'none', border: 'none', color: activeTab === 'users' ? 'var(--primary-color)' : 'var(--text-muted)' }}><Users size={24} /></button>
+                <button onClick={() => setActiveTab('agents')} style={{ background: 'none', border: 'none', color: activeTab === 'agents' ? 'var(--primary-color)' : 'var(--text-muted)' }}><Briefcase size={24} /></button>
+                <button onClick={() => setActiveTab('analytics')} style={{ background: 'none', border: 'none', color: activeTab === 'analytics' ? 'var(--primary-color)' : 'var(--text-muted)' }}><BarChart3 size={24} /></button>
+                <button onClick={() => logout()} style={{ background: 'none', border: 'none', color: 'var(--error-color)' }}><LogOut size={24} /></button>
+            </div>
+
             {/* Main Content */}
-            <div style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+            <div style={{ flex: 1, padding: '40px 24px', overflowY: 'auto', paddingBottom: '100px' }}>
                 <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                     <div>
-                        <h1 style={{ fontSize: '2rem', marginBottom: '8px' }}>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
-                        <p style={{ color: 'var(--text-muted)' }}>Welcome back, {user?.name || 'Admin'}</p>
+                        <h1 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
+                        <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Welcome, {user?.name || 'Admin'}</p>
                     </div>
                 </header>
 

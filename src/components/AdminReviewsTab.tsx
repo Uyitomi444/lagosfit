@@ -66,38 +66,40 @@ const AdminReviewsTab = () => {
                             key={review.id}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="card"
-                            style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '20px', alignItems: 'center' }}
+                            className="card grid-responsive"
+                            style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '20px', alignItems: 'start' }}
                         >
-                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)', fontWeight: 700 }}>
+                            <div className="hide-on-mobile" style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)', fontWeight: 700 }}>
                                 {review.authorName?.[0] || 'U'}
                             </div>
-                            <div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
                                     <span style={{ fontWeight: 700 }}>{review.authorName}</span>
                                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                                         {review.createdAt?.seconds ? new Date(review.createdAt.seconds * 1000).toLocaleDateString() : 'New'}
                                     </span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '8px' }}>
                                     <StarRating rating={review.rating} size={12} />
                                     <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', background: 'rgba(var(--primary-rgb), 0.1)', padding: '2px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                                         {review.targetType === 'area' ? <MapPin size={10} /> : <Briefcase size={10} />}
                                         {review.targetId}
                                     </span>
                                 </div>
-                                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.5 }}>
+                                <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.5, wordBreak: 'break-word' }}>
                                     "{review.comment}"
                                 </p>
                             </div>
-                            <button 
-                                onClick={() => handleDelete(review.id)}
-                                className="btn-icon"
-                                style={{ color: '#ef4444', padding: '10px' }}
-                                title="Delete Review"
-                            >
-                                <Trash2 size={18} />
-                            </button>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                <button 
+                                    onClick={() => handleDelete(review.id)}
+                                    className="btn-icon"
+                                    style={{ color: '#ef4444', padding: '10px' }}
+                                    title="Delete Review"
+                                >
+                                    <Trash2 size={20} />
+                                </button>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
