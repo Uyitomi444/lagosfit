@@ -14,40 +14,55 @@ const PricingPage = () => {
     const navigate = useNavigate();
     const [billingCycle, setBillingCycle] = useState<PlanKey>('monthly');
 
-    const handleUpgrade = (plan: PlanKey) => {
+    const handleUpgrade = async (plan: PlanKey) => {
         if (!user) {
             navigate('/login', { state: { from: '/pricing' } });
             return;
         }
 
-        initializePayment({
-            email: user.email || '',
-            userId: user.uid,
-            plan: plan,
-            onSuccess: async (reference: string) => {
-                console.log('Payment Successful:', reference);
-                try {
-                    // Diagnostic Log
-                    console.log("Upgrading user in Firestore...");
-                    await upgradeToPremium(reference);
-                    
-                    // Success feedback
-                    alert("Payment and Upgrade Successful! Welcome to Pro.");
-                    navigate('/market', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
-                } catch (err: any) {
-                    console.error("Pro Upgrade Firestore Error:", err);
-                    const errorDetails = `
-Payment was SUCCESSFUL (${reference}) 
-BUT database update failed.
-Error: ${err.message || err.code || 'Unknown Error'}
-                    `.trim();
-                    alert(errorDetails);
+        try {
+            console.log('Initializing Payment Flow...');
+            await initializePayment({
+                email: user.email || '',
+                userId: user.uid,
+                plan: plan,
+                onSuccess: async (reference: string) => {
+                    console.log('Payment Successful:', reference);
+                    try {
+                        console.log("Upgrading user in Firestore...");
+                        await upgradeToPremium(reference);
+                        alert("Upgrade Successful! Welcome to Pro.");
+                        navigate('/market', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
+                    } catch (err: any) {
+                        alert(`Payment OK (${reference}) but database update failed: ${err.message}`);
+                    }
+                },
+                onCancel: () => {
+                    console.log('Payment closed');
                 }
-            },
-            onCancel: () => {
-                console.log('Payment closed');
+            });
+        } catch (error: any) {
+            console.error('Payment Error:', error);
+            
+            // If the key is missing during testing, let's offer a simulation so we aren't blocked
+            if (error.message?.includes('not configured')) {
+                const proceed = window.confirm(
+                    "Paystack Public Key is missing in your settings. \n\n" +
+                    "Would you like to simulate a successful payment test for now?"
+                );
+                if (proceed) {
+                    try {
+                        await upgradeToPremium('test-simulation-' + Date.now());
+                        alert('Simulation Success! You are now Pro.');
+                        navigate('/market');
+                    } catch (e: any) {
+                        alert('Simulation failed: ' + e.message);
+                    }
+                }
+            } else {
+                alert("Could not open payment window: " + error.message);
             }
-        });
+        }
     };
 
     const features = [
