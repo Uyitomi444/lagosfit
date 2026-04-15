@@ -39,7 +39,7 @@ const MarketPage = () => {
             description: t("market.platform.propertypro.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().replace(/\s+/g, "-")}?utm_source=lagosfit`
+            urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}?utm_source=lagosfit`
         },
         {
             name: "NaijaHouses",
@@ -74,7 +74,7 @@ const MarketPage = () => {
             description: t("market.platform.tiktok.desc"),
             icon: <Smartphone size={18} strokeWidth={1.5} />,
             color: "#000000",
-            urlBuilder: (area: string) => `https://www.tiktok.com/search?q=${encodeURIComponent(area + " apartments lagos")}`
+            urlBuilder: (area: string) => `https://www.tiktok.com/search/video?q=${encodeURIComponent(area + " apartments lagos")}&ref=lagosfit`
         }
     ];
 
