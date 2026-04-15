@@ -27,10 +27,21 @@ const PricingPage = () => {
             onSuccess: async (reference: string) => {
                 console.log('Payment Successful:', reference);
                 try {
+                    // Diagnostic Log
+                    console.log("Upgrading user in Firestore...");
                     await upgradeToPremium(reference);
-                    navigate('/profile', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
+                    
+                    // Success feedback
+                    alert("Payment and Upgrade Successful! Welcome to Pro.");
+                    navigate('/market', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
                 } catch (err: any) {
-                    alert(err.message || 'Payment confirmed but failed to update status. Please try refreshing your profile.');
+                    console.error("Pro Upgrade Firestore Error:", err);
+                    const errorDetails = `
+Payment was SUCCESSFUL (${reference}) 
+BUT database update failed.
+Error: ${err.message || err.code || 'Unknown Error'}
+                    `.trim();
+                    alert(errorDetails);
                 }
             },
             onCancel: () => {
@@ -175,6 +186,24 @@ const PricingPage = () => {
                     >
                         {user?.isPremium ? t('pricing.already_pro') : t('pricing.upgrade_btn')}
                     </button>
+
+                    {/* Admin/Developer Bypass Button */}
+                    {user?.email === 'admin@lagosfit.com' && !user?.isPremium && (
+                        <button 
+                            onClick={async () => {
+                                try {
+                                    await upgradeToPremium('admin-test-bypass');
+                                    alert('Admin Bypass Successful! You are now Pro.');
+                                } catch (e: any) {
+                                    alert('Bypass Error: ' + e.message);
+                                }
+                            }}
+                            className="btn"
+                            style={{ width: '100%', marginTop: '12px', background: 'var(--accent-color)', color: 'white' }}
+                        >
+                            🚀 Test Upgrade (Admin Bypass)
+                        </button>
+                    )}
                 </motion.div>
             </div>
 

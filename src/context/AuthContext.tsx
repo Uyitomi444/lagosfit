@@ -331,20 +331,28 @@ Message: ${err.message}
         return [];
     }, [user]);
 
-    // Upgrade to premium after successful payment
     const upgradeToPremium = useCallback(async (paymentReference: string) => {
         const currentUser = auth.currentUser;
-        if (!currentUser) throw new Error('Must be logged in to upgrade');
         
+        // Developer/Admin bypass logic for testing on live site
+        const isAdmin = currentUser?.email?.toLowerCase() === 'admin@lagosfit.com';
+        
+        if (!currentUser && !isAdmin) throw new Error('Must be logged in to upgrade');
+        if (!currentUser && isAdmin) {
+             console.warn('Simulating upgrade for dev-mode admin...');
+             setUser(prev => prev ? { ...prev, isPremium: true } : null);
+             return;
+        }
+
         try {
-            const userRef = doc(db, 'users', currentUser.uid);
+            const userRef = doc(db, 'users', currentUser!.uid);
             
-            console.log('Finalizing Pro Upgrade in Firestore...');
+            console.log(`Finalizing Pro Upgrade for ${currentUser?.email}...`);
             
             await setDoc(userRef, {
                 isPremium: true,
                 premiumUpgradedAt: serverTimestamp(),
-                paymentReference
+                paymentReference: paymentReference || 'admin-bypass'
             }, { merge: true });
 
             // Update local user state immediately
@@ -354,7 +362,7 @@ Message: ${err.message}
             console.error('PRO UPGRADE FAILED:', err);
             // If it's a permission error, alert the user or log it specifically
             if (err.code === 'permission-denied') {
-                throw new Error('Database permission denied. Please ensure you have updated your Firebase Security Rules in the console.');
+                throw new Error('Database permission denied. Please ensure you have updated your Firebase Security Rules in the console (Rules must allow writing to /users/{uid}).');
             }
             throw err;
         }
