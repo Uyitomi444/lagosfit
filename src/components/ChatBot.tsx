@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, X, MessageCircle, Sparkles, User, Bot, HelpCircle } from 'lucide-react';
+import { Send, X, Sparkles } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AREAS } from '../data/quiz_data';
 import { AGENTS } from '../data/agents_data';
