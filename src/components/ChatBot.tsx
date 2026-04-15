@@ -57,7 +57,13 @@ const ChatBot = () => {
 
             // Initialize inside the function to ensure the key is captured
             const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const model = genAI.getGenerativeModel({ 
+                model: "gemini-1.5-flash",
+                generationConfig: {
+                    maxOutputTokens: 500,
+                    temperature: 0.7,
+                }
+            });
 
             const systemPrompt = `
                 You are "LagosFit Buddy", a friendly and street-smart AI mascot for the LagosFit platform.
@@ -72,7 +78,9 @@ const ChatBot = () => {
             `;
 
             const fullPrompt = `${systemPrompt}\n\nUser Question: ${input}`;
-            const result = await model.generateContent(fullPrompt);
+            const result = await model.generateContent({
+                contents: [{ role: 'user', parts: [{ text: fullPrompt }]}]
+            });
             const response = await result.response;
             const text = response.text();
 
