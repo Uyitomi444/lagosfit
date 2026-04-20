@@ -46,28 +46,28 @@ const MarketPage = () => {
             description: t("market.platform.naijahouses.desc"),
             icon: <Home size={18} strokeWidth={1.5} />,
             color: "#2C3E50",
-            urlBuilder: (area: string) => `https://naijahouses.com/property/for-rent/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}`
+            urlBuilder: (area: string) => `https://www.naijahouses.com/rental/search?town=${encodeURIComponent(area)}&state=Lagos&market_statuses=Active`
         },
         {
             name: "MyPlace.ng",
             description: t("market.platform.myplace.desc"),
             icon: <Globe size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://myplace.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://myplace.ng/search-properties/?by_title=${encodeURIComponent(area)}&offer-type=for-rent`
         },
         {
             name: "ListProperty Nigeria",
             description: t("market.platform.listproperty.desc"),
             icon: <Building2 size={18} strokeWidth={1.5} />,
             color: "#454545",
-            urlBuilder: (area: string) => `https://listproperty.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://listproperty.ng/all-ads/?q=${encodeURIComponent(area)}&rtcl_search_type=for-rent`
         },
         {
             name: "Property Marketplace",
             description: t("market.platform.marketplace.desc"),
             icon: <MapPin size={18} strokeWidth={1.5} />,
             color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?location=${encodeURIComponent(area + " Lagos")}`
+            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?status=for-rent&keyword=${encodeURIComponent(area)}`
         },
         {
             name: "TikTok Apartment Hunting",
