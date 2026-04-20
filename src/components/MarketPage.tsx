@@ -42,32 +42,25 @@ const MarketPage = () => {
             urlBuilder: (area: string) => `https://www.propertypro.ng/property-for-rent/in/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}`
         },
         {
-            name: "NaijaHouses",
-            description: t("market.platform.naijahouses.desc"),
+            name: "Private Property",
+            description: "Nigeria's premium property portal with thousands of verified luxury and budget listings.",
             icon: <Home size={18} strokeWidth={1.5} />,
-            color: "#2C3E50",
-            urlBuilder: (area: string) => `https://www.naijahouses.com/rental/search?town=${encodeURIComponent(area)}&state=Lagos&market_statuses=Active`
+            color: "#1B365D",
+            urlBuilder: (area: string) => `https://www.privateproperty.com.ng/property-for-rent?search=${encodeURIComponent(area)}`
         },
         {
-            name: "MyPlace.ng",
-            description: t("market.platform.myplace.desc"),
+            name: "Jiji (Real Estate)",
+            description: "The biggest marketplace in Nigeria. Find direct listings from owners and verified agents.",
             icon: <Globe size={18} strokeWidth={1.5} />,
-            color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://myplace.ng/search-properties/?by_title=${encodeURIComponent(area)}&offer-type=for-rent`
+            color: "#3BB34A",
+            urlBuilder: (area: string) => `https://jiji.ng/lagos/houses-apartments-for-rent?query=${encodeURIComponent(area)}`
         },
         {
-            name: "ListProperty Nigeria",
-            description: t("market.platform.listproperty.desc"),
+            name: "Nigeria Property Centre",
+            description: "The most trusted source for real estate listings and price insights in Lagos.",
             icon: <Building2 size={18} strokeWidth={1.5} />,
-            color: "#454545",
-            urlBuilder: (area: string) => `https://listproperty.ng/all-ads/?q=${encodeURIComponent(area)}&rtcl_search_type=for-rent`
-        },
-        {
-            name: "Property Marketplace",
-            description: t("market.platform.marketplace.desc"),
-            icon: <MapPin size={18} strokeWidth={1.5} />,
-            color: "var(--primary-color)",
-            urlBuilder: (area: string) => `https://propertymarketplace.com.ng/property-search/?status=for-rent&keyword=${encodeURIComponent(area)}`
+            color: "#E74C3C",
+            urlBuilder: (area: string) => `https://nigeriapropertycentre.com/for-rent/lagos/${area.toLowerCase().trim().replace(/\s+/g, "-")}`
         },
         {
             name: "TikTok Apartment Hunting",
