@@ -235,22 +235,24 @@ const PricingPage = () => {
                         background: 'rgba(var(--primary-rgb), 0.02)'
                     }}
                 >
-                    <h4 style={{ marginBottom: '12px', fontSize: '1.1rem' }}>Prefer Direct Bank Transfer? 🇳🇬</h4>
+                    <h4 style={{ marginBottom: '12px', fontSize: '1.2rem', fontWeight: 800 }}>Instant Bank Transfer 🇳🇬</h4>
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: 1.5 }}>
-                        Don't have a card? No problem. You can pay via direct Bank Transfer. Just chat with us on WhatsApp to get our account details and activate your Pro account manually.
+                        Prefer to transfer? Pay directly into our bank account and get activated instantly. No card required.
                     </p>
                     <button 
                         onClick={() => {
-                            const message = `Hello! I want to upgrade to LagosFit Pro. Please send me your bank details. (User: ${user?.email || 'Guest'})`;
+                            const message = `Hello! I want to upgrade to LagosFit Pro via Bank Transfer. Please send me your account details. (User: ${user?.email || 'Guest'})`;
                             window.open(`https://wa.me/2347066684457?text=${encodeURIComponent(message)}`, '_blank');
                         }}
-                        className="btn btn-outline"
-                        style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 auto', color: '#25D366', borderColor: '#25D366', padding: '12px 28px' }}
+                        className="btn btn-primary"
+                        style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 auto', padding: '16px 32px', fontSize: '1.1rem' }}
                     >
-                        <MessageSquare size={20} /> Pay via WhatsApp
+                        <MessageSquare size={20} /> Chat & Pay via WhatsApp
                     </button>
-                    <div style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                        Instant response. 24/7 Support.
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '16px', opacity: 0.6 }}>
+                        <span style={{ fontSize: '0.8rem' }}>✔️ No Card Fees</span>
+                        <span style={{ fontSize: '0.8rem' }}>✔️ Instant Setup</span>
+                        <span style={{ fontSize: '0.8rem' }}>✔️ Direct Support</span>
                     </div>
                 </motion.div>
             )}
