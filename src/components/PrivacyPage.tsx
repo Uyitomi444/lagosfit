@@ -1,14 +1,13 @@
 
-import React from 'react';
-import Navbar from './Navbar';
+import NavBar from './NavBar';
 import Footer from './Footer';
 import { motion } from 'framer-motion';
-import { ShieldCheck, Lock, Eye } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 
 const PrivacyPage = () => {
   return (
     <div className="app-container">
-      <Navbar />
+      <NavBar />
       <main className="container" style={{ padding: '120px 24px 80px' }}>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

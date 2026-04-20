@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, Sparkles } from 'lucide-react';
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import { useLanguage } from '../context/LanguageContext';
 import { AREAS } from '../data/quiz_data';
 
