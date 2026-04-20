@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, X, Sparkles } from 'lucide-react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { useLanguage } from '../context/LanguageContext';
 import { AREAS } from '../data/quiz_data';
 
 const mascotImg = "/lagosfit_mascot_head.png"; 
@@ -14,12 +15,13 @@ interface Message {
 }
 
 const ChatBot = () => {
+    const { language, t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState('');
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: "Kedu! (Hello!) I'm Buddy, your LagosFit assistant. I know Lagos like the back of my hand. Ask me about house prices in Lekki, the best vibes in Ikeja, or how to get a verified agent!",
+            text: t('buddy.welcome') || "Kedu! I'm Buddy, your LagosFit assistant. Need help finding a home or a vibe in Lagos?",
             sender: 'bot',
             timestamp: new Date()
         }
@@ -46,43 +48,64 @@ const ChatBot = () => {
         };
 
         setMessages(prev => [...prev, userMsg]);
+        const currentInput = input;
         setInput('');
         setIsLoading(true);
 
         try {
-            const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-            if (!apiKey || apiKey === 'PASTE_YOUR_GOOGLE_AI_KEY_HERE') {
-                throw new Error("Missing Gemini API Key. Please add VITE_GEMINI_API_KEY to your settings.");
+            const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+            
+            if (!apiKey || apiKey.includes('your_groq_key')) {
+                throw new Error("Missing Groq API Key");
             }
 
-            // Initialize inside the function to ensure the key is captured
-            const genAI = new GoogleGenerativeAI(apiKey);
-            const model = genAI.getGenerativeModel({ 
-                model: "gemini-1.5-flash",
-                generationConfig: {
-                    maxOutputTokens: 500,
-                    temperature: 0.7,
-                }
-            });
+            const systemContent = `
+                You are "LagosFit Buddy", an expert AI mascot for the LagosFit platform.
+                
+                PERSONALITY:
+                - Tone: Friendly, smart, and helpful.
+                - Vibe: A Lagos "big boy/girl" who knows all the spots.
+                - Current User Language: ${language}
 
-            const systemPrompt = `
-                You are "LagosFit Buddy", a friendly and street-smart AI mascot for the LagosFit platform.
+                LANGUAGE RULES:
+                - If User Language is "en", speak English with a touch of local slang.
+                - DO NOT use heavy Pidgin unless the user starts it.
                 
                 KNOWLEDGE:
-                - We help people move to Lagos. We have areas like ${AREAS.slice(0, 10).map(a => a.name).join(', ')}.
-                - Features: Market (listings), Lagos on a Budget (PRO guide), Finding a home Quiz.
-                
-                TONE: Friendly, local Lagosian style. Use light pidgin ("Abeg", "Beta", "Sharp").
-                
-                TASK: Answer accurately about Lagos. Encourage Upgrading to Pro for extra features.
+                - We match people with Lagos areas: ${AREAS.slice(0, 15).map(a => a.name).join(', ')}.
+                - We offer a Lifestyle Quiz, Market Hub, and Budget Outings.
+                - Encourage upgrading to "LagosFit Pro" for agent contacts.
             `;
 
-            const fullPrompt = `${systemPrompt}\n\nUser Question: ${input}`;
-            const result = await model.generateContent({
-                contents: [{ role: 'user', parts: [{ text: fullPrompt }]}]
+            // Using direct Groq fetch for zero-dependency speed
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
+                        { role: "system", content: systemContent },
+                        ...messages.slice(-5).map(m => ({
+                            role: m.sender === 'user' ? "user" : "assistant",
+                            content: m.text
+                        })),
+                        { role: "user", content: currentInput }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 1024
+                })
             });
-            const response = await result.response;
-            const text = response.text();
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Groq API Error');
+            }
+
+            const data = await response.json();
+            const text = data.choices[0].message.content;
 
             const botMsg: Message = {
                 id: (Date.now() + 1).toString(),
@@ -93,17 +116,16 @@ const ChatBot = () => {
 
             setMessages(prev => [...prev, botMsg]);
         } catch (error: any) {
-            console.error('Gemini Error Details:', error);
+            console.error('Buddy (Groq) Error:', error);
             
-            let errorMessage = "Ah, my network is dragging a bit. Please try asking again!";
+            let errorMessage = "Omo, I'm having a small network glitch. Please try again!";
             
-            // Detailed debugging for the user
-            if (error.message?.includes('API_KEY_INVALID')) {
-                errorMessage = "Error: Your Gemini API Key looks invalid. Please check it in Vercel/DOTENV.";
-            } else if (error.message?.includes('Missing Gemini')) {
-                errorMessage = "Error: I can't find your Gemini API Key in the settings!";
-            } else if (error.message) {
-                errorMessage = `Buddy is struggling: ${error.message.substring(0, 50)}...`;
+            if (error.message?.includes('rate_limit') || error.message?.includes('429')) {
+                errorMessage = "Groq Limit Reached: I'm thinking too fast! Please wait 10 seconds and try again.";
+            } else if (error.message?.includes('Missing Groq')) {
+                errorMessage = "Config Error: Abeg, you need to add the VITE_GROQ_API_KEY to your .env file!";
+            } else {
+                errorMessage = `Buddy Error: ${error.message.substring(0, 50)}...`;
             }
 
             setMessages(prev => [...prev, {

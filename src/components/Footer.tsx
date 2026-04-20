@@ -37,8 +37,9 @@ const Footer = () => {
                     <h4 style={{ fontSize: '1rem', marginBottom: '16px' }}>{t('footer.company')}</h4>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                         <li><Link to="/about" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('nav.about')}</Link></li>
-                        <li><span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', cursor: 'pointer' }}>{t('footer.contact')}</span></li>
-                        <li><span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', cursor: 'pointer' }}>{t('footer.privacy')}</span></li>
+                        <li><Link to="/about#contact" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('footer.contact')}</Link></li>
+                        <li><Link to="/privacy" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('footer.privacy')}</Link></li>
+                        <li><Link to="/terms" style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Terms of Service</Link></li>
                     </ul>
                 </div>
 

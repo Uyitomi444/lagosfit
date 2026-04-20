@@ -280,7 +280,8 @@ const translations: Record<Language, Record<string, string>> = {
         'history.title': 'Your Search History',
         'history.subtitle': 'Revisit your previous quiz results and recommendations.',
         'history.no_history': 'No history found. Take the quiz to get started!',
-        'history.back_to_profile': 'Back to Profile'
+        'history.back_to_profile': 'Back to Profile',
+        'buddy.welcome': "Kedu! (Hello!) I'm Buddy, your LagosFit assistant. I know Lagos like the back of my hand. Ask me about house prices in Lekki, the best vibes in Ikeja, or how to get a verified agent!"
     },
     pidgin: {
         'landing.title': 'Which Lagos Area Fit You?',
@@ -553,7 +554,8 @@ const translations: Record<Language, Record<string, string>> = {
         'history.title': 'Your Search History',
         'history.subtitle': 'Check all your previous house search results.',
         'history.no_history': 'No history. Take the quiz to see area!',
-        'history.back_to_profile': 'Go back to Profile'
+        'history.back_to_profile': 'Go back to Profile',
+        'buddy.welcome': "Oshey! I be Buddy, your LagosFit expert. I sabi Lagos well well. Ask me anything about house for Lekki, cool spots for Ikeja, or how you fit find original agents!"
     },
     yo: {
         'landing.title': 'Ibugbe Lagos wo lo tọ si ọ?',
@@ -816,7 +818,8 @@ const translations: Record<Language, Record<string, string>> = {
         'history.title': 'Itan Wiwa Rẹ',
         'history.subtitle': 'Ṣatunyẹwo awọn abajade idanwo rẹ tẹlẹ.',
         'history.no_history': 'Ko si itan. Ṣe idanwo naa lati bẹrẹ!',
-        'history.back_to_profile': 'Pada si Oju-iwe rẹ'
+        'history.back_to_profile': 'Pada si Oju-iwe rẹ',
+        'buddy.welcome': "Kaabo! Buddy ni orukọ mi, oluranlọwọ LagosFit rẹ. Mo mọ Lagos bi owo mi. Beere ohunkohun nipa idiyele ile ni Lekki, awọn ibi isere ni Ikeja, tabi bi o ṣe le rii awọn aṣoju to daju!"
     },
     ig: {
         'landing.title': 'Kedu akụkụ Lagos dabara gị?',
@@ -1079,7 +1082,8 @@ const translations: Record<Language, Record<string, string>> = {
         'history.title': 'Itan Ọchịchị Gị',
         'history.subtitle': 'Laghachiri lelee abajade idanwo gị mbụ.',
         'history.no_history': 'Ọ nweghị itan. Mee idanwo ahụ iji bido!',
-        'history.back_to_profile': 'Laghachi na ihu gị'
+        'history.back_to_profile': 'Laghachi na ihu gị',
+        'buddy.welcome': "Nnọọ! Abụ m Buddy, onye enyemaka LagosFit gị. Amara m Lagos nke ọma. Jụọ m ihe ọ bụla gbasara ọnụ ụlọ na Lekki, ebe dị mma na Ikeja, ma ọ bụ otu ị ga-esi nweta ndị ọrụ enyochara!"
     },
     ha: {
         'landing.title': 'Wane yankin Legas ne ya dace da ku?',
@@ -1317,7 +1321,8 @@ const translations: Record<Language, Record<string, string>> = {
         'history.title': 'Tarihin Binciken Ku',
         'history.subtitle': 'Duba sakamakon gwajin ku na baya.',
         'history.no_history': 'Babu tarihi. Yi gwajin don fara bincike!',
-        'history.back_to_profile': 'Koma Zuwa Profile dinka'
+        'history.back_to_profile': 'Koma Zuwa Profile dinka',
+        'buddy.welcome': "Sannu! Ni ne Buddy, mataimakin ku na LagosFit. Na san Legas sosai. Tambaye ni game da farashin gidaje a Lekki, wuraren shakatawa a Ikeja, ko yadda zaku sami ingantattun wakilai!"
     }
 };
 

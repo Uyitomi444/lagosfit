@@ -352,7 +352,7 @@ const AgentsTab = ({ agents, deleteAgent, onMigrate, actionLoading, onEdit, onAd
                         className="btn btn-outline" 
                         style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--primary-color)', flex: 1, justifyContent: 'center' }}
                     >
-                        <TrendingUp size={18} /> {actionLoading ? 'Working...' : 'Sync'}
+                        <TrendingUp size={18} /> {actionLoading ? 'Migrating...' : 'Migrate Static Data'}
                     </button>
                     <button 
                         onClick={onAdd} 

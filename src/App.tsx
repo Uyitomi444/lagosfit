@@ -21,6 +21,8 @@ import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './components/AdminDashboard';
+import PrivacyPage from './components/PrivacyPage';
+import TermsPage from './components/TermsPage';
 import ChatBot from './components/ChatBot';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -48,6 +50,8 @@ function App() {
                       <Route path="/market" element={<MarketPage />} />
                       <Route path="/about" element={<AboutPage />} />
                       <Route path="/pricing" element={<PricingPage />} />
+                      <Route path="/privacy" element={<PrivacyPage />} />
+                      <Route path="/terms" element={<TermsPage />} />
                       <Route path="/history" element={
                         <ProtectedRoute>
                           <HistoryPage />

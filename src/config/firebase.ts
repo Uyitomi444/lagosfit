@@ -13,12 +13,12 @@ const sanitize = (val: string | undefined, keyName?: string) => {
     let cleaned = val
         .replace(/%H DOMAIN%/gi, '')
         .replace(/H_DOMAIN/gi, '')
-        .replace(/%09/gi, '')
-        .replace(/YOUR_API_KEY/g, '')
-        .replace(/YOUR_PROJECT_ID/g, '')
-        .replace(/YOUR_APP_ID/g, '')
-        .replace(/%[0-9A-Z]{2}/g, '') // Remove any URL encoding fragments like %09
-        .trim();
+        .replace(/%09/gi, '');
+
+    // Only strip placeholders if they are the literal "your_..." strings
+    if (cleaned.toLowerCase().includes('your_api_key') || cleaned === 'working') {
+        return "";
+    }
 
     // 2. Specialized extraction for authDomain
     if (keyName === 'authDomain') {
