@@ -9,7 +9,7 @@ const PrivacyPage = () => {
     <div className="app-container">
       <NavBar />
       <main className="container" style={{ padding: '120px 24px 80px' }}>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="card"

@@ -222,6 +222,39 @@ const PricingPage = () => {
                 </motion.div>
             </div>
 
+            {/* Free Alternative: WhatsApp Payment */}
+            {!user?.isPremium && (
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    style={{ 
+                        marginTop: '60px', padding: '32px', 
+                        border: '1px dashed var(--border-color)', 
+                        borderRadius: '24px', maxWidth: '600px', margin: '60px auto 0',
+                        background: 'rgba(var(--primary-rgb), 0.02)'
+                    }}
+                >
+                    <h4 style={{ marginBottom: '12px', fontSize: '1.1rem' }}>Prefer Direct Bank Transfer? 🇳🇬</h4>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: 1.5 }}>
+                        Don't have a card? No problem. You can pay via direct Bank Transfer. Just chat with us on WhatsApp to get our account details and activate your Pro account manually.
+                    </p>
+                    <button 
+                        onClick={() => {
+                            const message = `Hello! I want to upgrade to LagosFit Pro. Please send me your bank details. (User: ${user?.email || 'Guest'})`;
+                            window.open(`https://wa.me/2347066684457?text=${encodeURIComponent(message)}`, '_blank');
+                        }}
+                        className="btn btn-outline"
+                        style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 auto', color: '#25D366', borderColor: '#25D366', padding: '12px 28px' }}
+                    >
+                        <MessageSquare size={20} /> Pay via WhatsApp
+                    </button>
+                    <div style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                        Instant response. 24/7 Support.
+                    </div>
+                </motion.div>
+            )}
+
             {/* Trust Badges */}
             <div style={{ marginTop: '80px', display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '60px', opacity: 0.6 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
