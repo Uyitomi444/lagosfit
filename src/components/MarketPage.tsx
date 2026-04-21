@@ -473,19 +473,30 @@ const MarketPage = () => {
                                 </div>
                             </div>
                             
-                            <div style={{ 
-                                marginTop: 'auto',
-                                padding: '20px 32px', 
-                                borderTop: '1px solid var(--border-color)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                background: 'rgba(255, 255, 255, 0.01)'
-                            }}>
-                                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                                    {t('budget.source_by').replace('{0}', outing.source)}
-                                </span>
-                                <ExternalLink size={14} color="var(--text-muted)" />
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                    {outing.websiteUrl && (
+                                        <a 
+                                            href={outing.websiteUrl} 
+                                            target="_blank" 
+                                            rel="noopener noreferrer"
+                                            className="btn btn-outline"
+                                            style={{ 
+                                                width: '100%', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '8px', 
+                                                justifyContent: 'center',
+                                                padding: '12px',
+                                                fontSize: '0.85rem'
+                                            }}
+                                        >
+                                            <ExternalLink size={14} /> View Online
+                                        </a>
+                                    )}
+                                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center' }}>
+                                        {t('budget.source_by').replace('{0}', outing.source)}
+                                    </span>
+                                </div>
                             </div>
                         </motion.div>
                     ))}

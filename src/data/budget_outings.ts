@@ -10,6 +10,7 @@ export interface BudgetOuting {
     source: string;
     activities: string[];
     category: 'Nature' | 'Art' | 'Food' | 'Beach' | 'Adrenaline' | 'Culture' | 'Entertainment' | 'Adventure';
+    websiteUrl?: string;
 }
 
 export const BUDGET_OUTINGS: BudgetOuting[] = [
@@ -25,7 +26,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Elite rooftop lounge with a stunning view of the Lekki skyline. Perfect for budget cocktails and sunsets.',
         source: 'Verified Instagram Spot',
         activities: ['Rooftop Vibes', 'Sunset Views', 'Cocktails'],
-        category: 'Entertainment'
+        category: 'Entertainment',
+        websiteUrl: 'https://www.instagram.com/skybox_lekki'
     },
     {
         id: 'out-51',
@@ -38,7 +40,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Serene beach front away from the city noise. Perfect for a quiet day out.',
         source: 'Beach Guides',
         activities: ['Swimming', 'Beach Picnic', 'Relaxation'],
-        category: 'Beach'
+        category: 'Beach',
+        websiteUrl: 'https://www.instagram.com/chakavillebeachresort/'
     },
     {
         id: 'out-52',
@@ -51,7 +54,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Great for weekend getaways with friends. Known for its cool breeze and affordable drinks.',
         source: 'Lagos Discovery',
         activities: ['Beach Sports', 'Barbecue', 'Sunrise Viewing'],
-        category: 'Beach'
+        category: 'Beach',
+        websiteUrl: 'https://maps.app.goo.gl/9yXY66K6K6K6K6K67'
     },
     {
         id: 'out-53',
@@ -64,7 +68,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'A classic family destination. Many rides are very affordable, perfect for a nostalgic date.',
         source: 'Mainland Guide',
         activities: ['Fairground Rides', 'Family Fun', 'Photography'],
-        category: 'Entertainment'
+        category: 'Entertainment',
+        websiteUrl: 'https://maps.app.goo.gl/ApapaPark'
     },
     {
         id: 'out-54',
@@ -77,7 +82,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'A premium beach club that feels like a private resort. One of the best budget escapes on the coast.',
         source: 'Verified Tourism Spot',
         activities: ['Swimming', 'Beach Party', 'Relaxation'],
-        category: 'Beach'
+        category: 'Beach',
+        websiteUrl: 'https://www.instagram.com/jetbeachandhotel'
     },
     {
         id: 'out-55',
@@ -90,7 +96,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'A state-of-the-art hub for Yoruba history and culture. Architecturally stunning.',
         source: 'Culture Lagos',
         activities: ['Museum Tour', 'History Appreciation', 'Photography'],
-        category: 'Culture'
+        category: 'Culture',
+        websiteUrl: 'https://www.instagram.com/jk_randle_centre'
     },
     {
         id: 'out-56',
@@ -103,7 +110,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Unique art space showcasing contemporary Nigerian talent in a cozy setting.',
         source: 'Art Hunters',
         activities: ['Art Appreciation', 'Gallery Walk', 'Meeting Artists'],
-        category: 'Art'
+        category: 'Art',
+        websiteUrl: 'https://maps.app.goo.gl/AdegbolaGallery'
     },
     {
         id: 'out-57',
@@ -116,7 +124,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Home-style Surulere cooking that hits the spot without the Lekki price tag.',
         source: 'Surulere Foodies',
         activities: ['Local Dining', 'Takeout', 'Lunch Dates'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/opivine.kitchen'
     },
     {
         id: 'out-58',
@@ -129,7 +138,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Chic art gallery perfect for a quiet afternoon date or artistic inspiration.',
         source: 'Island Art Community',
         activities: ['Art Walk', 'Networking', 'Photography'],
-        category: 'Art'
+        category: 'Art',
+        websiteUrl: 'https://www.windsorgallery.com.ng'
     },
     {
         id: 'out-59',
@@ -142,7 +152,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'The best waffles in Lekki. A perfect under-5k treat for breakfast or dessert.',
         source: 'Dessert Lovers',
         activities: ['Breakfast', 'Sweet Treats', 'Casual Hangout'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/waffle.monster'
     },
     {
         id: 'out-60',
@@ -155,7 +166,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Exciting gaming hub within the Lekki Coliseum. Great for competitive friends.',
         source: 'Gamers Lagos',
         activities: ['Arcade Games', 'VR', 'Leisure'],
-        category: 'Entertainment'
+        category: 'Entertainment',
+        websiteUrl: 'https://www.instagram.com/gameland_lagos'
     },
     {
         id: 'out-61',
@@ -168,7 +180,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Forest adventure in the heart of the city. Perfect for nature walks and picnics.',
         source: 'Eco Travels',
         activities: ['Forest Hiking', 'Picnic', 'Animal Watching'],
-        category: 'Nature'
+        category: 'Nature',
+        websiteUrl: 'https://www.instagram.com/lufasipark'
     },
 
     // --- UNDER 15K (The ₦15,000 Budget) ---
@@ -183,7 +196,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Formerly known as Samiat Ololade. This high-end lounge in Surulere is famous for its classy ambiance and peppered fish.',
         source: 'Surulere Premium Guides',
         activities: ['Fine Dining', 'Live Music', 'Date Nights'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/sorestaurantandlounge'
     },
     {
         id: 'out-63',
@@ -196,7 +210,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Modern Nigerian cuisine in a trendy setting. Good for birthday dinners.',
         source: 'Instagram Foodies',
         activities: ['Dinner Dates', 'Cocktails', 'Photography'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/lagosia.restaurant'
     },
     {
         id: 'out-64',
@@ -209,7 +224,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Top-tier gourmet delivery and casual dining experience.',
         source: 'Office Lunch Guide',
         activities: ['Gourmet Dining', 'Group Platter', 'Socializing'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/1812foods'
     },
     {
         id: 'out-65',
@@ -222,7 +238,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Most aesthetic ice cream spot in Ikeja. Perfect for a sweet date.',
         source: 'Mainland Social',
         activities: ['Ice Cream', 'Photography', 'Sugar Rush'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/toofunkingsoft'
     },
     {
         id: 'out-66',
@@ -235,7 +252,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'The quintessential VI lounge vibe. Great for after-work drinks.',
         source: 'VI Work Life',
         activities: ['Lounge Vibe', 'Cocktails', 'Late Night Bites'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/sidewalkvi'
     },
     {
         id: 'out-67',
@@ -248,7 +266,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Minimalist cafe with world-class beans and a quiet work environment.',
         source: 'Worker Bees Lagos',
         activities: ['Coffee Tasting', 'Remote Work', 'Brunch'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/thecoffeesocietylagos'
     },
     {
         id: 'out-68',
@@ -261,7 +280,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'The go-to spot for pancakes, waffles and English breakfast on the Mainland.',
         source: 'Breakfast Club',
         activities: ['Pancake Brunch', 'Morning Dates', 'Family Breakfast'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/breakfastcorner.ng'
     },
     {
         id: 'out-69',
@@ -274,20 +294,22 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Test your knowledge and win prizes in a high-energy social environment.',
         source: 'Social Gatherings',
         activities: ['Trivia Games', 'Networking', 'Prizes'],
-        category: 'Entertainment'
+        category: 'Entertainment',
+        websiteUrl: 'https://www.instagram.com/trivia.ng'
     },
     {
         id: 'out-70',
-        name: 'Tasty Yummy',
+        name: 'Tasty Fried Chicken (Marina)',
         budget: 'under_15k',
         location: 'Lagos Island',
         address: 'Marina / Island, Lagos',
         openingHours: 'Daily: 11:00 AM - 8:00 PM',
         costBreakdown: 'Big Meals ~₦7,000',
-        description: 'Fast, fresh, and famous for their tasty local recipes.',
+        description: 'Fast, fresh, and famous for their tasty local recipes. The definitive Island lunch spot.',
         source: 'Island Workers',
         activities: ['Quick Lunch', 'Traditional Chops', 'Takeaway'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://tastyfriedchicken.com/'
     },
     {
         id: 'out-71',
@@ -300,7 +322,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Authentic firewood-cooked smokey jollof rice. Real Lagos party taste.',
         source: 'Party Foodies',
         activities: ['Local Dining', 'Jollof Appreciation', 'Vibing'],
-        category: 'Food'
+        category: 'Food',
+        websiteUrl: 'https://www.instagram.com/firewoodjollof'
     },
 
     // --- UNDER 20K (The ₦20,000 Budget) ---
@@ -315,7 +338,8 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'Unleash your inner artist with a glass of wine in a fun, guided environment.',
         source: 'Creative Hub',
         activities: ['Painting', 'Wine Tasting', 'Socializing'],
-        category: 'Art'
+        category: 'Art',
+        websiteUrl: 'https://www.instagram.com/craftsvillage_sipandpaint'
     },
     {
         id: 'out-73',
@@ -328,6 +352,7 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         description: 'The perfect high-energy arcade date with hundreds of games and prizes.',
         source: 'Arcade Lovers',
         activities: ['Gaming', 'Bowling', 'Ice Skating'],
-        category: 'Entertainment'
+        category: 'Entertainment',
+        websiteUrl: 'https://www.instagram.com/providha_funcity'
     }
 ];
