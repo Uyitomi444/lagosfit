@@ -611,30 +611,47 @@ const MarketPage = () => {
                             <ChevronLeft size={16} />
                         </button>
                         
-                        <div style={{ display: 'flex', gap: '8px' }}>
-                            {Array.from({ length: totalPages }).map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentPage(i + 1)}
-                                    style={{
-                                        width: '40px',
-                                        height: '40px',
-                                        borderRadius: '8px',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        fontWeight: 700,
-                                        fontSize: '0.9rem',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s',
-                                        border: currentPage === i + 1 ? 'none' : '1px solid var(--border-color)',
-                                        background: currentPage === i + 1 ? 'var(--primary-color)' : 'var(--card-bg)',
-                                        color: currentPage === i + 1 ? 'white' : 'var(--text-muted)'
-                                    }}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'nowrap', overflowX: 'auto', padding: '4px' }} className="hide-scrollbar">
+                            {(() => {
+                                const pages = [];
+                                const delta = 1; // Number of pages to show around current page
+                                const left = currentPage - delta;
+                                const right = currentPage + delta + 1;
+                                
+                                for (let i = 1; i <= totalPages; i++) {
+                                    if (i === 1 || i === totalPages || (i >= left && i < right)) {
+                                        pages.push(i);
+                                    } else if (i === left - 1 || i === right) {
+                                        pages.push('...');
+                                    }
+                                }
+
+                                return pages.map((page, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => typeof page === 'number' && setCurrentPage(page)}
+                                        style={{
+                                            minWidth: '40px',
+                                            height: '40px',
+                                            padding: '0 8px',
+                                            borderRadius: '12px',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontWeight: 700,
+                                            fontSize: '0.9rem',
+                                            cursor: typeof page === 'number' ? 'pointer' : 'default',
+                                            transition: 'all 0.2s',
+                                            border: currentPage === page ? 'none' : '1px solid var(--border-color)',
+                                            background: currentPage === page ? 'var(--primary-color)' : 'var(--card-bg)',
+                                            color: currentPage === page ? 'white' : 'var(--text-muted)',
+                                            opacity: page === '...' ? 0.6 : 1
+                                        }}
+                                    >
+                                        {page}
+                                    </button>
+                                ));
+                            })()}
                         </div>
 
                         <button 

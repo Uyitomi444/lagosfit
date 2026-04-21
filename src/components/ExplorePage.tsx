@@ -102,7 +102,10 @@ const ExplorePage = () => {
             </div>
 
             {/* Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '32px' }}>
+            <div 
+                className="grid-responsive"
+                style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '24px' }}
+            >
                 {filteredAreas.map((area, index) => (
                     <motion.div
                         key={area.id}
