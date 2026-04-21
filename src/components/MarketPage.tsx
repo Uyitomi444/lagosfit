@@ -497,7 +497,6 @@ const MarketPage = () => {
                                         {t('budget.source_by').replace('{0}', outing.source)}
                                     </span>
                                 </div>
-                            </div>
                         </motion.div>
                     ))}
                 </div>

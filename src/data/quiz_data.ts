@@ -413,6 +413,8 @@ export const AREAS: Area[] = [
             },
             'Ponle': {
                 placesToVisit: [
+                    { name: 'Ponle Bus Stop axis' }
+                ],
                 whatToEat: [
                     { name: 'Amala & ewedu joints' },
                     { name: 'Street suya & bole evening spots' },
