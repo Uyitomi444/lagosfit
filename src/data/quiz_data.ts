@@ -6505,6 +6505,81 @@ export const AREAS: Area[] = [
         minPrice: 800000,
         maxPrice: 2000000,
         innerLocalities: ['Lateef Jakande', 'Acme', 'Cadbury Axis', 'Coca-Cola Axis'],
+        subLocalityInsights: {
+            'Lateef Jakande': {
+                en: "The media heart. 'Home to LTV 8 and Eko FM. Busy, professional, and well-connected to Alausa and Ogba.'",
+                pidgin: "Major road vibes. 'LTV 8 dey here. Everywhere busy and you fit reach Alausa or Ogba sharply.'",
+                yo: "Ọkàn media. 'Ile si LTV 8 ati Eko FM. O nšišẹ, alamọja, ati isopọ daradara si Alausa ati Ogba.'",
+                ig: "Isi mgbasa ozi. 'Ebe obibi LTV 8 na Eko FM. Ọ na-ekwo ekwo ma nwee njikọ dị mma na Alausa na Ogba.'",
+                ha: "Zuciyar yada labarai. 'Gidan LTV 8 da Eko FM. Akwai hada-hada kuma yana da kyakkyawar hanyar sadarwa zuwa Alausa da Ogba.'"
+            },
+            'Coca-Cola Axis': {
+                en: "The industrial pulse. 'Famous for the iconic factory. Nearness to Ikeja City Mall makes it a sweet spot for balance.'",
+                pidgin: "Coke ground! 'Factory dey here and you close to ICM Mall well well. Energy set.'",
+                yo: "Ipa ile-iṣẹ. 'Olokiki fun ile-iṣẹ aami. Isunmọ si Ile-itaja rira Ikeja jẹ ki o jẹ aaye didun fun iwọntunwọnsi.'",
+                ig: "Ọpụrụ ụlọ ọrụ mmepụta ihe. 'A ma ama maka ụlọ ọrụ mmepụta ihe ama ama. Ịnọ nso na Ikeja City Mall na-eme ka ọ bụrụ ezigbo ebe obibi.'",
+                ha: "Zuciyar masana'antu. 'An san shi da babban kamfani. Kasancewa kusa da Ikeja City Mall ya sa ya zama wuri mai kyau don daidaito.'"
+            }
+        },
+        subLocalityDetails: {
+            'Lateef Jakande': {
+                placesToVisit: [
+                    { name: 'LTV 8 / Eko FM', url: 'https://ltv.tv/' },
+                    { name: 'Johnson Jakande Tinubu (JJT) Park', url: 'https://www.instagram.com/lasparklagos/' },
+                    { name: 'Lagos State Secretariat', url: 'https://lagosstate.gov.ng/' }
+                ],
+                whatToEat: [
+                    { name: 'Africulture Ikeja', url: 'https://www.instagram.com/africultureikeja/' },
+                    { name: 'The Place (Alausa)', url: 'https://www.theplace.com.ng/' },
+                    { name: 'Bukka Hut (nearby)', url: 'https://bukkahut.com/' }
+                ],
+                sports: [
+                    { name: 'JJT Park Jogging', type: 'Other', url: 'https://www.instagram.com/lasparklagos/' },
+                    { name: 'Kanu Ndubuisi Park courts', type: 'Basketball', url: 'https://www.instagram.com/lasparklagos/' }
+                ]
+            },
+            'Coca-Cola Axis': {
+                placesToVisit: [
+                    { name: 'Ikeja City Mall (3 mins away)', url: 'http://ikejacitymall.com.ng/' },
+                    { name: 'Silverbird Cinemas (ICM)', url: 'https://silverbirdcinemas.com/cinema/ikeja/' }
+                ],
+                whatToEat: [
+                    { name: 'Ocean Basket ICM', url: 'https://www.instagram.com/oceanbasket_nigeria/' },
+                    { name: 'Spur family restaurant', url: 'https://www.instagram.com/spur_nigeria/' },
+                    { name: 'Street grills on Agidingbi road' }
+                ],
+                sports: [
+                    { name: 'ICM Fitness Hub', type: 'Gym' },
+                    { name: 'Ndubuisi Kanu Park', type: 'Other', url: 'https://www.instagram.com/lasparklagos/' }
+                ]
+            },
+            'Acme': {
+                placesToVisit: [
+                    { name: 'Acme Road Industrial Hub' },
+                    { name: 'Konga HQ (nearby)', url: 'https://www.konga.com' }
+                ],
+                whatToEat: [
+                    { name: 'Lunch joints for professionals' },
+                    { name: 'Canteen hubs' }
+                ],
+                sports: [
+                    { name: 'Roadside gyms', type: 'Gym' }
+                ]
+            },
+            'Cadbury Axis': {
+                placesToVisit: [
+                    { name: 'Cadbury Factory (Smell the chocolate!)' },
+                    { name: 'Acme Road shops' }
+                ],
+                whatToEat: [
+                    { name: 'Amala joints near factory' },
+                    { name: 'Local grills' }
+                ],
+                sports: [
+                    { name: 'Community ball', type: 'Football' }
+                ]
+            }
+        },
         coords: { lat: 6.6122, lng: 3.3444 }
     },
     {
