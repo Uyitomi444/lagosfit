@@ -770,12 +770,12 @@ export const AREAS: Area[] = [
         },
         commuteTo: { vi: '25m', ikeja: '35m' },
         hotspots: [
-            { name: 'E-Center (Ozone)', category: 'activity' },
-            { name: 'White House', category: 'food' },
-            { name: 'Banilux Bar', category: 'nightlife' },
-            { name: 'Purple Bistro', category: 'food' },
-            { name: 'YabaTech Art Museum', category: 'activity' },
-            { name: 'Tejuosho Market', category: 'activity' }
+            { name: 'E-Center (Ozone)', category: 'activity', url: 'https://www.instagram.com/ozonecinemas/' },
+            { name: 'White House', category: 'food', url: 'https://www.instagram.com/whitehouseresturant/' },
+            { name: 'Banilux Bar', category: 'nightlife', url: 'https://www.instagram.com/baniluxbar/' },
+            { name: 'Purple Bistro', category: 'food', url: 'https://www.instagram.com/purplebistrolagos/' },
+            { name: 'YabaTech Art Museum', category: 'activity', url: 'https://yabatech.edu.ng' },
+            { name: 'Tejuosho Market', category: 'activity', url: 'https://www.instagram.com/tejuoshomarket/' }
         ],
         attributes: {
             rent: ['budget', 'standard', 'mid'],
@@ -1351,13 +1351,13 @@ export const AREAS: Area[] = [
         },
         commuteTo: { vi: '10m', ikeja: '50m' },
         hotspots: [
-            { name: 'Filmhouse IMAX', category: 'activity' },
-            { name: 'Circa Non Pareil', category: 'food' },
-            { name: 'Sailor’s Lounge', category: 'nightlife' },
-            { name: 'Lekki Leisure Lake', category: 'activity' },
-            { name: 'Upbeat Centre', category: 'activity' },
-            { name: 'Nike Art Gallery', category: 'activity' },
-            { name: 'The Place', category: 'food' }
+            { name: 'Filmhouse IMAX', category: 'activity', url: 'https://filmhouseretail.com/' },
+            { name: 'Circa Non Pareil', category: 'food', url: 'https://www.instagram.com/circanonpareil/' },
+            { name: 'Sailor’s Lounge', category: 'nightlife', url: 'https://www.sailorslounge.com/' },
+            { name: 'Lekki Leisure Lake', category: 'activity', url: 'https://www.lekkileisure.com/' },
+            { name: 'Upbeat Centre', category: 'activity', url: 'https://upbeatcentre.com/' },
+            { name: 'Nike Art Gallery', category: 'activity', url: 'https://www.nikeart.com/' },
+            { name: 'The Place', category: 'food', url: 'https://www.theplace.com.ng/' }
         ],
         attributes: {
             rent: ['premium', 'luxury'],
@@ -1873,13 +1873,13 @@ export const AREAS: Area[] = [
         },
         commuteTo: { vi: '0m', ikeja: '40m' },
         hotspots: [
-            { name: 'Eko Hotel', category: 'hotel' },
-            { name: 'Landmark Beach', category: 'activity' },
-            { name: 'Mega Plaza', category: 'activity' },
-            { name: 'Hard Rock Cafe', category: 'nightlife' },
-            { name: 'Shiro', category: 'food' },
-            { name: 'Civic Center', category: 'activity' },
-            { name: 'Moist Beach Club', category: 'nightlife' }
+            { name: 'Eko Hotel', category: 'hotel', url: 'https://www.ekohotels.com/' },
+            { name: 'Landmark Beach', category: 'activity', url: 'https://www.landmarkbeach.ng/' },
+            { name: 'Mega Plaza', category: 'activity', url: 'https://www.instagram.com/megaplazadeptstore/' },
+            { name: 'Hard Rock Cafe', category: 'nightlife', url: 'https://www.hardrockcafe.com/location/lagos/' },
+            { name: 'Shiro', category: 'food', url: 'https://www.instagram.com/shirolagos/' },
+            { name: 'Civic Center', category: 'activity', url: 'https://civiccentre.com/' },
+            { name: 'Moist Beach Club', category: 'nightlife', url: 'https://www.instagram.com/moistbeachclub/' }
         ],
         attributes: {
             rent: ['premium', 'luxury'],
