@@ -36,10 +36,18 @@ const getCategoryIcon = (category: string) => {
         case 'Food': 
             iconSvg = '<path d="M12 2v20M5 5v3a7 7 0 0 0 14 0V5M12 15v7" />'; // Simplified fork/spoon vibe
             bgColor = '#FF4B2B'; break;
-        case 'Parks':
         case 'Beach':
+            iconSvg = '<path d="M12 2L4 22h16L12 2z" />'; // Beach/Mountain vibe
+            bgColor = '#3498DB'; break;
+        case 'Parks':
             iconSvg = '<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />'; // Terrain
             bgColor = '#2ECC71'; break;
+        case 'Nightlife':
+            iconSvg = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />'; // Moon
+            bgColor = '#1F2937'; break;
+        case 'Entertainment':
+            iconSvg = '<path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />'; // Music
+            bgColor = '#F59E0B'; break;
         case 'Museum':
         case 'Art':
         case 'Culture':
@@ -389,17 +397,20 @@ const MarketPage = () => {
     const BudgetExplorer = () => {
         const [currentPage, setCurrentPage] = useState(1);
         const [locationFilter, setLocationFilter] = useState('all');
+        const [categoryFilter, setCategoryFilter] = useState('all');
         const itemsPerPage = 6;
 
-        // Get unique locations for the filter
+        // Get unique locations and categories for filters
         const uniqueLocations = Array.from(new Set(BUDGET_OUTINGS.map(o => o.location))).sort();
+        const uniqueCategories = Array.from(new Set(BUDGET_OUTINGS.map(o => o.category))).sort();
 
         const filteredOutings = BUDGET_OUTINGS.filter(outing => {
             const matchesBudget = budgetFilter === 'all' || outing.budget === budgetFilter;
             const matchesLocation = locationFilter === 'all' || outing.location === locationFilter;
+            const matchesCategory = categoryFilter === 'all' || outing.category === categoryFilter;
             // Ensure coordinates exist to prevent map crash
             const hasCoords = outing.lat !== undefined && outing.lng !== undefined;
-            return matchesBudget && matchesLocation && hasCoords;
+            return matchesBudget && matchesLocation && matchesCategory && hasCoords;
         });
         
         const totalPages = Math.ceil(filteredOutings.length / itemsPerPage);
@@ -409,7 +420,7 @@ const MarketPage = () => {
         // Reset to page 1 when filters change
         useEffect(() => {
             setCurrentPage(1);
-        }, [budgetFilter, locationFilter]);
+        }, [budgetFilter, locationFilter, categoryFilter]);
 
         return (
             <div>
@@ -418,7 +429,7 @@ const MarketPage = () => {
                         {t('budget.title')}
                     </h2>
                     <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-                        {t('budget.subtitle')}
+                        Discover {BUDGET_OUTINGS.length}+ hand-picked spots across Lagos state. Verified data for Restaurants, Arts, and Leisure.
                     </p>
                 </div>
 
@@ -469,7 +480,7 @@ const MarketPage = () => {
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-color)' }}>{outing.costBreakdown}</span>
                                                 <button 
-                                                    onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' Lagos')}`, '_blank')}
+                                                    onClick={() => window.open(outing.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(outing.name + ' Lagos')}`, '_blank')}
                                                     style={{ background: 'none', border: 'none', color: 'var(--primary-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                                                 >
                                                     <ExternalLink size={14} />
@@ -516,10 +527,10 @@ const MarketPage = () => {
                         ))}
                     </div>
 
-                    {/* Location Category Filters */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-                        <div style={{ position: 'relative', minWidth: '200px' }}>
-                            <Filter size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                    {/* Dual Filters: Location & Category */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                        <div style={{ position: 'relative', minWidth: '220px' }}>
+                            <MapPin size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                             <select 
                                 value={locationFilter}
                                 onChange={(e) => setLocationFilter(e.target.value)}
@@ -536,9 +547,34 @@ const MarketPage = () => {
                                     cursor: 'pointer'
                                 }}
                             >
-                                <option value="all">All Locations (Lagos)</option>
+                                <option value="all">Everywhere in Lagos</option>
                                 {uniqueLocations.map(loc => (
                                     <option key={loc} value={loc}>{loc}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div style={{ position: 'relative', minWidth: '220px' }}>
+                            <Filter size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <select 
+                                value={categoryFilter}
+                                onChange={(e) => setCategoryFilter(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px 16px 12px 42px',
+                                    borderRadius: '16px',
+                                    border: '1px solid var(--border-color)',
+                                    background: 'var(--card-bg)',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 600,
+                                    appearance: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <option value="all">All Experiences</option>
+                                {uniqueCategories.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
                                 ))}
                             </select>
                         </div>
@@ -645,10 +681,8 @@ const MarketPage = () => {
                             
                             <div style={{ padding: '0 32px 32px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                    <a 
-                                        href={`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
+                                    <button 
+                                        onClick={() => window.open(outing.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`, '_blank')}
                                         className="btn btn-outline"
                                         style={{ 
                                             width: '100%', 
@@ -660,8 +694,8 @@ const MarketPage = () => {
                                             fontSize: '0.85rem'
                                         }}
                                     >
-                                        <ExternalLink size={14} /> View Online
-                                    </a>
+                                        <Globe size={18} /> {outing.websiteUrl ? 'View Profile' : 'Search Online'}
+                                    </button>
                                     <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center' }}>
                                         {t('budget.source_by').replace('{0}', outing.source)}
                                     </span>
