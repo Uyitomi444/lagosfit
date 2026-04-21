@@ -116,10 +116,33 @@ const TruthCard = ({ area }: TruthCardProps) => {
             )}
 
             {isPremium && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--success-color)', fontSize: '0.85rem' }}>
-                    <Check size={18} strokeWidth={1.5} />
-                    Pro access active — Full data unlocked.
-                </div>
+                <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--success-color)', fontSize: '0.85rem', marginBottom: '20px' }}>
+                        <Check size={18} strokeWidth={1.5} />
+                        Pro access active — Full data unlocked.
+                    </div>
+                    
+                    <div style={{ 
+                        padding: '16px', 
+                        background: 'rgba(var(--primary-rgb), 0.03)', 
+                        borderRadius: '12px', 
+                        fontSize: '0.75rem', 
+                        color: 'var(--text-muted)',
+                        border: '1px solid var(--border-color)'
+                    }}>
+                        <p style={{ margin: '0 0 8px 0', fontWeight: 700, color: 'var(--text-main)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                            Data Sources & Accuracy
+                        </p>
+                        <ul style={{ paddingLeft: '16px', margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                            <li><strong>Flood Risk:</strong> Sourced from LSWMO elevation benchmarks and 5-year historical soil-saturation trends.</li>
+                            <li><strong>Power Supply:</strong> Derived from Ikeja Electric / Eko DisCo cluster performance indices (Ref: Q1 2026).</li>
+                            <li><strong>Fiber Internet:</strong> Verified against FiberOne, Airtel, and MainOne active coverage heatmaps.</li>
+                        </ul>
+                        <p style={{ marginTop: '12px', fontSize: '0.7rem', fontStyle: 'italic' }}>
+                            Last Comprehensive Audit: April 2026.
+                        </p>
+                    </div>
+                </>
             )}
 
         </motion.div>

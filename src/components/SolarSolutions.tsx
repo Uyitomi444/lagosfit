@@ -82,7 +82,10 @@ const SolarSolutions = () => {
                             alignItems: 'center',
                             gap: '8px'
                         }}
-                        onClick={() => window.open('https://strengthfield.com', '_blank')}
+                        onClick={() => {
+                            const message = encodeURIComponent("Hello! I was referred by LagosFit for a free solar quote.");
+                            window.open(`https://wa.me/2347065545958?text=${message}`, '_blank');
+                        }}
                     >
                         Get Free Quote <ArrowRight size={16} />
                     </button>
