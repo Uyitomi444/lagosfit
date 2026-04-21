@@ -55,6 +55,7 @@ export interface Area {
     hotspots: {
         name: string;
         category: 'food' | 'nightlife' | 'activity' | 'hotel';
+        url?: string;
     }[];
     attributes: {
         rent: RentRange[];

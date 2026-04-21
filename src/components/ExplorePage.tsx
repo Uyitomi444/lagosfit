@@ -597,12 +597,47 @@ const ExplorePage = () => {
                                     </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '12px' }}>
                                     {selectedArea.hotspots.map((spot, i) => (
-                                        <div key={i} style={{ padding: '12px', border: '1px solid var(--border-color)', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <Utensils size={14} color="var(--text-muted)" strokeWidth={1.5} />
+                                        <a 
+                                            key={i} 
+                                            href={spot.url || `https://www.google.com/maps/search/${encodeURIComponent(spot.name + ' ' + selectedArea.name + ' Lagos')}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            style={{ 
+                                                padding: '12px', 
+                                                border: '1px solid var(--border-color)', 
+                                                borderRadius: '12px', 
+                                                display: 'flex', 
+                                                alignItems: 'center', 
+                                                gap: '10px',
+                                                textDecoration: 'none',
+                                                color: 'inherit',
+                                                transition: 'all 0.2s',
+                                                background: 'var(--card-bg)'
+                                            }}
+                                            className="hotspot-link"
+                                            onMouseOver={(e) => {
+                                                e.currentTarget.style.borderColor = 'var(--accent-color)';
+                                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                                            }}
+                                            onMouseOut={(e) => {
+                                                e.currentTarget.style.borderColor = 'var(--border-color)';
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                                e.currentTarget.style.boxShadow = 'none';
+                                            }}
+                                        >
+                                            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                {spot.category === 'food' ? <Utensils size={14} color="var(--primary-color)" strokeWidth={1.5} /> :
+                                                 spot.category === 'nightlife' ? <Heart size={14} color="var(--primary-color)" strokeWidth={1.5} /> :
+                                                 spot.category === 'hotel' ? <Home size={14} color="var(--primary-color)" strokeWidth={1.5} /> :
+                                                 <Activity size={14} color="var(--primary-color)" strokeWidth={1.5} />}
                                             </div>
-                                            <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>{spot.name}</span>
-                                        </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{spot.name}</span>
+                                                <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>{spot.category}</span>
+                                            </div>
+                                            <ExternalLink size={12} style={{ marginLeft: 'auto', opacity: 0.5 }} />
+                                        </a>
                                     ))}
                                 </div>
                             </div>
