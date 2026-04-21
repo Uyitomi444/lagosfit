@@ -480,7 +480,7 @@ const MarketPage = () => {
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-color)' }}>{outing.costBreakdown}</span>
                                                 <button 
-                                                    onClick={() => window.open(outing.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(outing.name + ' Lagos')}`, '_blank')}
+                                                    onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`, '_blank')}
                                                     style={{ background: 'none', border: 'none', color: 'var(--primary-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
                                                 >
                                                     <ExternalLink size={14} />
@@ -682,7 +682,7 @@ const MarketPage = () => {
                             <div style={{ padding: '0 32px 32px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     <button 
-                                        onClick={() => window.open(outing.websiteUrl || `https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`, '_blank')}
+                                        onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`, '_blank')}
                                         className="btn btn-outline"
                                         style={{ 
                                             width: '100%', 
@@ -694,7 +694,7 @@ const MarketPage = () => {
                                             fontSize: '0.85rem'
                                         }}
                                     >
-                                        <Globe size={18} /> {outing.websiteUrl ? 'View Profile' : 'Search Online'}
+                                        <Globe size={18} /> Search Online
                                     </button>
                                     <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center' }}>
                                         {t('budget.source_by').replace('{0}', outing.source)}

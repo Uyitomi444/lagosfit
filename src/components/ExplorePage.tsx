@@ -201,7 +201,7 @@ const ExplorePage = () => {
                             {PLACES_TO_VISIT.map((item, i) => (
                                 <li key={i}>
                                     <a
-                                        href={item.url}
+                                        href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' Lagos')}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         style={{
@@ -238,7 +238,7 @@ const ExplorePage = () => {
                                         {items.map((item, i) => (
                                             <li key={i} style={{ marginBottom: '8px' }}>
                                                 <a
-                                                    href={item.url}
+                                                    href={`https://www.google.com/search?q=${encodeURIComponent(item.name + ' Lagos')}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     style={{
@@ -481,7 +481,7 @@ const ExplorePage = () => {
                                                                                     <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                                                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-color)', boxShadow: '0 0 0 4px rgba(var(--accent-rgb), 0.1)' }} />
                                                                                         <a
-                                                                                            href={p.url || '#'}
+                                                                                            href={`https://www.google.com/search?q=${encodeURIComponent(p.name + ' ' + selectedArea.name + ' Lagos')}`}
                                                                                             target="_blank"
                                                                                             rel="noopener noreferrer"
                                                                                             style={{
@@ -507,7 +507,7 @@ const ExplorePage = () => {
                                                                                 {selectedArea.subLocalityDetails[activeSubLocality].whatToEat.map((food, i) => (
                                                                                     <a
                                                                                         key={i}
-                                                                                        href={food.url || '#'}
+                                                                                        href={`https://www.google.com/search?q=${encodeURIComponent(food.name + ' ' + selectedArea.name + ' Lagos')}`}
                                                                                         target="_blank"
                                                                                         rel="noopener noreferrer"
                                                                                         style={{
@@ -525,7 +525,7 @@ const ExplorePage = () => {
                                                                                             e.currentTarget.style.transform = 'translateY(0)';
                                                                                         }}
                                                                                     >
-                                                                                        {food.name} {food.url && <ExternalLink size={12} strokeWidth={1.5} opacity={0.6} />}
+                                                                                        {food.name} <ExternalLink size={12} strokeWidth={1.5} opacity={0.6} />
                                                                                     </a>
                                                                                 ))}
                                                                             </div>
@@ -540,7 +540,7 @@ const ExplorePage = () => {
                                                                                 {selectedArea.subLocalityDetails[activeSubLocality].sports.map((sport, i) => (
                                                                                     <a
                                                                                         key={i}
-                                                                                        href={sport.url || '#'}
+                                                                                        href={`https://www.google.com/search?q=${encodeURIComponent(sport.name + ' ' + selectedArea.name + ' Lagos')}`}
                                                                                         target="_blank"
                                                                                         rel="noopener noreferrer"
                                                                                         style={{
@@ -599,7 +599,7 @@ const ExplorePage = () => {
                                     {selectedArea.hotspots.map((spot, i) => (
                                         <a 
                                             key={i} 
-                                            href={spot.url || `https://www.google.com/maps/search/${encodeURIComponent(spot.name + ' ' + selectedArea.name + ' Lagos')}`}
+                                            href={`https://www.google.com/search?q=${encodeURIComponent(spot.name + ' ' + selectedArea.name + ' Lagos')}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             style={{ 
