@@ -84,7 +84,7 @@ const SolarSolutions = () => {
                         }}
                         onClick={() => {
                             const message = encodeURIComponent("Hello! I was referred by LagosFit for a free solar quote.");
-                            window.open(`https://wa.me/2347065545958?text=${message}`, '_blank');
+                            window.open(`https://wa.me/2347066684457?text=${message}`, '_blank');
                         }}
                     >
                         Get Free Quote <ArrowRight size={16} />
