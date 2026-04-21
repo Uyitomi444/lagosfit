@@ -378,78 +378,58 @@ export const AREAS: Area[] = [
             },
             'Akowonjo': {
                 placesToVisit: [
-                    { name: 'Akowonjo, Egbeda' },
-                    { name: 'Local market in Akowonjo' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Akowonjo Roundabout' },
+                    { name: 'Miccom Golf Course (nearby)', url: 'https://miccomgolf.com.ng/' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'The Place Akowonjo', url: 'https://www.theplace.com.ng/' },
+                    { name: 'Domino\'s Pizza Egbeda', url: 'https://www.dominos.ng/' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'I-Fitness Egbeda', type: 'Gym', url: 'https://ifitness.ng/' }
                 ]
             },
             'Gowon Estate': {
                 placesToVisit: [
-                    { name: 'Gowon Estate' },
-                    { name: 'Egbeda estate parks & green spaces' },
-                    { name: 'Estate recreational & community facilities' },
+                    { name: 'Gowon Estate inner parks' },
+                    { name: 'Federal Housing Hub' }
                 ],
                 whatToEat: [
-                    { name: 'Estate canteen & café' },
-                    { name: 'Local suya & grills near estate gate' },
-                    { name: 'Restaurants on the nearby main road' },
+                    { name: 'Estate canteen' },
+                    { name: 'Street delicacies' }
                 ],
                 sports: [
-                    { name: 'Estate football pitch', type: 'Football' },
-                    { name: 'Private estate gym', type: 'Gym' },
-                    { name: 'Estate jogging route', type: 'Other' },
+                    { name: 'Estate courts', type: 'Basketball' },
+                    { name: 'Jogging routes', type: 'Other' }
                 ]
             },
             'Shasha': {
                 placesToVisit: [
-                    { name: 'Shasha, Egbeda' },
-                    { name: 'Local market in Shasha' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Shasha Market' },
+                    { name: 'Airport Perimeter Road' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Local food joints' },
+                    { name: 'Evening suya' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Community football', type: 'Football' }
                 ]
             },
             'Idimu': {
                 placesToVisit: [
-                    { name: 'Idimu, Egbeda' },
-                    { name: 'Local market in Idimu' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Idimu Council' },
+                    { name: 'NYSC Camp Iyana Ipaja (nearby)', url: 'https://www.instagram.com/explore/locations/248102353/nysc-camp-iyana-ipaja-lagos/' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Local canteens' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Roadside running', type: 'Other' }
                 ]
             },
             'Ponle': {
                 placesToVisit: [
-                    { name: 'Ponle, Egbeda' },
-                    { name: 'Local market in Ponle' },
-                    { name: 'Community park & open spaces' },
-                ],
                 whatToEat: [
                     { name: 'Amala & ewedu joints' },
                     { name: 'Street suya & bole evening spots' },
@@ -715,70 +695,57 @@ export const AREAS: Area[] = [
             },
             'Alimosho': {
                 placesToVisit: [
-                    { name: 'Alimosho, Iyana Ipaja' },
-                    { name: 'Local market in Alimosho' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Alimosho Local Government HQ', url: 'https://alimosho.lg.gov.ng/' },
+                    { name: 'Justrite Superstore', url: 'https://justriteonline.com/' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Chicken Republic Alimosho', url: 'https://www.instagram.com/chickenrepublic/' },
+                    { name: 'Local Buka joints' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Community football', type: 'Football' },
+                    { name: 'I-Fitness Egbeda (nearby)', type: 'Gym', url: 'https://ifitness.ng/' }
                 ]
             },
             'Baruwa': {
                 placesToVisit: [
-                    { name: 'Baruwa, Iyana Ipaja' },
-                    { name: 'Local market in Baruwa' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Baruwa Estate Gate' },
+                    { name: 'Gated Residential Zone' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Estate canteen' },
+                    { name: 'Street Suya points' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Estate jogging', type: 'Other' },
+                    { name: 'Private compound gyms', type: 'Gym' }
                 ]
             },
             'Mosan': {
                 placesToVisit: [
-                    { name: 'Mosan, Iyana Ipaja' },
-                    { name: 'Local market in Mosan' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Mosan-Okunola LCDA', url: 'https://alimosho.lg.gov.ng/' },
+                    { name: 'LSDPC Estate Mosan' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Local Amala & Ewedu' },
+                    { name: 'Estate snacks' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Mosan community ball', type: 'Football' },
+                    { name: 'Road running', type: 'Other' }
                 ]
             },
             'Gate': {
                 placesToVisit: [
-                    { name: 'Gate, Iyana Ipaja' },
-                    { name: 'Local market in Gate' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Ipaja Gate Bus Stop' },
+                    { name: 'Gate commercial hub' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Quick roadside snacks' },
+                    { name: 'Evening grills' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Road jogging', type: 'Other' }
                 ]
             },
         },
