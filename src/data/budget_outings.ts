@@ -1381,7 +1381,6 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         lng: 3.4242,
         rating: 4.4
     },
-    },
     {
         id: 'res-vi-14',
         name: 'Kaly Restaurant & Bar',
