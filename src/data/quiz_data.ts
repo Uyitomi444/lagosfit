@@ -218,70 +218,53 @@ export const AREAS: Area[] = [
             },
             'Meiran': {
                 placesToVisit: [
-                    { name: 'Meiran, Abule Egba' },
-                    { name: 'Local market in Meiran' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Lagos State University (nearby axis)', url: 'https://lasu.edu.ng/' },
+                    { name: 'Meiran Road market' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Local student canteens' },
+                    { name: 'Evening grills' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Community ball', type: 'Football' },
+                    { name: 'Road running', type: 'Other' }
                 ]
             },
             'Command': {
                 placesToVisit: [
-                    { name: 'Command, Abule Egba' },
-                    { name: 'Local market in Command' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Army Command Road axis' },
+                    { name: 'IPAJ-Command Gate' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Barracks-style canteens' },
+                    { name: 'Suya spots' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Command field workouts', type: 'Other' }
                 ]
             },
             'Ekoro': {
                 placesToVisit: [
-                    { name: 'Ekoro, Abule Egba' },
-                    { name: 'Local market in Ekoro' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Ekoro Junction' },
+                    { name: 'Local commercial shops' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Street buka & snacks' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Community football', type: 'Football' }
                 ]
             },
             'Pipeline': {
                 placesToVisit: [
-                    { name: 'Pipeline, Abule Egba' },
-                    { name: 'Local market in Pipeline' },
-                    { name: 'Community park & open spaces' },
+                    { name: 'Pipeline residential stretch' },
+                    { name: 'Estate gate views' }
                 ],
                 whatToEat: [
-                    { name: 'Amala & ewedu joints' },
-                    { name: 'Street suya & bole evening spots' },
-                    { name: 'Local buka & canteen' },
+                    { name: 'Neighborhood food kiosks' }
                 ],
                 sports: [
-                    { name: 'Community football pitch', type: 'Football' },
-                    { name: 'Local private gym', type: 'Gym' },
-                    { name: 'Road jogging route', type: 'Other' },
+                    { name: 'Estate jogging', type: 'Other' }
                 ]
             },
         },
