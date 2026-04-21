@@ -43,8 +43,26 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ targetId, targetType }) =
             const snap = await getDocs(q);
             const fetched = snap.docs.map(d => ({ id: d.id, ...d.data() } as Review));
             setReviews(fetched);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Failed to fetch reviews:', err);
+            // Handle missing index or other Firestore errors gracefully
+            if (err.code === 'failed-precondition' || err.message?.includes('index')) {
+                console.warn('Firestore index missing for reviews sorting. Showing unsorted fallback.');
+                try {
+                    const fallbackQuery = query(
+                        collection(db, 'reviews'),
+                        where('targetId', '==', targetId)
+                    );
+                    const fallbackSnap = await getDocs(fallbackQuery);
+                    const fallbackFetched = fallbackSnap.docs.map(d => ({ id: d.id, ...d.data() } as Review));
+                    setReviews(fallbackFetched);
+                } catch (fallbackErr) {
+                    console.error('Fallback fetch also failed:', fallbackErr);
+                    setReviews([]); // Secure fallback to empty state
+                }
+            } else {
+                setReviews([]);
+            }
         }
         setLoading(false);
     };

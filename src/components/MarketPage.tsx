@@ -14,13 +14,29 @@ import { collection, getDocs } from 'firebase/firestore';
 import { useLanguage } from '../context/LanguageContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { RefreshCw } from 'lucide-react';
 import {
     Search, ExternalLink, Building2, Home, Globe,
     MapPin, Smartphone, Lock, Crown, Phone, MessageSquare,
-    ChevronDown, ChevronUp, Star,
-    Users, Briefcase, Loader2, Clock
+    ChevronDown, ChevronUp, Star, Map, Filter, RefreshCw,
+    Users, Briefcase, Loader2, Clock, ChevronLeft, ChevronRight
 } from 'lucide-react';
+
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+
+// Fix for default marker icon in leaflet with React
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
+const DefaultIcon = L.icon({
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 import ReviewSection from './ReviewSection';
 import SEO from './SEO';
@@ -339,9 +355,29 @@ const MarketPage = () => {
     );
     
     const BudgetExplorer = () => {
-        const filteredOutings = budgetFilter === 'all' 
-            ? BUDGET_OUTINGS 
-            : BUDGET_OUTINGS.filter(o => o.budget === budgetFilter);
+        const [currentPage, setCurrentPage] = useState(1);
+        const [locationFilter, setLocationFilter] = useState('all');
+        const itemsPerPage = 6;
+
+        // Get unique locations for the filter
+        const uniqueLocations = Array.from(new Set(BUDGET_OUTINGS.map(o => o.location))).sort();
+
+        const filteredOutings = BUDGET_OUTINGS.filter(outing => {
+            const matchesBudget = budgetFilter === 'all' || outing.budget === budgetFilter;
+            const matchesLocation = locationFilter === 'all' || outing.location === locationFilter;
+            // Ensure coordinates exist to prevent map crash
+            const hasCoords = outing.lat !== undefined && outing.lng !== undefined;
+            return matchesBudget && matchesLocation && hasCoords;
+        });
+        
+        const totalPages = Math.ceil(filteredOutings.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const paginatedOutings = filteredOutings.slice(startIndex, startIndex + itemsPerPage);
+
+        // Reset to page 1 when filters change
+        useEffect(() => {
+            setCurrentPage(1);
+        }, [budgetFilter, locationFilter]);
 
         return (
             <div>
@@ -354,37 +390,113 @@ const MarketPage = () => {
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    {[
-                        { key: 'all', label: t('budget.category.all') },
-                        { key: 'under_5k', label: t('budget.category.under_5k') },
-                        { key: 'under_15k', label: t('budget.category.under_15k') },
-                        { key: 'under_20k', label: t('budget.category.under_20k') },
-                        { key: 'under_30k', label: t('budget.category.under_30k') }
-                    ].map(btn => (
-                        <button
-                            key={btn.key}
-                            onClick={() => setBudgetFilter(btn.key)}
-                            style={{
-                                padding: '10px 24px', borderRadius: '50px',
-                                border: budgetFilter === btn.key ? 'none' : '1px solid var(--border-color)',
-                                background: budgetFilter === btn.key ? 'var(--primary-color)' : 'var(--card-bg)',
-                                color: budgetFilter === btn.key ? 'white' : 'var(--text-muted)',
-                                cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem',
-                                transition: 'all 0.3s ease',
-                                boxShadow: budgetFilter === btn.key ? '0 8px 16px rgba(var(--primary-rgb), 0.2)' : 'none'
-                            }}
-                        >
-                            {btn.label}
-                        </button>
-                    ))}
+                {/* Geo-Mapping Section */}
+                <div style={{ 
+                    height: '400px', 
+                    borderRadius: '24px', 
+                    overflow: 'hidden', 
+                    marginBottom: '40px',
+                    border: '1px solid var(--border-color)',
+                    boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                    position: 'relative',
+                    zIndex: 10
+                }}>
+                    <MapContainer 
+                        center={[6.5244, 3.3792]} 
+                        zoom={11} 
+                        style={{ height: '100%', width: '100%' }}
+                        scrollWheelZoom={false}
+                    >
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        {filteredOutings.map(outing => (
+                            <Marker key={outing.id} position={[outing.lat, outing.lng]}>
+                                <Popup>
+                                    <div style={{ padding: '4px' }}>
+                                        <strong style={{ display: 'block', fontSize: '1rem', color: 'var(--primary-color)' }}>{outing.name}</strong>
+                                        <p style={{ margin: '4px 0', fontSize: '0.85rem' }}>{outing.location}</p>
+                                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--accent-color)' }}>{outing.costBreakdown}</span>
+                                    </div>
+                                </Popup>
+                            </Marker>
+                        ))}
+                    </MapContainer>
+                </div>
+
+                <div style={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    gap: '24px', 
+                    marginBottom: '40px'
+                }}>
+                    {/* Budget Filters */}
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        {[
+                            { key: 'all', label: t('budget.category.all') },
+                            { key: 'under_5k', label: t('budget.category.under_5k') },
+                            { key: 'under_15k', label: t('budget.category.under_15k') },
+                            { key: 'under_20k', label: t('budget.category.under_20k') },
+                            { key: 'under_30k', label: t('budget.category.under_30k') }
+                        ].map(btn => (
+                            <button
+                                key={btn.key}
+                                onClick={() => setBudgetFilter(btn.key)}
+                                style={{
+                                    padding: '10px 24px', borderRadius: '50px',
+                                    border: budgetFilter === btn.key ? 'none' : '1px solid var(--border-color)',
+                                    background: budgetFilter === btn.key ? 'var(--primary-color)' : 'var(--card-bg)',
+                                    color: budgetFilter === btn.key ? 'white' : 'var(--text-muted)',
+                                    cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem',
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: budgetFilter === btn.key ? '0 8px 16px rgba(var(--primary-rgb), 0.2)' : 'none'
+                                }}
+                            >
+                                {btn.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    {/* Location Category Filters */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                        <div style={{ position: 'relative', minWidth: '200px' }}>
+                            <Filter size={16} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                            <select 
+                                value={locationFilter}
+                                onChange={(e) => setLocationFilter(e.target.value)}
+                                style={{
+                                    width: '100%',
+                                    padding: '12px 16px 12px 42px',
+                                    borderRadius: '16px',
+                                    border: '1px solid var(--border-color)',
+                                    background: 'var(--card-bg)',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 600,
+                                    appearance: 'none',
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                <option value="all">All Locations (Lagos)</option>
+                                {uniqueLocations.map(loc => (
+                                    <option key={loc} value={loc}>{loc}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div 
                     className="grid-responsive"
-                    style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}
+                    style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
+                        gap: '24px',
+                        marginBottom: '40px'
+                    }}
                 >
-                    {filteredOutings.map(outing => (
+                    {paginatedOutings.map(outing => (
                         <motion.div
                             key={outing.id}
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -464,7 +576,7 @@ const MarketPage = () => {
                                     </div>
                                 </div>
 
-                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                                     {outing.activities.map(act => (
                                         <span key={act} style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'var(--secondary-bg)', padding: '4px 10px', borderRadius: '6px' }}>
                                             • {act}
@@ -473,6 +585,7 @@ const MarketPage = () => {
                                 </div>
                             </div>
                             
+                            <div style={{ padding: '0 32px 32px' }}>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     <a 
                                         href={`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`} 
@@ -495,9 +608,71 @@ const MarketPage = () => {
                                         {t('budget.source_by').replace('{0}', outing.source)}
                                     </span>
                                 </div>
+                            </div>
                         </motion.div>
                     ))}
                 </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '16px', marginTop: '20px' }}>
+                        <button 
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            className="btn"
+                            style={{ 
+                                padding: '8px 16px', 
+                                background: 'var(--card-bg)', 
+                                border: '1px solid var(--border-color)',
+                                opacity: currentPage === 1 ? 0.5 : 1,
+                                cursor: currentPage === 1 ? 'not-allowed' : 'pointer'
+                            }}
+                        >
+                            <ChevronLeft size={16} />
+                        </button>
+                        
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                            {Array.from({ length: totalPages }).map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentPage(i + 1)}
+                                    style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '8px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontWeight: 700,
+                                        fontSize: '0.9rem',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        border: currentPage === i + 1 ? 'none' : '1px solid var(--border-color)',
+                                        background: currentPage === i + 1 ? 'var(--primary-color)' : 'var(--card-bg)',
+                                        color: currentPage === i + 1 ? 'white' : 'var(--text-muted)'
+                                    }}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button 
+                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            className="btn"
+                            style={{ 
+                                padding: '8px 16px', 
+                                background: 'var(--card-bg)', 
+                                border: '1px solid var(--border-color)',
+                                opacity: currentPage === totalPages ? 0.5 : 1,
+                                cursor: currentPage === totalPages ? 'not-allowed' : 'pointer'
+                            }}
+                        >
+                            <ChevronRight size={16} />
+                        </button>
+                    </div>
+                )}
             </div>
         );
     };

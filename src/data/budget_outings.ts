@@ -11,38 +11,12 @@ export interface BudgetOuting {
     activities: string[];
     category: 'Nature' | 'Art' | 'Food' | 'Beach' | 'Adrenaline' | 'Culture' | 'Entertainment' | 'Adventure';
     websiteUrl?: string;
+    lat: number;
+    lng: number;
 }
 
 export const BUDGET_OUTINGS: BudgetOuting[] = [
     // --- UNDER 5K (The ₦5,000 Budget) ---
-    {
-        id: 'out-50',
-        name: 'SKYBOX LEKKI',
-        budget: 'under_30k',
-        location: 'Lekki Phase 1',
-        address: '8 Otunba Adedoyin Ogungbe Cres, Lekki Phase 1, Lagos',
-        openingHours: 'Daily: 12:00 PM - Late',
-        costBreakdown: 'Cocktails from ₦8,000 | Small Chops from ₦6,000',
-        description: 'Elite rooftop lounge with a stunning view of the Lekki skyline. A premium experience where a full night out typically ranges between ₦20,000 - ₦30,000.',
-        source: 'Verified Instagram Spot',
-        activities: ['Rooftop Vibes', 'Sunset Views', 'Cocktails'],
-        category: 'Entertainment',
-        websiteUrl: 'https://www.instagram.com/skybox_lekki'
-    },
-    {
-        id: 'out-51',
-        name: 'CHAKAVILLE BEACH RESORT',
-        budget: 'under_20k',
-        location: 'Lekki / Ajah',
-        address: 'Eleko Beach Rd, Lekki',
-        openingHours: 'Daily: 24 Hours',
-        costBreakdown: 'Daycation Access ~₦15,000',
-        description: 'Serene beach front away from the city noise. Best enjoyed as a full day package with meals and pool access.',
-        source: 'Beach Guides',
-        activities: ['Swimming', 'Beach Picnic', 'Relaxation'],
-        category: 'Beach',
-        websiteUrl: 'https://www.instagram.com/chakavillebeachresort/'
-    },
     {
         id: 'out-52',
         name: 'WEST SIDE BEACH',
@@ -55,7 +29,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Lagos Discovery',
         activities: ['Beach Sports', 'Barbecue', 'Sunrise Viewing'],
         category: 'Beach',
-        websiteUrl: 'https://maps.app.goo.gl/9yXY66K6K6K6K6K67'
+        websiteUrl: 'https://maps.app.goo.gl/9yXY66K6K6K6K6K67',
+        lat: 6.4764,
+        lng: 3.5929
     },
     {
         id: 'out-53',
@@ -69,21 +45,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Mainland Guide',
         activities: ['Fairground Rides', 'Family Fun', 'Photography'],
         category: 'Entertainment',
-        websiteUrl: 'https://maps.app.goo.gl/ApapaPark'
-    },
-    {
-        id: 'out-54',
-        name: 'JET BEACH & HOTEL',
-        budget: 'under_15k',
-        location: 'Lekki',
-        address: 'Km 36 Lekki-Epe Expressway, Lagos',
-        openingHours: 'Daily: 24 Hours',
-        costBreakdown: 'Entry: ₦5,000 (Reg) / ₦8,000 (VIP)',
-        description: 'A premium beach club experience. While slightly higher entry, the facilities are top-tier and well-maintained.',
-        source: 'Verified Tourism Spot',
-        activities: ['Swimming', 'Beach Party', 'Relaxation'],
-        category: 'Beach',
-        websiteUrl: 'https://www.instagram.com/jetbeachandhotel'
+        websiteUrl: 'https://maps.app.goo.gl/ApapaPark',
+        lat: 6.4426,
+        lng: 3.3592
     },
     {
         id: 'out-55',
@@ -97,7 +61,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Culture Lagos',
         activities: ['Museum Tour', 'History Appreciation', 'Photography'],
         category: 'Culture',
-        websiteUrl: 'https://www.instagram.com/jk_randle_centre'
+        websiteUrl: 'https://www.instagram.com/jk_randle_centre',
+        lat: 6.4468,
+        lng: 3.4074
     },
     {
         id: 'out-56',
@@ -111,7 +77,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Art Hunters',
         activities: ['Art Appreciation', 'Gallery Walk', 'Meeting Artists'],
         category: 'Art',
-        websiteUrl: 'https://maps.app.goo.gl/AdegbolaGallery'
+        websiteUrl: 'https://maps.app.goo.gl/AdegbolaGallery',
+        lat: 6.4452,
+        lng: 3.4032
     },
     {
         id: 'out-57',
@@ -125,7 +93,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Surulere Foodies',
         activities: ['Local Dining', 'Takeout', 'Lunch Dates'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/opivine.kitchen'
+        websiteUrl: 'https://www.instagram.com/opivine.kitchen',
+        lat: 6.4982,
+        lng: 3.3512
     },
     {
         id: 'out-58',
@@ -139,7 +109,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Island Art Community',
         activities: ['Art Walk', 'Networking', 'Photography'],
         category: 'Art',
-        websiteUrl: 'https://www.windsorgallery.com.ng'
+        websiteUrl: 'https://www.windsorgallery.com.ng',
+        lat: 6.4326,
+        lng: 3.4212
     },
     {
         id: 'out-59',
@@ -153,7 +125,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Dessert Lovers',
         activities: ['Breakfast', 'Sweet Treats', 'Casual Hangout'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/waffle.monster'
+        websiteUrl: 'https://www.instagram.com/waffle.monster',
+        lat: 6.4482,
+        lng: 3.4732
     },
     {
         id: 'out-60',
@@ -167,7 +141,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Gamers Lagos',
         activities: ['Arcade Games', 'VR', 'Leisure'],
         category: 'Entertainment',
-        websiteUrl: 'https://www.instagram.com/gameland_lagos'
+        websiteUrl: 'https://www.instagram.com/gameland_lagos',
+        lat: 6.4512,
+        lng: 3.4642
     },
     {
         id: 'out-61',
@@ -181,7 +157,54 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Eco Travels',
         activities: ['Forest Hiking', 'Picnic', 'Animal Watching'],
         category: 'Nature',
-        websiteUrl: 'https://www.instagram.com/lufasipark'
+        websiteUrl: 'https://www.instagram.com/lufasipark',
+        lat: 6.4526,
+        lng: 3.6512
+    },
+    {
+        id: 'new-01',
+        name: 'FREEDOM PARK',
+        budget: 'under_5k',
+        location: 'Lagos Island',
+        address: 'Hospital Road, Old Prison Ground, Lagos Island',
+        openingHours: 'Daily: 8:00 AM - 11:00 PM',
+        costBreakdown: 'Entry: ₦200',
+        description: 'A historic cultural hub and leisure park formerly a colonial prison. A peaceful escape for art and history lovers.',
+        source: 'Culture Guide',
+        activities: ['Art Exhibitions', 'Live Music', 'Strolling'],
+        category: 'Culture',
+        lat: 6.4489,
+        lng: 3.3965
+    },
+    {
+        id: 'new-02',
+        name: 'NIKE ART GALLERY',
+        budget: 'under_5k',
+        location: 'Lekki',
+        address: '2 Oba Yekini Elegushi Rd, Lekki Phase I, Lagos',
+        openingHours: 'Daily: 10:00 AM - 6:00 PM',
+        costBreakdown: 'Entry: FREE',
+        description: 'West Africa\'s largest art gallery. A four-story treasure trove of Nigerian art and culture.',
+        source: 'Art Community',
+        activities: ['Art Appreciation', 'Photography', 'Shopping'],
+        category: 'Art',
+        lat: 6.4443,
+        lng: 3.4591
+    },
+    {
+        id: 'new-03',
+        name: 'NATIONAL MUSEUM LAGOS',
+        budget: 'under_5k',
+        location: 'Onikan',
+        address: 'Awolowo Rd, Onikan, Lagos Island',
+        openingHours: 'Daily: 9:00 AM - 6:00 PM',
+        costBreakdown: 'Entry: ₦1,000',
+        description: 'The definitive collection of Nigeria\'s historical artifacts and archaeological treasures.',
+        source: 'Museum Records',
+        activities: ['History Tour', 'Artifact Viewing', 'Education'],
+        category: 'Culture',
+        lat: 6.4400,
+        lng: 3.4020
     },
 
     // --- UNDER 15K (The ₦15,000 Budget) ---
@@ -197,7 +220,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Surulere Premium Guides',
         activities: ['Fine Dining', 'Live Music', 'Date Nights'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/sorestaurantandlounge'
+        websiteUrl: 'https://www.instagram.com/sorestaurantandlounge',
+        lat: 6.4974,
+        lng: 3.3542
     },
     {
         id: 'out-63',
@@ -211,7 +236,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Instagram Foodies',
         activities: ['Dinner Dates', 'Cocktails', 'Photography'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/lagosia.restaurant'
+        websiteUrl: 'https://www.instagram.com/lagosia.restaurant',
+        lat: 6.4526,
+        lng: 3.4682
     },
     {
         id: 'out-64',
@@ -225,7 +252,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Office Lunch Guide',
         activities: ['Gourmet Dining', 'Group Platter', 'Socializing'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/1812foods'
+        websiteUrl: 'https://www.instagram.com/1812foods',
+        lat: 6.4326,
+        lng: 3.4212
     },
     {
         id: 'out-65',
@@ -239,7 +268,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Mainland Social',
         activities: ['Ice Cream', 'Photography', 'Sugar Rush'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/toofunkingsoft'
+        websiteUrl: 'https://www.instagram.com/toofunkingsoft',
+        lat: 6.5932,
+        lng: 3.3562
     },
     {
         id: 'out-66',
@@ -253,7 +284,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'VI Work Life',
         activities: ['Lounge Vibe', 'Cocktails', 'Late Night Bites'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/sidewalkvi'
+        websiteUrl: 'https://www.instagram.com/sidewalkvi',
+        lat: 6.4352,
+        lng: 3.4242
     },
     {
         id: 'out-67',
@@ -267,7 +300,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Worker Bees Lagos',
         activities: ['Coffee Tasting', 'Remote Work', 'Brunch'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/thecoffeesocietylagos'
+        websiteUrl: 'https://www.instagram.com/thecoffeesocietylagos',
+        lat: 6.4492,
+        lng: 3.4712
     },
     {
         id: 'out-68',
@@ -281,35 +316,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Breakfast Club',
         activities: ['Pancake Brunch', 'Morning Dates', 'Family Breakfast'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/breakfastcorner.ng'
-    },
-    {
-        id: 'out-69',
-        name: 'Lagos Trivia Night',
-        budget: 'under_15k',
-        location: 'Multiple (VI/Lekki)',
-        address: 'Rotation between top lounges',
-        openingHours: 'Wednesdays/Thursdays: 7 PM',
-        costBreakdown: 'Entry/Participation ~₦5,000 + Food',
-        description: 'Test your knowledge and win prizes in a high-energy social environment.',
-        source: 'Social Gatherings',
-        activities: ['Trivia Games', 'Networking', 'Prizes'],
-        category: 'Entertainment',
-        websiteUrl: 'https://www.instagram.com/trivia.ng'
-    },
-    {
-        id: 'out-70',
-        name: 'Tasty Fried Chicken (Marina)',
-        budget: 'under_15k',
-        location: 'Lagos Island',
-        address: 'Marina / Island, Lagos',
-        openingHours: 'Daily: 11:00 AM - 8:00 PM',
-        costBreakdown: 'Big Meals ~₦7,000',
-        description: 'Fast, fresh, and famous for their tasty local recipes. The definitive Island lunch spot.',
-        source: 'Island Workers',
-        activities: ['Quick Lunch', 'Traditional Chops', 'Takeaway'],
-        category: 'Food',
-        websiteUrl: 'https://tastyfriedchicken.com/'
+        websiteUrl: 'https://www.instagram.com/breakfastcorner.ng',
+        lat: 6.5912,
+        lng: 3.3522
     },
     {
         id: 'out-71',
@@ -323,10 +332,43 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Party Foodies',
         activities: ['Local Dining', 'Jollof Appreciation', 'Vibing'],
         category: 'Food',
-        websiteUrl: 'https://www.instagram.com/firewoodjollof'
+        websiteUrl: 'https://www.instagram.com/firewoodjollof',
+        lat: 6.4512,
+        lng: 3.4692
+    },
+    {
+        id: 'new-04',
+        name: 'ESSENCE BY THE GRID',
+        budget: 'under_15k',
+        location: 'Ikeja GRA',
+        address: '15a Sasegbon St, Ikeja GRA, Lagos',
+        openingHours: 'Daily: 11:00 AM - 11:00 PM',
+        costBreakdown: 'Full Meals ~₦8,000',
+        description: 'A stylish bistro in the heart of Ikeja. Perfect for a quiet dinner or a professional lunch.',
+        source: 'Mainland Guide',
+        activities: ['Bistro Dining', 'Date Night', 'Mocktails'],
+        category: 'Food',
+        lat: 6.5912,
+        lng: 3.3490
     },
 
     // --- UNDER 20K (The ₦20,000 Budget) ---
+    {
+        id: 'out-51',
+        name: 'CHAKAVILLE BEACH RESORT',
+        budget: 'under_20k',
+        location: 'Lekki / Ajah',
+        address: 'Eleko Beach Rd, Lekki',
+        openingHours: 'Daily: 24 Hours',
+        costBreakdown: 'Daycation Access ~₦15,000',
+        description: 'Serene beach front away from the city noise. Best enjoyed as a full day package with meals and pool access.',
+        source: 'Beach Guides',
+        activities: ['Swimming', 'Beach Picnic', 'Relaxation'],
+        category: 'Beach',
+        websiteUrl: 'https://www.instagram.com/chakavillebeachresort/',
+        lat: 6.4674,
+        lng: 3.5829
+    },
     {
         id: 'out-72',
         name: 'Crafts Village Surulere - Sip & Paint',
@@ -339,7 +381,9 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Creative Hub',
         activities: ['Painting', 'Wine Tasting', 'Socializing'],
         category: 'Art',
-        websiteUrl: 'https://www.instagram.com/craftsvillage_sipandpaint'
+        websiteUrl: 'https://www.instagram.com/craftsvillage_sipandpaint',
+        lat: 6.4992,
+        lng: 3.3532
     },
     {
         id: 'out-73',
@@ -353,6 +397,87 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
         source: 'Arcade Lovers',
         activities: ['Gaming', 'Bowling', 'Ice Skating'],
         category: 'Entertainment',
-        websiteUrl: 'https://www.instagram.com/providha_funcity'
+        websiteUrl: 'https://www.instagram.com/providha_funcity',
+        lat: 6.5822,
+        lng: 3.3592
+    },
+    {
+        id: 'new-05',
+        name: 'YEMISI SHYLLON MUSEUM',
+        budget: 'under_20k',
+        location: 'Ibeju-Lekki',
+        address: 'Pan-Atlantic University, Ibeju-Lekki, Lagos',
+        openingHours: 'Tue-Sat: 10 AM - 4 PM',
+        costBreakdown: 'Entry & Tour ~₦5,000 (Students discounted)',
+        description: 'Nigeria\'s leading private art museum. A world-class facility housing centuries of Nigerian art.',
+        source: 'Art Records',
+        activities: ['Museum Tour', 'Art Study', 'Photography'],
+        category: 'Art',
+        lat: 6.4882,
+        lng: 3.8550
+    },
+
+    // --- UNDER 30K (The ₦30,000 Budget) ---
+    {
+        id: 'out-50',
+        name: 'SKYBOX LEKKI',
+        budget: 'under_30k',
+        location: 'Lekki Phase 1',
+        address: '8 Otunba Adedoyin Ogungbe Cres, Lekki Phase 1, Lagos',
+        openingHours: 'Daily: 12:00 PM - Late',
+        costBreakdown: 'Cocktails from ₦8,000 | Small Chops from ₦6,000',
+        description: 'Elite rooftop lounge with a stunning view of the Lekki skyline. A premium experience where a full night out typically ranges between ₦20,000 - ₦30,000.',
+        source: 'Verified Instagram Spot',
+        activities: ['Rooftop Vibes', 'Sunset Views', 'Cocktails'],
+        category: 'Entertainment',
+        websiteUrl: 'https://www.instagram.com/skybox_lekki',
+        lat: 6.4526,
+        lng: 3.4682
+    },
+    {
+        id: 'out-54',
+        name: 'JET BEACH & HOTEL',
+        budget: 'under_15k',
+        location: 'Lekki',
+        address: 'Km 36 Lekki-Epe Expressway, Lagos',
+        openingHours: 'Daily: 24 Hours',
+        costBreakdown: 'Entry: ₦5,000 (Reg) / ₦8,000 (VIP)',
+        description: 'A premium beach club experience. While slightly higher entry, the facilities are top-tier and well-maintained.',
+        source: 'Verified Tourism Spot',
+        activities: ['Swimming', 'Beach Party', 'Relaxation'],
+        category: 'Beach',
+        websiteUrl: 'https://www.instagram.com/jetbeachandhotel',
+        lat: 6.4712,
+        lng: 3.5782
+    },
+    {
+        id: 'new-06',
+        name: 'BUKKA HUT (IKEJA GRA)',
+        budget: 'under_5k',
+        location: 'Ikeja',
+        address: 'Ikeja GRA, Lagos (Various locations)',
+        openingHours: 'Daily: 10:00 AM - 10:00 PM',
+        costBreakdown: 'Full Meals from ₦3,500',
+        description: 'The definitive Mainland spot for authentic Nigerian cuisine. Famous for their Jollof rice, Amala, and variety of soups.',
+        source: 'Mainland Foodies',
+        activities: ['Local Dining', 'Quick Lunch', 'Cultural Food'],
+        category: 'Food',
+        lat: 6.5866,
+        lng: 3.3486
+    },
+    {
+        id: 'new-07',
+        name: 'GHANA HIGH RESTAURANT',
+        budget: 'under_5k',
+        location: 'Lagos Island',
+        address: 'Lagos Island Area, Near Onikan',
+        openingHours: 'Daily: 8:00 AM - 6:00 PM',
+        costBreakdown: 'Generous Portions from ₦2,500',
+        description: 'A legendary Island institution known for serving massive, affordable portions of Nigerian and Ghanaian favorites for decades.',
+        source: 'Island Workers',
+        activities: ['Budget Lunch', 'Legendary Eats', 'Quick Service'],
+        category: 'Food',
+        lat: 6.4484,
+        lng: 3.4002
     }
 ];
