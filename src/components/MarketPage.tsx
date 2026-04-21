@@ -17,7 +17,7 @@ import { useAuth } from '../context/AuthContext';
 import {
     Search, ExternalLink, Building2, Home, Globe,
     MapPin, Smartphone, Lock, Crown, Phone, MessageSquare,
-    ChevronDown, ChevronUp, Star, Map, Filter, RefreshCw,
+    ChevronDown, ChevronUp, Star, Filter, RefreshCw,
     Users, Briefcase, Loader2, Clock, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
