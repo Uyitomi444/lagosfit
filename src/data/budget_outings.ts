@@ -132,7 +132,7 @@ export const BUDGET_OUTINGS: BudgetOuting[] = [
     {
         id: 'md-01',
         name: 'OTRES EXPRESS',
-        budget: 'under_10k',
+        budget: 'under_15k',
         location: 'Maryland',
         address: 'Maryland Mall, Lagos',
         openingHours: 'Daily: 9:00 AM - 9:00 PM',
