@@ -21,62 +21,9 @@ import {
     Users, Briefcase, Loader2, Clock, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
-import 'leaflet/dist/leaflet.css';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 
-// Category-based Custom SVG Icons
-const getCategoryIcon = (category: string) => {
-    let iconSvg = '';
-    let color = 'white';
-    let bgColor = 'var(--primary-color)';
 
-    switch(category) {
-        case 'Food': 
-            iconSvg = '<path d="M12 2v20M5 5v3a7 7 0 0 0 14 0V5M12 15v7" />'; // Simplified fork/spoon vibe
-            bgColor = '#FF4B2B'; break;
-        case 'Beach':
-            iconSvg = '<path d="M12 2L4 22h16L12 2z" />'; // Beach/Mountain vibe
-            bgColor = '#3498DB'; break;
-        case 'Parks':
-            iconSvg = '<path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />'; // Terrain
-            bgColor = '#2ECC71'; break;
-        case 'Nightlife':
-            iconSvg = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />'; // Moon
-            bgColor = '#1F2937'; break;
-        case 'Entertainment':
-            iconSvg = '<path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm12-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />'; // Music
-            bgColor = '#F59E0B'; break;
-        case 'Museum':
-        case 'Art':
-        case 'Culture':
-            iconSvg = '<circle cx="12" cy="12" r="10" /><path d="M12 8v8M8 12h8" />'; // Art/Plus
-            bgColor = '#A855F7'; break;
-        default:
-            iconSvg = '<path d="M12 2v20M5 5v3a7 7 0 0 0 14 0V5" />';
-            bgColor = 'var(--primary-color)';
-    }
 
-    return L.divIcon({
-        className: 'custom-div-icon',
-        html: `<div style="background-color: ${bgColor}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-50%);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconSvg}</svg>
-               </div>`,
-        iconSize: [40, 40],
-        iconAnchor: [20, 20],
-        popupAnchor: [0, -20]
-    });
-};
-
-// Map Controller for smooth transitions
-const MapController = ({ center }: { center: [number, number] }) => {
-    const map = useMap();
-    useEffect(() => {
-        map.flyTo(center, 13, { duration: 1.5 });
-    }, [center, map]);
-    return null;
-};
 
 import ReviewSection from './ReviewSection';
 import SEO from './SEO';
@@ -433,66 +380,7 @@ const MarketPage = () => {
                     </p>
                 </div>
 
-                {/* Geo-Mapping Section */}
-                <div style={{ 
-                    height: '450px', 
-                    borderRadius: '32px', 
-                    overflow: 'hidden', 
-                    marginBottom: '40px',
-                    border: '1px solid var(--border-color)',
-                    boxShadow: '0 25px 50px -12px rgba(0,0,0,0.15)',
-                    position: 'relative',
-                    zIndex: 10
-                }}>
-                    <MapContainer 
-                        center={[6.5244, 3.3792]} 
-                        zoom={11} 
-                        style={{ height: '100%', width: '100%' }}
-                        scrollWheelZoom={false}
-                    >
-                        {/* Premium Minimalist Map Tiles */}
-                        <TileLayer
-                            attribution='&copy; <a href="https://carto.com/attributions">CARTO</a>'
-                            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                        />
-                        
-                        {/* Dynamic Map Controller for Area Zooming */}
-                        {filteredOutings.length > 0 && (
-                            <MapController center={[
-                                filteredOutings.reduce((acc, curr) => acc + curr.lat, 0) / filteredOutings.length,
-                                filteredOutings.reduce((acc, curr) => acc + curr.lng, 0) / filteredOutings.length
-                            ]} />
-                        )}
 
-                        <MarkerClusterGroup chunkedLoading zoomToBoundsOnClick={true}>
-                            {filteredOutings.map(outing => (
-                                <Marker 
-                                    key={outing.id} 
-                                    position={[outing.lat, outing.lng]}
-                                    icon={getCategoryIcon(outing.category)}
-                                >
-                                    <Popup>
-                                        <div style={{ padding: '8px', minWidth: '150px' }}>
-                                            <strong style={{ display: 'block', fontSize: '1.1rem', color: 'var(--primary-color)', marginBottom: '4px' }}>{outing.name}</strong>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '8px' }}>
-                                                <MapPin size={12} /> {outing.location}
-                                            </div>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-color)' }}>{outing.costBreakdown}</span>
-                                                <button 
-                                                    onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(outing.name + ' ' + outing.location + ' Lagos')}`, '_blank')}
-                                                    style={{ background: 'none', border: 'none', color: 'var(--primary-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                                                >
-                                                    <ExternalLink size={14} />
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </Popup>
-                                </Marker>
-                            ))}
-                        </MarkerClusterGroup>
-                    </MapContainer>
-                </div>
 
                 <div style={{ 
                     display: 'flex', 
