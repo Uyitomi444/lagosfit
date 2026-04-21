@@ -1,10 +1,38 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Mail, Heart, Globe, Users } from 'lucide-react';
+import { Mail, Heart, Globe, Users, Send, CheckCircle2 } from 'lucide-react';
+import { sendContactEmail } from '../utils/email';
 import SEO from './SEO';
 
 const AboutPage = () => {
     const { t } = useLanguage();
+    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+    const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('sending');
+        
+        try {
+            const success = await sendContactEmail({
+                from_name: formData.name,
+                from_email: formData.email,
+                subject: formData.subject,
+                message: formData.message
+            });
+            
+            if (success) {
+                setStatus('success');
+                setFormData({ name: '', email: '', subject: '', message: '' });
+                setTimeout(() => setStatus('idle'), 5000);
+            } else {
+                setStatus('error');
+            }
+        } catch (err) {
+            setStatus('error');
+        }
+    };
 
     return (
         <div style={{ paddingBottom: '80px', overflowX: 'hidden' }}>
@@ -109,17 +137,61 @@ const AboutPage = () => {
                 </div>
 
                 <div 
-                    className="mobile-stack"
-                    style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px 24px', textAlign: 'center' }}
+                    style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px 24px' }}
                 >
-                    <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
-                    <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '32px', maxWidth: '600px', margin: '0 auto 32px' }}>
-                        {t('about.contact_text')}
-                    </p>
-                    <a href="mailto:hello@lagosfit.com" className="btn btn-primary" style={{ padding: '16px 40px' }}>
-                        {t('about.contact_btn')}
-                    </a>
+                    <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '60px' }}>
+                        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                            <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
+                            <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
+                            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '400px' }}>
+                                {t('about.contact_text')}
+                            </p>
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="card" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {status === 'success' ? (
+                                <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                                    <CheckCircle2 size={64} color="var(--success-color)" style={{ marginBottom: '16px' }} />
+                                    <h3 style={{ marginBottom: '8px' }}>Message Sent!</h3>
+                                    <p style={{ color: 'var(--text-muted)' }}>Thank you for reaching out. We'll get back to you shortly.</p>
+                                </div>
+                            ) : (
+                                <>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="mobile-stack">
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Your Name</label>
+                                            <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }} placeholder="John Doe" />
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Email Address</label>
+                                            <input required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }} placeholder="john@example.com" />
+                                        </div>
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Subject</label>
+                                        <input required type="text" value={formData.subject} onChange={e => setFormData({ ...formData, subject: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }} placeholder="Inquiry about area search" />
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Message</label>
+                                        <textarea required rows={4} value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)', resize: 'none' }} placeholder="Your message here..." />
+                                    </div>
+                                    <button 
+                                        type="submit" 
+                                        disabled={status === 'sending'}
+                                        className="btn btn-primary" 
+                                        style={{ marginTop: '8px', padding: '16px', fontWeight: 700 }}
+                                    >
+                                        {status === 'sending' ? 'Sending...' : <><Send size={18} /> {t('about.contact_btn')}</>}
+                                    </button>
+                                    {status === 'error' && (
+                                        <p style={{ color: 'var(--error-color)', fontSize: '0.85rem', textAlign: 'center', marginTop: '8px' }}>
+                                            Failed to send message. Please try again or email us directly at hello@lagosfit.com.
+                                        </p>
+                                    )}
+                                </>
+                            )}
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
