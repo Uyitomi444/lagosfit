@@ -152,14 +152,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
                     if (snap.exists()) {
                         const data = snap.data();
-                        isPremium = data.isPremium === true;
-                        isAdmin = data.isAdmin === true; // Fetch from doc
+                        const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
+                        const isHardcodedAdmin = firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase());
                         
-                        // Fallback: Check for specific admin email (Development/Initial setup)
-                        if (!isAdmin && firebaseUser.email && firebaseUser.email.toLowerCase() === 'admin@lagosfit.com') {
-                            isAdmin = true;
+                        // If they are a hardcoded admin but the DB doesn't know it yet, sync it
+                        if (isHardcodedAdmin && data.isAdmin !== true) {
+                            try {
+                                await updateDoc(doc(db, 'users', firebaseUser.uid), { isAdmin: true });
+                                console.log('Admin status synced to Firestore for:', firebaseUser.email);
+                            } catch (err) {
+                                console.error('Failed to sync admin status to Firestore:', err);
+                            }
                         }
 
+                        isPremium = data.isPremium === true || isHardcodedAdmin;
+                        isAdmin = data.isAdmin === true || isHardcodedAdmin;
+                        
                         favorites = data.favorites || [];
                         firestoreData = {
                             name: data.name,
@@ -189,8 +197,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
             if (snap.exists()) {
                 const data = snap.data();
-                const isPremium = data.isPremium === true;
-                const isAdmin = data.isAdmin === true || (firebaseUser.email?.toLowerCase() === 'admin@lagosfit.com');
+                const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
+                const isHardcodedAdmin = firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase());
+                
+                const isPremium = data.isPremium === true || isHardcodedAdmin;
+                const isAdmin = data.isAdmin === true || isHardcodedAdmin;
                 const favorites = data.favorites || [];
                 const firestoreData = { name: data.name, photoURL: data.photoURL };
                 
@@ -281,7 +292,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const currentUser = auth.currentUser;
         
         // Developer/Admin bypass logic for testing on live site
-        const isAdmin = currentUser?.email?.toLowerCase() === 'admin@lagosfit.com';
+        const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
+        const isAdmin = currentUser?.email && adminEmails.includes(currentUser.email.toLowerCase());
         
         if (!currentUser && !isAdmin) throw new Error('Must be logged in to upgrade');
         if (!currentUser && isAdmin) {

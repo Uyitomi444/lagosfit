@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     User, Mail, Crown, Heart, Clock, Settings, LogOut, 
-    Save, Camera, MapPin, ArrowRight, ChevronRight, AlertCircle
+    Save, Camera, MapPin, ArrowRight, ChevronRight, AlertCircle, ShieldCheck
 } from 'lucide-react';
 import { AREAS } from '../data/quiz_data';
 import { useRef } from 'react';
@@ -152,6 +152,19 @@ const ProfilePage = () => {
                                 {t('profile.pro_badge')}
                             </div>
                         )}
+                        
+                        {user.isAdmin && (
+                            <div style={{ 
+                                position: 'absolute', top: '15px', left: '-35px', 
+                                background: '#ef4444',
+                                padding: '8px 40px', transform: 'rotate(-45deg)',
+                                color: 'white', fontWeight: 800, fontSize: '0.75rem',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                                zIndex: 10
+                            }}>
+                                ADMIN
+                            </div>
+                        )}
 
                         <div style={{ position: 'relative', width: '100px', height: '100px', margin: '0 auto 20px' }}>
                             <div style={{ 
@@ -288,6 +301,35 @@ const ProfilePage = () => {
                             </button>
                         </div>
                     </motion.div>
+
+                    {/* Admin Dashboard Entry */}
+                    {user.isAdmin && (
+                        <motion.div 
+                            className="card" 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            style={{ 
+                                padding: '30px', 
+                                background: 'white',
+                                border: '2px solid #ef4444',
+                                boxShadow: '0 10px 30px rgba(239, 68, 68, 0.1)'
+                            }}
+                        >
+                            <h3 style={{ fontSize: '1.4rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                <ShieldCheck size={24} color="#ef4444" /> Admin Console
+                            </h3>
+                            <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginBottom: '24px', lineHeight: 1.5 }}>
+                                You have administrative privileges. Access the dashboard to manage users, agents, and reviews.
+                            </p>
+                            <button 
+                                onClick={() => navigate('/admin')}
+                                className="btn" 
+                                style={{ background: '#ef4444', color: 'white', width: '100%', fontWeight: 700 }}
+                            >
+                                Go to Dashboard
+                            </button>
+                        </motion.div>
+                    )}
 
                     {/* Premium Card */}
                     {!user.isPremium && (
