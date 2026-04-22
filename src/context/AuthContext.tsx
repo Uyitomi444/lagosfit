@@ -261,6 +261,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 domain: window.location.hostname
             });
 
+            // Help the user identify the exact issue
+            alert(`Login Error: ${err.code}\n${err.message}`);
+
             // If the popup is blocked OR Google blocks the useragent in popup mode,
             // we let the user know and try redirect as a last resort.
             if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
