@@ -1,5 +1,3 @@
-
-import { Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
