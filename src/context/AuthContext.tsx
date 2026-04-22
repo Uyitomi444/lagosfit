@@ -227,21 +227,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Email + Password Login
     const login = async (email: string, password: string) => {
-        // Developer Backdoor for Admin account
-        if (email.toLowerCase() === 'admin@lagosfit.com' && password === 'LagosAdmin2024') {
-            const mockAdmin: AppUser = {
-                uid: 'admin-dev-id',
-                email: 'admin@lagosfit.com',
-                name: 'System Administrator',
-                photoURL: null,
-                isPremium: true,
-                isAdmin: true,
-                favorites: []
-            };
-            setUser(mockAdmin);
-            localStorage.setItem('lagosfit_admin_dev_mode', 'true');
-            return;
-        }
         await signInWithEmailAndPassword(auth, email, password);
     };
 

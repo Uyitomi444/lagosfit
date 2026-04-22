@@ -239,6 +239,13 @@ a {
     font-size: 1.6rem !important;
   }
 
+.grid-responsive {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 900px) {
   .grid-responsive {
     grid-template-columns: 1fr !important;
     gap: 16px !important;

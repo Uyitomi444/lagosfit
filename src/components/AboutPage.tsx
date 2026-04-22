@@ -142,7 +142,7 @@ const AboutPage = () => {
                 <div 
                     style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px 24px' }}
                 >
-                    <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '60px' }}>
+                    <div className="grid-responsive" style={{ gap: '60px' }}>
                         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                             <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
                             <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
@@ -188,7 +188,7 @@ const AboutPage = () => {
                                     </button>
                                     {status === 'error' && (
                                         <p style={{ color: 'var(--error-color)', fontSize: '0.85rem', textAlign: 'center', marginTop: '8px' }}>
-                                            Failed to send message. Please try again or email us directly at hello@lagosfit.com.
+                                            Failed to send message. Please try again or email us directly at uyitomiadebiyi@gmail.com.
                                         </p>
                                     )}
                                 </>

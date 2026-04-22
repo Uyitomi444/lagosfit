@@ -43,25 +43,7 @@ const PricingPage = () => {
             });
         } catch (error: any) {
             console.error('Payment Error:', error);
-            
-            // If the key is missing during testing, let's offer a simulation so we aren't blocked
-            if (error.message?.includes('not configured')) {
-                const proceed = window.confirm(
-                    "Paystack Public Key is missing in your settings. \n\n" +
-                    "Would you like to simulate a successful payment test for now?"
-                );
-                if (proceed) {
-                    try {
-                        await upgradeToPremium('test-simulation-' + Date.now());
-                        alert('Simulation Success! You are now Pro.');
-                        navigate('/market');
-                    } catch (e: any) {
-                        alert('Simulation failed: ' + e.message);
-                    }
-                }
-            } else {
-                alert("Could not open payment window: " + error.message);
-            }
+            alert("Could not open payment window: " + error.message);
         }
     };
 

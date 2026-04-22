@@ -52,7 +52,7 @@ const PrivacyPage = () => {
 
           <section style={{ marginBottom: '32px' }}>
             <h2>5. Contact Us</h2>
-            <p>If you have questions about your data, contact us at <strong>legal@lagosfit.com</strong>.</p>
+            <p>If you have questions about your data, contact us at <strong>uyitomiadebiyi@gmail.com</strong>.</p>
           </section>
         </motion.div>
       </main>
