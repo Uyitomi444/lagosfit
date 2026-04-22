@@ -20,31 +20,9 @@ const PricingPage = () => {
             return;
         }
 
-        try {
-            console.log('Initializing Payment Flow...');
-            await initializePayment({
-                email: user.email || '',
-                userId: user.uid,
-                plan: plan,
-                onSuccess: async (reference: string) => {
-                    console.log('Payment Successful:', reference);
-                    try {
-                        console.log("Upgrading user in Firestore...");
-                        await upgradeToPremium(reference);
-                        alert("Upgrade Successful! Welcome to Pro.");
-                        navigate('/market', { state: { message: 'Welcome to Pro! Your features are now unlocked.' } });
-                    } catch (err: any) {
-                        alert(`Payment OK (${reference}) but database update failed: ${err.message}`);
-                    }
-                },
-                onCancel: () => {
-                    console.log('Payment closed');
-                }
-            });
-        } catch (error: any) {
-            console.error('Payment Error:', error);
-            alert("Could not open payment window: " + error.message);
-        }
+        const planName = plan === 'monthly' ? 'Monthly' : 'Yearly';
+        const message = `Hello! I want to upgrade to LagosFit Pro (${planName} Plan) via Bank Transfer. Please send me your account details. (User: ${user.email})`;
+        window.open(`https://wa.me/2347066684457?text=${encodeURIComponent(message)}`, '_blank');
     };
 
     const features = [
