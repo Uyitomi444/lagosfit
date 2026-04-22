@@ -15,10 +15,11 @@ const AboutPage = () => {
         setStatus('sending');
         
         try {
+            console.log('Attempting to send email with params:', formData);
             const success = await sendContactEmail({
-                from_name: formData.name,
-                from_email: formData.email,
-                subject: formData.subject,
+                name: formData.name,
+                email: formData.email,
+                title: formData.subject,
                 message: formData.message
             });
             
@@ -27,9 +28,11 @@ const AboutPage = () => {
                 setFormData({ name: '', email: '', subject: '', message: '' });
                 setTimeout(() => setStatus('idle'), 5000);
             } else {
+                console.error('sendContactEmail returned false - check network tab or EmailJS config');
                 setStatus('error');
             }
-        } catch (err) {
+        } catch (err: any) {
+            console.error('Contact form error caught:', err);
             setStatus('error');
         }
     };

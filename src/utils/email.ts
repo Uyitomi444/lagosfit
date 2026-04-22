@@ -60,9 +60,9 @@ export const sendWelcomeEmail = async (params: {
  * Send a contact form message to the admin.
  */
 export const sendContactEmail = async (params: {
-    from_name: string;
-    from_email: string;
-    subject: string;
+    name: string;
+    email: string;
+    title: string;
     message: string;
 }): Promise<boolean> => {
     if (!EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !EMAILJS_PUBLIC_KEY) {
