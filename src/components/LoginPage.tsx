@@ -240,6 +240,24 @@ const LoginPage = () => {
                         {t('auth.register_link')}
                     </Link>
                 </div>
+
+                {/* Emergency Fix Button */}
+                <div style={{ marginTop: '32px', paddingTop: '20px', borderTop: '1px solid var(--border-color)', textAlign: 'center' }}>
+                    <button 
+                        onClick={() => {
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            window.location.reload();
+                        }}
+                        style={{ 
+                            background: 'none', border: 'none', color: 'var(--error-color)',
+                            fontSize: '0.75rem', cursor: 'pointer', opacity: 0.6,
+                            textDecoration: 'underline'
+                        }}
+                    >
+                        ⚠️ Trouble signing in? Clear session & fix login
+                    </button>
+                </div>
             </div>
 
             <style>{`
