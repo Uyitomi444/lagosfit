@@ -250,6 +250,7 @@ a {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
   }
+}
 
   .mobile-stack {
     flex-direction: column !important;
