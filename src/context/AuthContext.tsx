@@ -6,7 +6,6 @@ import {
     signOut,
     updateProfile,
     sendPasswordResetEmail,
-    signInWithPopup,
     signInWithRedirect,
     getRedirectResult
 } from 'firebase/auth';
@@ -91,6 +90,7 @@ const ensureUserDoc = async (firebaseUser: FirebaseUser, additionalData: { name?
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<AppUser | null>(null);
     const [loading, setLoading] = useState(true);
+    const [authError, setAuthError] = useState<string | null>(null);
 
     // Configuration Health Check (Masked for security)
     useEffect(() => {
@@ -153,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     if (snap.exists()) {
                         const data = snap.data();
                         const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
-                        const isHardcodedAdmin = firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase());
+                        const isHardcodedAdmin = !!(firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase()));
                         
                         // If they are a hardcoded admin but the DB doesn't know it yet, sync it
                         if (isHardcodedAdmin && data.isAdmin !== true) {
@@ -198,7 +198,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (snap.exists()) {
                 const data = snap.data();
                 const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
-                const isHardcodedAdmin = firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase());
+                const isHardcodedAdmin = !!(firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase()));
                 
                 const isPremium = data.isPremium === true || isHardcodedAdmin;
                 const isAdmin = data.isAdmin === true || isHardcodedAdmin;
@@ -237,7 +237,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             await signInWithRedirect(auth, googleProvider);
         } catch (err: any) {
             console.error('Google Sign-In Error:', err);
-            setError(err.message || 'Failed to initialize Google login');
+            setAuthError(err.message || 'Failed to initialize Google login');
             setLoading(false);
         }
     };
@@ -293,7 +293,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         // Developer/Admin bypass logic for testing on live site
         const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
-        const isAdmin = currentUser?.email && adminEmails.includes(currentUser.email.toLowerCase());
+        const isAdmin = !!(currentUser?.email && adminEmails.includes(currentUser.email.toLowerCase()));
         
         if (!currentUser && !isAdmin) throw new Error('Must be logged in to upgrade');
         if (!currentUser && isAdmin) {
