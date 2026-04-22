@@ -221,16 +221,15 @@ const PricingPage = () => {
                     <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: 1.5 }}>
                         Prefer to transfer? Pay directly into our bank account and get activated instantly. No card required.
                     </p>
-                    <button 
-                        onClick={() => {
-                            const message = `Hello! I want to upgrade to LagosFit Pro via Bank Transfer. Please send me your account details. (User: ${user?.email || 'Guest'})`;
-                            window.open(`https://wa.me/2347066684457?text=${encodeURIComponent(message)}`, '_blank');
-                        }}
+                    <a 
+                        href={`https://wa.me/2347066684457?text=${encodeURIComponent(`Hello! I want to upgrade to LagosFit Pro via Bank Transfer. Please send me your account details. (User: ${user?.email || 'Guest'})`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="btn btn-primary"
-                        style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 auto', padding: '16px 32px', fontSize: '1.1rem' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '24px auto 0', padding: '16px 32px', fontSize: '1.1rem', width: 'fit-content', textDecoration: 'none' }}
                     >
                         <MessageSquare size={20} /> Chat & Pay via WhatsApp
-                    </button>
+                    </a>
                     <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'center', gap: '16px', opacity: 0.6 }}>
                         <span style={{ fontSize: '0.8rem' }}>✔️ No Card Fees</span>
                         <span style={{ fontSize: '0.8rem' }}>✔️ Instant Setup</span>
