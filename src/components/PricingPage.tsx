@@ -161,24 +161,6 @@ const PricingPage = () => {
                     >
                         {user?.isPremium ? t('pricing.already_pro') : t('pricing.upgrade_btn')}
                     </button>
-
-                    {/* Admin/Developer Bypass Button */}
-                    {user?.email === 'admin@lagosfit.com' && !user?.isPremium && (
-                        <button 
-                            onClick={async () => {
-                                try {
-                                    await upgradeToPremium('admin-test-bypass');
-                                    alert('Admin Bypass Successful! You are now Pro.');
-                                } catch (e: any) {
-                                    alert('Bypass Error: ' + e.message);
-                                }
-                            }}
-                            className="btn"
-                            style={{ width: '100%', marginTop: '12px', background: 'var(--accent-color)', color: 'white' }}
-                        >
-                            🚀 Test Upgrade (Admin Bypass)
-                        </button>
-                    )}
                 </motion.div>
             </div>
 

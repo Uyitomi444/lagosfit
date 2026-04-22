@@ -156,8 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         isAdmin = data.isAdmin === true; // Fetch from doc
                         
                         // Fallback: Check for specific admin email (Development/Initial setup)
-                        const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
-                        if (!isAdmin && firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase())) {
+                        if (!isAdmin && firebaseUser.email && firebaseUser.email.toLowerCase() === 'admin@lagosfit.com') {
                             isAdmin = true;
                         }
 
