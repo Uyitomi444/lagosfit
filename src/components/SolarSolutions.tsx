@@ -72,7 +72,10 @@ const SolarSolutions = () => {
                         ))}
                     </div>
 
-                    <button 
+                    <a 
+                        href={`https://wa.me/2348102441180?text=${encodeURIComponent("Hello! I was referred by LagosFit for a free solar quote.")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="btn btn-primary"
                         style={{ 
                             padding: '12px 24px',
@@ -80,15 +83,12 @@ const SolarSolutions = () => {
                             fontWeight: 700,
                             display: 'flex',
                             alignItems: 'center',
-                            gap: '8px'
-                        }}
-                        onClick={() => {
-                            const message = encodeURIComponent("Hello! I was referred by LagosFit for a free solar quote.");
-                            window.open(`https://wa.me/2348102441180?text=${message}`, '_blank');
+                            gap: '8px',
+                            textDecoration: 'none'
                         }}
                     >
                         Get Free Quote <ArrowRight size={16} />
-                    </button>
+                    </a>
                 </div>
             </div>
         </motion.div>

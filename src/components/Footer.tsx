@@ -1,5 +1,5 @@
 
-import { Github, Twitter, Instagram } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
@@ -43,14 +43,7 @@ const Footer = () => {
                     </ul>
                 </div>
 
-                <div>
-                    <h4 style={{ fontSize: '1rem', marginBottom: '16px' }}>{t('footer.connect')}</h4>
-                    <div style={{ display: 'flex', gap: '16px' }}>
-                        <a href="#" style={{ color: 'var(--text-muted)' }}><Twitter size={20} /></a>
-                        <a href="#" style={{ color: 'var(--text-muted)' }}><Instagram size={20} /></a>
-                        <a href="#" style={{ color: 'var(--text-muted)' }}><Github size={20} /></a>
-                    </div>
-                </div>
+
             </div>
 
             <div style={{
