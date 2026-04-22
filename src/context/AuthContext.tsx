@@ -116,7 +116,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const result = await getRedirectResult(auth);
                 if (result?.user) {
                     await ensureUserDoc(result.user);
-                    console.log('Redirect Sign-In Success');
+                    console.log('Redirect Sign-In Success - Navigating Home');
+                    // Force a refresh to the home page to ensure state is clean
+                    window.location.href = '/';
                 }
             } catch (err: any) {
                 console.error('Redirect Sign-In Error:', err);
