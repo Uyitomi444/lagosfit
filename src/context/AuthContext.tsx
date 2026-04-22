@@ -246,27 +246,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 domain: window.location.hostname
             });
 
-            // Help the user identify the exact issue
-            alert(`Login Error: ${err.code}\n${err.message}`);
-
-            // If the popup is blocked OR Google blocks the useragent in popup mode,
-            // we let the user know and try redirect as a last resort.
+            // If the popup is blocked, switch to redirect SILENTLY for a better UX
             if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
                 console.log('Popup restricted. Trying Redirect flow...');
                 await signInWithRedirect(auth, googleProvider);
             } else {
-                // Show a clear alert for production debugging
-                const diagnosticInfo = `
-Auth Error: ${err.code}
-Domain: ${window.location.hostname}
-Message: ${err.message}
-                `.trim();
-                
-                if (err.code === 'auth/unauthorized-domain') {
-                    alert(`ACCESS BLOCKED: This domain (${window.location.hostname}) is not authorized in your Firebase Project skip settings. Please add it to "Authorized Domains" in the Firebase Console.`);
-                } else {
-                    alert(diagnosticInfo);
-                }
+                // Only alert for actual configuration or network errors
+                alert(`Login Error: ${err.code}\n${err.message}`);
                 throw err;
             }
         }
