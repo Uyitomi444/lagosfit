@@ -221,28 +221,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Google Sign-In
     const loginWithGoogle = async () => {
         try {
-            console.log('Attempting Google Sign-In (Popup mode)...');
-            // We try popup first. If you are in mobile emulation, 
-            // the browser might handle a popup better than a full-page disallowed redirect.
-            const result = await signInWithPopup(auth, googleProvider);
-            await ensureUserDoc(result.user);
-            console.log('Google Sign-In Successful');
+            setLoading(true);
+            console.log('Using Redirect mode for 100% desktop compatibility...');
+            await signInWithRedirect(auth, googleProvider);
         } catch (err: any) {
-            console.error('Google Sign-In Error:', {
-                code: err.code,
-                message: err.message,
-                domain: window.location.hostname
-            });
-
-            // If the popup is blocked, switch to redirect SILENTLY for a better UX
-            if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
-                console.log('Popup restricted. Trying Redirect flow...');
-                await signInWithRedirect(auth, googleProvider);
-            } else {
-                // Only alert for actual configuration or network errors
-                alert(`Login Error: ${err.code}\n${err.message}`);
-                throw err;
-            }
+            console.error('Google Sign-In Error:', err);
+            setError(err.message || 'Failed to initialize Google login');
+            setLoading(false);
         }
     };
 
