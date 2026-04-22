@@ -273,27 +273,6 @@ const ProfilePage = () => {
                             )}
                         </AnimatePresence>
 
-                        <div style={{ marginTop: '30px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-                            <h4 style={{ textAlign: 'left', fontSize: '1rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                <AlertCircle size={18} color="var(--primary-color)" /> {t('profile.preferences')}
-                            </h4>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{t('profile.alerts')}</span>
-                                    <label className="switch">
-                                        <input type="checkbox" defaultChecked />
-                                        <span className="slider round"></span>
-                                    </label>
-                                </div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{t('profile.summary')}</span>
-                                    <label className="switch">
-                                        <input type="checkbox" />
-                                        <span className="slider round"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
 
                         <div style={{ marginTop: '30px', borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
                             <button 
