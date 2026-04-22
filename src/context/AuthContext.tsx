@@ -134,22 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen to Firebase auth state
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-            // Check for developer admin bypass first
-            if (localStorage.getItem('lagosfit_admin_dev_mode') === 'true') {
-                setUser({
-                    uid: 'admin-dev-id',
-                    email: 'admin@lagosfit.com',
-                    name: 'System Administrator',
-                    photoURL: null,
-                    isPremium: true,
-                    isAdmin: true,
-                    favorites: []
-                });
-                setLoading(false);
-                return;
-            }
-
             if (firebaseUser) {
+                console.log('Firebase user detected:', firebaseUser.email);
                 try {
                     await ensureUserDoc(firebaseUser);
                 } catch (err) {
@@ -260,7 +246,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Logout
     const logout = async () => {
-        localStorage.removeItem('lagosfit_admin_dev_mode');
         try {
             await signOut(auth);
         } catch (err) {
