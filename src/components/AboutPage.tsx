@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { Mail, Heart, Globe, Users, Send, CheckCircle2 } from 'lucide-react';
+import { Mail, Heart, Globe, Users, Send, CheckCircle2, MessageSquare } from 'lucide-react';
 import { sendContactEmail } from '../utils/email';
 import SEO from './SEO';
 
@@ -146,9 +146,22 @@ const AboutPage = () => {
                         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                             <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
                             <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
-                            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '400px' }}>
+                            <p style={{ fontSize: '1.1rem', color: 'var(--text-muted)', maxWidth: '400px', marginBottom: '24px' }}>
                                 {t('about.contact_text')}
                             </p>
+                            
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', maxWidth: '300px' }}>
+                                <a 
+                                    href="https://wa.me/2347066684457?text=Hello%20LagosFit!%20I%20have%20an%20inquiry."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="btn btn-primary"
+                                    style={{ background: '#25D366', borderColor: '#25D366', width: '100%', textDecoration: 'none' }}
+                                >
+                                    <MessageSquare size={20} /> Chat on WhatsApp
+                                </a>
+                                <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Typical response: Instant</p>
+                            </div>
                         </div>
 
                         <form onSubmit={handleSubmit} className="card" style={{ padding: '40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
