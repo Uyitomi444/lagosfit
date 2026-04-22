@@ -4,12 +4,12 @@ import { motion } from 'framer-motion';
 import { Check, Shield, Zap, Star, Users, Building2, MapPin, Smartphone, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { initializePayment, PLANS } from '../utils/paystack';
+import { PLANS } from '../utils/paystack';
 import type { PlanKey } from '../utils/paystack';
 import { useLanguage } from '../context/LanguageContext';
 
 const PricingPage = () => {
-    const { user, upgradeToPremium } = useAuth();
+    const { user } = useAuth();
     const { t } = useLanguage();
     const navigate = useNavigate();
     const [billingCycle, setBillingCycle] = useState<PlanKey>('monthly');
