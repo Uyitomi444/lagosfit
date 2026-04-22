@@ -66,13 +66,19 @@ const AdminReviewsTab = () => {
                             key={review.id}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="card grid-responsive"
-                            style={{ padding: '24px', display: 'grid', gridTemplateColumns: 'auto 1fr auto', gap: '20px', alignItems: 'start' }}
+                            className="card"
+                            style={{ 
+                                padding: '24px', 
+                                display: 'flex', 
+                                flexWrap: 'wrap',
+                                gap: '20px', 
+                                alignItems: 'start' 
+                            }}
                         >
-                            <div className="hide-on-mobile" style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)', fontWeight: 700 }}>
+                            <div className="hide-on-mobile" style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--secondary-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary-color)', fontWeight: 700, flexShrink: 0 }}>
                                 {review.authorName?.[0] || 'U'}
                             </div>
-                            <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ flex: '1 1 250px', minWidth: 0 }}>
                                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px', marginBottom: '4px' }}>
                                     <span style={{ fontWeight: 700 }}>{review.authorName}</span>
                                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -90,11 +96,11 @@ const AdminReviewsTab = () => {
                                     "{review.comment}"
                                 </p>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
                                 <button 
                                     onClick={() => handleDelete(review.id)}
                                     className="btn-icon"
-                                    style={{ color: '#ef4444', padding: '10px' }}
+                                    style={{ color: '#ef4444', padding: '10px', background: 'none', border: 'none', cursor: 'pointer' }}
                                     title="Delete Review"
                                 >
                                     <Trash2 size={20} />
