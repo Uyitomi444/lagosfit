@@ -4,7 +4,7 @@ import { useQuiz } from '../context/QuizContext';
 import { getRecommendations } from '../utils/recommendation';
 import type { Area } from '../types';
 import { motion } from 'framer-motion';
-import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp, Heart } from 'lucide-react';
+import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp, Heart, Clock } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { calculateDistance } from '../utils/distance';
 import { AREAS } from '../data/quiz_data';
@@ -321,9 +321,20 @@ const ResultPage = () => {
                                 </motion.div>
                             ))}
 
-                            <div style={{ marginTop: '40px', textAlign: 'center' }}>
+                            <div style={{ marginTop: '40px', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '12px', alignItems: 'center' }}>
                                 <button onClick={handleRetake} className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 500, border: 'none', background: 'transparent', color: 'var(--text-muted)' }}>
                                     <RefreshCw size={16} /> {t('result.retake')}
+                                </button>
+                                <button 
+                                    onClick={() => navigate('/history')} 
+                                    style={{ 
+                                        display: 'flex', alignItems: 'center', gap: '8px', 
+                                        background: 'none', border: 'none', color: 'var(--primary-color)',
+                                        fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer',
+                                        opacity: 0.8
+                                    }}
+                                >
+                                    <Clock size={16} /> {t('landing.view_history')}
                                 </button>
                             </div>
                         </div>
