@@ -6,7 +6,7 @@ import {
     signOut,
     updateProfile,
     sendPasswordResetEmail,
-    signInWithRedirect,
+    signInWithPopup,
     getRedirectResult
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -46,6 +46,7 @@ interface AuthContextType {
     toggleFavorite: (areaId: string) => Promise<void>; 
     updateUserInfo: (name: string, photoURL?: string) => Promise<void>;
     refreshUserStatus: () => Promise<void>; // Added
+    authError: string | null;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -233,11 +234,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const loginWithGoogle = async () => {
         try {
             setLoading(true);
-            console.log('Using Redirect mode for 100% desktop compatibility...');
-            await signInWithRedirect(auth, googleProvider);
+            setAuthError(null);
+            console.log('Using Popup mode for maximum compatibility...');
+            const result = await signInWithPopup(auth, googleProvider);
+            if (result.user) {
+                await ensureUserDoc(result.user);
+                console.log('Google Sign-In Success');
+            }
         } catch (err: any) {
             console.error('Google Sign-In Error:', err);
             setAuthError(err.message || 'Failed to initialize Google login');
+        } finally {
             setLoading(false);
         }
     };
@@ -392,7 +399,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         <AuthContext.Provider value={{
             user, loading, login, register, loginWithGoogle,
             logout, resetPassword, saveQuizHistory, getQuizHistory,
-            upgradeToPremium, toggleFavorite, updateUserInfo, refreshUserStatus
+            upgradeToPremium, toggleFavorite, updateUserInfo, refreshUserStatus,
+            authError
         }}>
             {children}
         </AuthContext.Provider>
