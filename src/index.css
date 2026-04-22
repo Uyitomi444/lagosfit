@@ -220,7 +220,20 @@ a {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* ========= Mobile Responsive Overrides (Expansion to 900px) ========= */
+/* ========= Responsive Utilities & Overrides ========= */
+
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
 @media (max-width: 900px) {
   .container {
     padding: 0 12px;
@@ -231,30 +244,22 @@ a {
     font-size: 0.9rem;
   }
 
-  h1 {
-    font-size: 2rem !important;
-  }
+  h1 { font-size: 1.8rem !important; }
+  h2 { font-size: 1.5rem !important; }
 
-  h2 {
-    font-size: 1.6rem !important;
-  }
-
-.grid-responsive {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
-}
-
-@media (max-width: 900px) {
-  .grid-responsive {
+  .grid-responsive, .admin-grid {
     grid-template-columns: 1fr !important;
     gap: 16px !important;
   }
-}
 
   .mobile-stack {
     flex-direction: column !important;
     gap: 16px !important;
+  }
+
+  .admin-main-content {
+      padding: 24px 16px !important;
+      width: 100% !important;
   }
 
   .tab-scroll {

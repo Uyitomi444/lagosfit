@@ -60,14 +60,14 @@ const OverviewTab = ({ stats }: any) => {
 
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginBottom: '40px' }}>
+            <div className="admin-grid" style={{ marginBottom: '40px' }}>
                 <StatCard label="Total Users" value={stats.totalUsers} icon={<Users size={20} strokeWidth={1.5} />} />
                 <StatCard label="Pro Subscribers" value={stats.premiumUsers} icon={<Crown size={20} strokeWidth={1.5} />} />
                 <StatCard label="Monthly Revenue" value={`₦${mrr.toLocaleString()}`} icon={<TrendingUp size={20} strokeWidth={1.5} />} />
                 <StatCard label="Total Agents" value={stats.totalAgents} icon={<Briefcase size={20} strokeWidth={1.5} />} />
             </div>
 
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div className="admin-grid">
                 <div className="card" style={{ padding: '32px' }}>
                     <h3 style={{ marginBottom: '24px' }}>Conversion Performance</h3>
                     <div style={{ height: '24px', background: 'var(--secondary-bg)', borderRadius: '12px', overflow: 'hidden', display: 'flex', marginBottom: '16px' }}>
@@ -194,7 +194,7 @@ const AnalyticsTab = ({ users }: any) => {
 
     return (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <div className="grid-responsive" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '32px' }}>
+            <div className="admin-grid" style={{ gap: '32px' }}>
                 {/* Top Recommendations */}
                 <div className="card" style={{ padding: '32px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
@@ -278,8 +278,8 @@ const AnalyticsTab = ({ users }: any) => {
                         <h3 style={{ margin: 0 }}>Platform & Revenue Summary</h3>
                     </div>
                     <div 
-                        className="grid-responsive"
-                        style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}
+                        className="admin-grid"
+                        style={{ gap: '24px' }}
                     >
                         <div style={{ padding: '20px', background: 'var(--secondary-bg)', borderRadius: '16px', textAlign: 'center' }}>
                             <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--success-color)', marginBottom: '4px' }}>
@@ -364,7 +364,7 @@ const AgentsTab = ({ agents, deleteAgent, onMigrate, actionLoading, onEdit, onAd
                 </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginBottom: '32px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px', marginBottom: '32px' }}>
                 {paginatedAgents.map((a: any) => (
                     <div key={a.id} className="card" style={{ padding: '20px', position: 'relative' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
@@ -611,7 +611,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Main Content */}
-            <div style={{ flex: 1, padding: '40px 24px', overflowY: 'auto', paddingBottom: '100px' }}>
+            <div className="admin-main-content" style={{ flex: 1, overflowY: 'auto', paddingBottom: '100px' }}>
                 <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
                     <div>
                         <h1 style={{ fontSize: '1.8rem', marginBottom: '8px' }}>{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</h1>
