@@ -39,12 +39,9 @@ const LandingPage = () => {
                 {/* Background Logo Replacement */}
                 <div style={{
                     position: 'absolute',
-                    top: '50%', left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 'min(80vw, 600px)',
-                    height: 'min(80vh, 600px)',
+                    top: 0, left: 0, right: 0, bottom: 0,
                     backgroundImage: `url(/logo.png)`,
-                    backgroundSize: 'contain',
+                    backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                     opacity: 0.15,
