@@ -3,7 +3,6 @@ import { AREAS } from '../data/quiz_data';
 
 // Budget tiers mapping for strict filtering
 const BUDGET_MAP: Record<string, { min: number, max: number }> = {
-    'entry': { min: 200000, max: 500000 },
     'budget': { min: 500000, max: 1000000 },
     'standard': { min: 1000000, max: 2000000 },
     'mid': { min: 2000000, max: 5000000 },
