@@ -95,6 +95,18 @@ const ResultPage = () => {
         fetchAiSummary();
     }, [currentArea, noMatch, answers, language]);
 
+    const isBudgetTight = useMemo(() => {
+        if (noMatch) return false;
+        // Case 1: Custom budget is very close to or below area's min
+        if (answers.customBudget) {
+            return answers.customBudget <= (currentArea.minPrice * 1.15); // 15% margin
+        }
+        // Case 2: Range-based budget. Our 'budget' tier is 500k-1M.
+        // If an area's minPrice is 850k+, then a 500k-1M budget is "tight".
+        if (answers.rent === 'budget' && currentArea.minPrice >= 850000) return true;
+        return false;
+    }, [answers, currentArea, noMatch]);
+
     const displayOptions = useMemo(() => {
         const all = [top, ...others];
         // Deduplicate by ID just in case
@@ -197,125 +209,129 @@ const ResultPage = () => {
                                      <span style={{ fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>{t('result.top_rec')}</span>
                                 </div>
 
-
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <h2 style={{ fontSize: '3.5rem', marginBottom: '8px', color: 'white', flex: 1 }}>{currentArea.name}</h2>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (!user) {
-                                        navigate('/login', { state: { from: location.pathname } });
-                                        return;
-                                    }
-                                    toggleFavorite(currentArea.id);
-                                }}
-                                style={{
-                                    background: 'rgba(255,255,255,0.2)',
-                                    border: 'none',
-                                    width: '48px',
-                                    height: '48px',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    cursor: 'pointer',
-                                }}
-                            >
-                                <Heart
-                                    size={24}
-                                    fill={(user?.favorites?.includes(currentArea.id)) ? 'var(--accent-color)' : 'none'}
-                                    strokeWidth={1.5}
-                                />
-                            </button>
-                        </div>
-
-                        {currentArea.innerLocalities && currentArea.innerLocalities.length > 0 && (
-                            <div style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                                <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', width: '100%', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 600 }}>{t('result.specific_spots')}</span>
-                                {currentArea.innerLocalities.slice(0, 3).map((loc, i) => (
-                                    <motion.span
-                                        key={i}
-                                        whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
-                                        style={{ padding: '6px 14px', background: 'rgba(255,255,255,0.15)', borderRadius: '20px', fontSize: '0.9rem', color: 'white', border: '1px solid rgba(255,255,255,0.2)', cursor: 'default' }}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <h2 style={{ fontSize: '3.5rem', marginBottom: '8px', color: 'white', flex: 1 }}>{currentArea.name}</h2>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (!user) {
+                                                navigate('/login', { state: { from: location.pathname } });
+                                                return;
+                                            }
+                                            toggleFavorite(currentArea.id);
+                                        }}
+                                        style={{
+                                            background: 'rgba(255,255,255,0.2)',
+                                            border: 'none',
+                                            width: '48px',
+                                            height: '48px',
+                                            borderRadius: '50%',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            cursor: 'pointer',
+                                        }}
                                     >
-                                        {loc}
-                                    </motion.span>
-                                ))}
-                            </div>
-                        )}
-
-                        <p style={{ fontSize: '1.2rem', opacity: 0.9, lineHeight: 1.6, marginBottom: '32px' }}>{currentArea.description[language]}</p>
-
-                        {/* Buddy's Take (AI Insight) */}
-                        <motion.div 
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            style={{ 
-                                background: 'rgba(255, 255, 255, 0.1)', 
-                                border: '1px solid rgba(255, 255, 255, 0.2)',
-                                borderRadius: '16px', 
-                                padding: '20px', 
-                                marginBottom: '32px',
-                                display: 'flex',
-                                gap: '16px',
-                                alignItems: 'flex-start'
-                            }}
-                        >
-                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'white', flexShrink: 0, overflow: 'hidden', border: '2px solid white' }}>
-                                <img src="/lagosfit_mascot_head.png" alt="Buddy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            </div>
-                            <div>
-                                <div style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <Sparkles size={12} /> {language === 'en' ? "Buddy's Take" : "Buddy's Take"}
+                                        <Heart
+                                            size={24}
+                                            fill={(user?.favorites?.includes(currentArea.id)) ? 'var(--accent-color)' : 'none'}
+                                            strokeWidth={1.5}
+                                        />
+                                    </button>
                                 </div>
-                                <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'white', fontStyle: 'italic', margin: 0 }}>
-                                    {isAiLoading ? "Buddy is thinking..." : (aiSummary || currentArea.description[language])}
-                                </p>
-                            </div>
-                        </motion.div>
 
-                        <div style={{ marginBottom: '32px' }}>
-                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                                {/* Priority Badge */}
-                                {answers.priority && (
-                                    <span className="tag" style={{ background: 'var(--accent-color)', color: 'white', borderColor: 'var(--accent-color)' }}>
-                                        Priority: {answers.priority.charAt(0).toUpperCase() + answers.priority.slice(1)}
-                                    </span>
+                                {currentArea.innerLocalities && currentArea.innerLocalities.length > 0 && (
+                                    <div style={{ marginBottom: '24px', display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                        <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)', width: '100%', marginBottom: '4px', textTransform: 'uppercase', fontWeight: 600 }}>{t('result.specific_spots')}</span>
+                                        {currentArea.innerLocalities.slice(0, 3).map((loc, i) => (
+                                            <motion.span
+                                                key={i}
+                                                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.3)' }}
+                                                style={{ padding: '6px 14px', background: 'rgba(255,255,255,0.15)', borderRadius: '20px', fontSize: '0.9rem', color: 'white', border: '1px solid rgba(255,255,255,0.2)', cursor: 'default' }}
+                                            >
+                                                {loc}
+                                            </motion.span>
+                                        ))}
+                                    </div>
                                 )}
-                                {/* Budget Warning */}
-                                {answers.customBudget && answers.customBudget <= currentArea.minPrice * 1.1 && (
-                                    <span className="tag" style={{ background: '#f59e0b', color: 'white', borderColor: '#f59e0b' }}>
-                                        <AlertCircle size={12} /> Budget Tight
-                                    </span>
-                                )}
-                                {/* Rent */}
-                                {(() => {
-                                    const matchedRent = answers.rent && currentArea.attributes.rent.includes(answers.rent) ? answers.rent : null;
-                                    const displayRent = matchedRent || currentArea.attributes.rent.join(', ');
-                                    return <span className="tag">{t('result.rent')}: {displayRent.charAt(0).toUpperCase() + displayRent.slice(1)}</span>;
-                                })()}
 
-                                {/* Noise */}
-                                {(() => {
-                                    const matchedNoise = answers.noise && currentArea.attributes.noise.includes(answers.noise) ? answers.noise : null;
-                                    const displayNoise = matchedNoise || currentArea.attributes.noise.join(', ');
-                                    return <span className="tag">{t('result.noise')}: {displayNoise.charAt(0).toUpperCase() + displayNoise.slice(1)}</span>;
-                                })()}
+                                <p style={{ fontSize: '1.2rem', opacity: 0.9, lineHeight: 1.6, marginBottom: '32px' }}>{currentArea.description[language]}</p>
 
-                                {/* Lifestyle (New) */}
-                                {currentArea.attributes.lifestyle && (() => {
-                                    const matchedLifestyle = answers.lifestyle && currentArea.attributes.lifestyle.includes(answers.lifestyle) ? answers.lifestyle : null;
-                                    const displayLifestyle = matchedLifestyle || currentArea.attributes.lifestyle[0]; // Just show first if multiple/no match to save space
-                                    return <span className="tag">{t('result.lifestyle')}: {displayLifestyle.charAt(0).toUpperCase() + displayLifestyle.slice(1)}</span>;
-                                })()}
+                                {/* Buddy's Take (AI Insight) */}
+                                <motion.div 
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    style={{ 
+                                        background: 'rgba(255, 255, 255, 0.1)', 
+                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                        borderRadius: '16px', 
+                                        padding: '20px', 
+                                        marginBottom: '32px',
+                                        display: 'flex',
+                                        gap: '16px',
+                                        alignItems: 'flex-start'
+                                    }}
+                                >
+                                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'white', flexShrink: 0, overflow: 'hidden', border: '2px solid white' }}>
+                                        <img src="/lagosfit_mascot_head.png" alt="Buddy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Sparkles size={12} />Buddy's Take
+                                        </div>
+                                        <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'white', fontStyle: 'italic', margin: 0 }}>
+                                            {isAiLoading ? (
+                                                <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                                                    Buddy is thinking...
+                                                </motion.span>
+                                            ) : (aiSummary || currentArea.description[language])}
+                                        </p>
+                                    </div>
+                                </motion.div>
 
-                                {/* Electricity (New) */}
-                                {currentArea.attributes.electricity && (() => {
-                                    const matchedElec = answers.electricity && currentArea.attributes.electricity.includes(answers.electricity) ? answers.electricity : null;
-                                    const displayElec = matchedElec || currentArea.attributes.electricity[0];
-                                    return <span className="tag">{t('result.power')}: {displayElec.charAt(0).toUpperCase() + displayElec.slice(1)}</span>;
-                                })()}
-                            </div>
+                                <div style={{ marginBottom: '32px' }}>
+                                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        {/* Priority Badge */}
+                                        {answers.priority && (
+                                            <span className="tag" style={{ background: 'var(--accent-color)', color: 'white', borderColor: 'var(--accent-color)' }}>
+                                                Priority: {answers.priority.charAt(0).toUpperCase() + answers.priority.slice(1)}
+                                            </span>
+                                        )}
+                                        {/* Budget Warning */}
+                                        {isBudgetTight && (
+                                            <span className="tag" style={{ background: '#f59e0b', color: 'white', borderColor: '#f59e0b' }}>
+                                                <AlertCircle size={12} /> Budget Tight
+                                            </span>
+                                        )}
+                                        {/* Rent */}
+                                        {(() => {
+                                            const matchedRent = answers.rent && currentArea.attributes.rent.includes(answers.rent) ? answers.rent : null;
+                                            const displayRent = matchedRent || currentArea.attributes.rent.join(', ');
+                                            return <span className="tag">{t('result.rent')}: {displayRent.charAt(0).toUpperCase() + displayRent.slice(1)}</span>;
+                                        })()}
+
+                                        {/* Noise */}
+                                        {(() => {
+                                            const matchedNoise = answers.noise && currentArea.attributes.noise.includes(answers.noise) ? answers.noise : null;
+                                            const displayNoise = matchedNoise || currentArea.attributes.noise.join(', ');
+                                            return <span className="tag">{t('result.noise')}: {displayNoise.charAt(0).toUpperCase() + displayNoise.slice(1)}</span>;
+                                        })()}
+
+                                        {/* Lifestyle (New) */}
+                                        {currentArea.attributes.lifestyle && (() => {
+                                            const matchedLifestyle = answers.lifestyle && currentArea.attributes.lifestyle.includes(answers.lifestyle) ? answers.lifestyle : null;
+                                            const displayLifestyle = matchedLifestyle || currentArea.attributes.lifestyle[0]; // Just show first if multiple/no match to save space
+                                            return <span className="tag">{t('result.lifestyle')}: {displayLifestyle.charAt(0).toUpperCase() + displayLifestyle.slice(1)}</span>;
+                                        })()}
+
+                                        {/* Electricity (New) */}
+                                        {currentArea.attributes.electricity && (() => {
+                                            const matchedElec = answers.electricity && currentArea.attributes.electricity.includes(answers.electricity) ? answers.electricity : null;
+                                            const displayElec = matchedElec || currentArea.attributes.electricity[0];
+                                            return <span className="tag">{t('result.power')}: {displayElec.charAt(0).toUpperCase() + displayElec.slice(1)}</span>;
+                                        })()}
+                                    </div>
+                                </div>
                         </div>
 
                         {/* Social Buzz section */}
