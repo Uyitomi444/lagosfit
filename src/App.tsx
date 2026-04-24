@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
 import { QuizProvider } from './context/QuizContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';

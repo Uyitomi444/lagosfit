@@ -26,7 +26,6 @@ export const getRecommendations = (answers: QuizAnswers): { top: Area; others: A
         userMax = answers.customBudget * 1.3; // Allow up to 30% above (very strict)
     } else if (answers.rent) {
         const rents = Array.isArray(answers.rent) ? answers.rent : [answers.rent];
-        userMin = Math.min(...rents.map(r => BUDGET_MAP[r]?.min || 0));
         userMax = Math.max(...rents.map(r => BUDGET_MAP[r]?.max || 999999999)) * 1.25; // Small buffer for tiers
     }
 
