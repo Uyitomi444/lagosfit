@@ -36,15 +36,15 @@ const LandingPage = () => {
                 textAlign: 'center',
                 padding: '0 24px'
             }}>
-                {/* Background Logo Replacement */}
+                {/* Background Logo Pattern Replacement */}
                 <div style={{
                     position: 'absolute',
-                    top: '5%', left: '5%', right: '5%', bottom: '5%',
+                    top: 0, left: 0, right: 0, bottom: 0,
                     backgroundImage: `url(/logo.png)`,
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '320px',
+                    backgroundRepeat: 'repeat',
                     backgroundPosition: 'center',
-                    opacity: 0.15,
+                    opacity: 0.08,
                     zIndex: -1,
                     pointerEvents: 'none'
                 }} />
