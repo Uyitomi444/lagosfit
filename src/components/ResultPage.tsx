@@ -409,10 +409,11 @@ const ResultPage = () => {
                         </div>
                     </div>
                 </div>
-                </>
-            )}
-        </div>
-    );
+            </div>
+            </>
+        )}
+    </div>
+);
 };
 
 export default ResultPage;
