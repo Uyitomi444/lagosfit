@@ -63,24 +63,7 @@ const ResultPage = () => {
 
     return (
         <div className="container" style={{ padding: '60px 24px', maxWidth: '1000px' }}>
-            {/* PRO Trial Banner */}
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                style={{
-                    background: 'var(--accent-color)',
-                    color: 'white',
-                    padding: '12px 20px',
-                    borderRadius: '12px',
-                    marginBottom: '32px',
-                    textAlign: 'center',
-                    fontWeight: 700,
-                    fontSize: '0.9rem',
-                    boxShadow: '0 4px 15px rgba(224, 159, 62, 0.3)'
-                }}
-            >
-                🚀 PRO MONTH IS LIVE! All premium features are FREE for the next 30 days. Enjoy full access!
-            </motion.div>
+
 
             {noMatch ? (
                 <motion.div
