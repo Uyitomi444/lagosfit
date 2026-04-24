@@ -9,26 +9,24 @@ import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 
 const PromoBanner = () => (
-  <motion.div
-    initial={{ height: 0, opacity: 0 }}
-    animate={{ height: 'auto', opacity: 1 }}
+  <div
     style={{
       background: 'linear-gradient(90deg, #386668 0%, #e09f3e 50%, #386668 100%)',
-      backgroundSize: '200% 100%',
       color: 'white',
-      padding: '8px 24px',
+      padding: '12px 24px',
       textAlign: 'center',
       fontWeight: 700,
       fontSize: '0.85rem',
       zIndex: 200,
       position: 'relative',
-      overflow: 'hidden'
+      boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
     }}
   >
     🎁 PRO MONTH IS LIVE! All premium features are FREE for 30 days! 
     <Link to="/pricing" style={{ color: 'white', textDecoration: 'underline', marginLeft: '8px', fontWeight: 800 }}>Learn more</Link>
-  </motion.div>
+  </div>
 );
+
 
 import LandingPage from './components/LandingPage';
 import QuestionPage from './components/QuestionPage';
