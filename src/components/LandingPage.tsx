@@ -36,27 +36,18 @@ const LandingPage = () => {
                 textAlign: 'center',
                 padding: '0 24px'
             }}>
-                {/* Background Elements */}
-                <div style={{
-                    position: 'absolute',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundImage: `url(/hero_illustration.png)`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    opacity: 0.15,
-                    zIndex: -1
-                }} />
-
+                {/* Background Logo Replacement */}
                 <div style={{
                     position: 'absolute',
                     top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '600px', height: '600px',
+                    width: 'min(80vw, 600px)',
+                    height: 'min(80vh, 600px)',
                     backgroundImage: `url(/logo.png)`,
                     backgroundSize: 'contain',
                     backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
-                    opacity: 0.1, // Slightly lower than illustration to avoid clashing
+                    opacity: 0.15,
                     zIndex: -1,
                     pointerEvents: 'none'
                 }} />
