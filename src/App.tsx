@@ -1,11 +1,35 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { motion, AnimatePresence } from 'framer-motion';
 import { QuizProvider } from './context/QuizContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+
+const PromoBanner = () => (
+  <motion.div
+    initial={{ height: 0, opacity: 0 }}
+    animate={{ height: 'auto', opacity: 1 }}
+    style={{
+      background: 'linear-gradient(90deg, #386668 0%, #e09f3e 50%, #386668 100%)',
+      backgroundSize: '200% 100%',
+      color: 'white',
+      padding: '8px 24px',
+      textAlign: 'center',
+      fontWeight: 700,
+      fontSize: '0.85rem',
+      zIndex: 200,
+      position: 'relative',
+      overflow: 'hidden'
+    }}
+  >
+    🎁 PRO MONTH IS LIVE! All premium features are FREE for 30 days! 
+    <Link to="/pricing" style={{ color: 'white', textDecoration: 'underline', marginLeft: '8px', fontWeight: 800 }}>Learn more</Link>
+  </motion.div>
+);
+
 import LandingPage from './components/LandingPage';
 import QuestionPage from './components/QuestionPage';
 import ResultPage from './components/ResultPage';
@@ -36,6 +60,7 @@ function App() {
               <Router>
                 <ScrollToTop />
                 <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+                  <PromoBanner />
                   <NavBar />
                   <div style={{ flex: 1 }}>
                     <Routes>
