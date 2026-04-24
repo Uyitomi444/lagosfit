@@ -47,6 +47,20 @@ const LandingPage = () => {
                     zIndex: -1
                 }} />
 
+                <div style={{
+                    position: 'absolute',
+                    top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '600px', height: '600px',
+                    backgroundImage: `url(/logo.png)`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                    opacity: 0.1, // Slightly lower than illustration to avoid clashing
+                    zIndex: -1,
+                    pointerEvents: 'none'
+                }} />
+
                 <div style={{ maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '48px', paddingTop: '80px' }}>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
