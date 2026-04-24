@@ -25,6 +25,53 @@ const LandingPage = () => {
                 title="Find Your Perfect Neighborhood" 
                 description="Discover the ideal Lagos neighborhood that matches your lifestyle, budget, and vibe with our AI-powered area finder."
             />
+
+            {/* PRO Month Promo Banner */}
+            <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                style={{
+                    background: 'linear-gradient(90deg, var(--primary-color) 0%, var(--accent-color) 50%, var(--primary-color) 100%)',
+                    backgroundSize: '200% 100%',
+                    color: 'white',
+                    padding: '10px 24px',
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '12px',
+                    zIndex: 10,
+                    position: 'relative'
+                }}
+            >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <motion.span
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                    >
+                        🎁 
+                    </motion.span>
+                    PRO MONTH IS LIVE! All premium features are currently UNLOCKED for everyone.
+                </div>
+                <button 
+                    onClick={() => navigate('/pricing')}
+                    style={{ 
+                        background: 'white', 
+                        color: 'var(--primary-color)', 
+                        border: 'none', 
+                        padding: '4px 12px', 
+                        borderRadius: '20px', 
+                        fontSize: '0.75rem', 
+                        fontWeight: 800, 
+                        cursor: 'pointer',
+                        marginLeft: '12px'
+                    }}
+                >
+                    LEARN MORE
+                </button>
+            </motion.div>
             {/* Hero Section */}
             <section style={{
                 position: 'relative',

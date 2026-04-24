@@ -25,9 +25,11 @@ const QuestionPage = () => {
     const customBudgetAnswer = answers.customBudget;
     const isLast = currentQuestionIndex === QUESTIONS.length - 1;
     const isRentQuestion = question.id === 'rent';
+    const isOtherAreaQuestion = question.id === 'other_area';
 
     const handleNext = () => {
-        if (currentAnswer || customBudgetAnswer) {
+        // For other_area or if has answer, proceed
+        if (currentAnswer || customBudgetAnswer || isOtherAreaQuestion) {
             if (isLast) {
                 navigate('/result');
             } else {
@@ -45,6 +47,10 @@ const QuestionPage = () => {
         } else {
             setAnswer('customBudget', undefined as any);
         }
+    };
+
+    const handleOtherAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAnswer('other_area', e.target.value);
     };
 
     const progressPercentage = ((currentQuestionIndex + 1) / QUESTIONS.length) * 100;
@@ -79,12 +85,17 @@ const QuestionPage = () => {
                                 <Info size={14} /> {t('quiz.multi_select')}
                             </span>
                         )}
+                        {isOtherAreaQuestion && (
+                            <span style={{ fontSize: '0.8rem', color: 'var(--primary-color)', fontWeight: 600 }}>
+                                {t('common.optional') || 'Optional'}
+                            </span>
+                        )}
                     </div>
 
                     <h2 style={{ fontSize: '2rem', marginBottom: '32px', lineHeight: 1.3 }}>{question.text[language]}</h2>
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '40px' }}>
-                        {question.options.map((opt) => (
+                        {!isOtherAreaQuestion && question.options.map((opt) => (
                             <OptionCard
                                 key={opt.id}
                                 label={opt.label[language]}
@@ -106,6 +117,33 @@ const QuestionPage = () => {
                                 }}
                             />
                         ))}
+
+                        {isOtherAreaQuestion && (
+                            <div style={{ marginTop: '0px' }}>
+                                <input
+                                    type="text"
+                                    placeholder={(question as any).placeholder?.[language] || "Type area..."}
+                                    value={answers.other_area || ''}
+                                    onChange={handleOtherAreaChange}
+                                    style={{
+                                        width: '100%',
+                                        padding: '20px',
+                                        background: 'var(--card-bg)',
+                                        border: '2px solid var(--border-color)',
+                                        borderRadius: '16px',
+                                        color: 'var(--text-main)',
+                                        fontSize: '1.2rem',
+                                        fontWeight: 600,
+                                        outline: 'none',
+                                        transition: 'all 0.2s ease',
+                                        boxShadow: 'var(--shadow)'
+                                    }}
+                                    autoFocus
+                                    onFocus={(e) => e.target.style.borderColor = 'var(--primary-color)'}
+                                    onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
+                                />
+                            </div>
+                        )}
 
                         {isRentQuestion && (
                             <div style={{ marginTop: '20px', padding: '24px', background: 'rgba(var(--primary-rgb), 0.03)', borderRadius: '16px', border: '1px dashed var(--border-color)' }}>
@@ -147,8 +185,8 @@ const QuestionPage = () => {
                         <button
                             className="btn btn-primary"
                             onClick={handleNext}
-                            disabled={!currentAnswer && !customBudgetAnswer}
-                            style={{ flex: 1, height: '56px', opacity: (currentAnswer || customBudgetAnswer) ? 1 : 0.5 }}
+                            disabled={!currentAnswer && !customBudgetAnswer && !isOtherAreaQuestion}
+                            style={{ flex: 1, height: '56px', opacity: (currentAnswer || customBudgetAnswer || isOtherAreaQuestion) ? 1 : 0.5 }}
                         >
                             {isLast ? t('quiz.results') : t('quiz.next')} <ArrowRight size={18} />
                         </button>

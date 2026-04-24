@@ -26,7 +26,7 @@ const ResultPage = () => {
     // Use history answers if available, otherwise use live quiz answers
     const answers = fromHistory && historyAnswers ? historyAnswers : currentAnswers;
 
-    const { top, others } = useMemo(() => getRecommendations(answers), [answers]);
+    const { top, others, noMatch } = useMemo(() => getRecommendations(answers), [answers]);
     const [selectedAreaId, setSelectedAreaId] = useState<string | null>(null);
 
     // Save result on mount only if NOT from history
@@ -63,36 +63,105 @@ const ResultPage = () => {
 
     return (
         <div className="container" style={{ padding: '60px 24px', maxWidth: '1000px' }}>
+            {/* PRO Trial Banner */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{ textAlign: 'center', marginBottom: '60px' }}
+                style={{
+                    background: 'var(--accent-color)',
+                    color: 'white',
+                    padding: '12px 20px',
+                    borderRadius: '12px',
+                    marginBottom: '32px',
+                    textAlign: 'center',
+                    fontWeight: 700,
+                    fontSize: '0.9rem',
+                    boxShadow: '0 4px 15px rgba(224, 159, 62, 0.3)'
+                }}
             >
-                <span style={{ color: 'var(--primary-color)', fontWeight: 600, fontSize: '1.2rem' }}>{t('result.based_on')}</span>
-                <h1 style={{ fontSize: '3rem', margin: '16px 0' }}>{t('result.perfect_match')}</h1>
+                🚀 PRO MONTH IS LIVE! All premium features are FREE for the next 30 days. Enjoy full access!
             </motion.div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px', alignItems: 'start' }}>
-                {/* Top Match Card */}
+            {noMatch ? (
                 <motion.div
-                    className="card"
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    style={{ background: 'var(--primary-color)', color: 'white', padding: '40px', position: 'relative', overflow: 'hidden' }}
+                    style={{
+                        textAlign: 'center',
+                        padding: '100px 40px',
+                        background: 'var(--card-bg)',
+                        borderRadius: '32px',
+                        border: '2px dashed var(--border-color)',
+                        maxWidth: '700px',
+                        margin: '60px auto'
+                    }}
                 >
-                    {/* Decorative element */}
-                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: 'url(/lagos_pattern.png)', opacity: 0.1, zIndex: 0 }} />
-                    <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', zIndex: 1 }} />
-                    <img src="/eyo_icon.png" alt="Eyo" style={{ position: 'absolute', bottom: '-20px', right: '20px', height: '180px', opacity: 0.1, transform: 'rotate(-10deg)', zIndex: 0 }} />
+                    <div style={{ 
+                        width: '120px', height: '120px', 
+                        background: 'rgba(239, 68, 68, 0.1)', 
+                        borderRadius: '50%', 
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        margin: '0 auto 32px'
+                    }}>
+                        <AlertCircle size={64} color="#ef4444" />
+                    </div>
+                    <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('result.no_match_title') || 'No perfect match found'}</h2>
+                    <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '40px' }}>
+                        We reviewed over 70+ Lagos neighborhoods but couldn't find one that fits your current budget and lifestyle perfectly. 
+                        It's better to tell you the truth than give you a wrong recommendation.
+                    </p>
+                    
+                    <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                        <button onClick={handleRetake} className="btn btn-primary" style={{ padding: '16px 32px' }}>
+                            <RefreshCw size={18} /> {t('result.retake')}
+                        </button>
+                        <button onClick={() => navigate('/market')} className="btn btn-outline" style={{ padding: '16px 32px' }}>
+                             Browse Market Prices
+                        </button>
+                    </div>
 
-                    <div style={{ position: 'relative', zIndex: 2 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                            <div style={{ padding: '8px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%' }}>
-                                <Star size={24} fill="var(--accent-color)" stroke="none" />
-                            </div>
-                             <span style={{ fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>{t('result.top_rec')}</span>
-                        </div>
+                    <div style={{ marginTop: '60px', paddingTop: '40px', borderTop: '1px solid var(--border-color)', textAlign: 'left' }}>
+                        <h4 style={{ marginBottom: '16px', color: 'var(--text-muted)', textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '1px' }}>Pro Tips for your search:</h4>
+                        <ul style={{ display: 'grid', gap: '12px', fontSize: '0.95rem', opacity: 0.8 }}>
+                            <li>• Consider increasing your budget by 20-30% for Mainland hubs like Magodo or Gbagada.</li>
+                            <li>• If working on the Island, look into Ajah or Sangotedo for more affordable options.</li>
+                            <li>• Check out Ikorodu or Egbeda for entry-level budgets (under ₦500k).</li>
+                        </ul>
+                    </div>
+                </motion.div>
+            ) : (
+                <>
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        style={{ textAlign: 'center', marginBottom: '60px' }}
+                    >
+                        <span style={{ color: 'var(--primary-color)', fontWeight: 600, fontSize: '1.2rem' }}>{t('result.based_on')}</span>
+                        <h1 style={{ fontSize: '3rem', margin: '16px 0' }}>{t('result.perfect_match')}</h1>
+                    </motion.div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px', alignItems: 'start' }}>
+                        {/* Top Match Card */}
+                        <motion.div
+                            className="card"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: 0.2 }}
+                            style={{ background: 'var(--primary-color)', color: 'white', padding: '40px', position: 'relative', overflow: 'hidden' }}
+                        >
+                            {/* Decorative element */}
+                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundImage: 'url(/lagos_pattern.png)', opacity: 0.1, zIndex: 0 }} />
+                            <div style={{ position: 'absolute', top: '-50px', right: '-50px', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.1)', zIndex: 1 }} />
+                            <img src="/eyo_icon.png" alt="Eyo" style={{ position: 'absolute', bottom: '-20px', right: '20px', height: '180px', opacity: 0.1, transform: 'rotate(-10deg)', zIndex: 0 }} />
+
+                            <div style={{ position: 'relative', zIndex: 2 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                                    <div style={{ padding: '8px', background: 'rgba(255,255,255,0.2)', borderRadius: '50%' }}>
+                                        <Star size={24} fill="var(--accent-color)" stroke="none" />
+                                    </div>
+                                     <span style={{ fontWeight: 600, letterSpacing: '1px', opacity: 0.9 }}>{t('result.top_rec')}</span>
+                                </div>
+
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                             <h2 style={{ fontSize: '3.5rem', marginBottom: '8px', color: 'white', flex: 1 }}>{currentArea.name}</h2>
@@ -340,7 +409,8 @@ const ResultPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+                </>
+            )}
         </div>
     );
 };

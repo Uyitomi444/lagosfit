@@ -166,7 +166,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                             }
                         }
 
-                        isPremium = data.isPremium === true || isHardcodedAdmin;
+                        const isProMonth = true; // Promotion: Everyone is Pro for 1 month
+                        isPremium = data.isPremium === true || isHardcodedAdmin || isProMonth;
                         isAdmin = data.isAdmin === true || isHardcodedAdmin;
                         
                         favorites = data.favorites || [];
@@ -201,7 +202,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
                 const isHardcodedAdmin = !!(firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase()));
                 
-                const isPremium = data.isPremium === true || isHardcodedAdmin;
+                const isProMonth = true; 
+                const isPremium = data.isPremium === true || isHardcodedAdmin || isProMonth;
                 const isAdmin = data.isAdmin === true || isHardcodedAdmin;
                 const favorites = data.favorites || [];
                 const firestoreData = { name: data.name, photoURL: data.photoURL };

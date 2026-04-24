@@ -15,6 +15,7 @@ export interface QuizAnswers {
     lifestyle?: LifestylePref | LifestylePref[];
     electricity?: ElectricityPref | ElectricityPref[];
     workLocation?: string;
+    other_area?: string;
     date?: string; // For history
 }
 

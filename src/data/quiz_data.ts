@@ -123,6 +123,25 @@ export const QUESTIONS: Question[] = [
         ],
         multiSelect: false,
     },
+    {
+        id: 'other_area',
+        text: {
+            en: "Is there a specific area you are ALREADY eyeing? (Optional)",
+            pidgin: "E get any area you don already dey look? (Optional)",
+            yo: "Njẹ agbegbe kan wa ti o ti n wo tẹlẹ? (Aṣayan)",
+            ig: "Enwere mpaghara ọ bụla ị na-eleru anya? (Nhọrọ)",
+            ha: "Shin akwai wani yanki da kuke kallo riga? (Zabi)"
+        },
+        options: [],
+        multiSelect: false,
+        placeholder: {
+            en: "Type area name (e.g. Magodo, Gbagada...)",
+            pidgin: "Type area name (e.g. Magodo, Gbagada...)",
+            yo: "Tẹ orukọ agbegbe (bi i Magodo, Gbagada...)",
+            ig: "Pịa aha mpaghara (dịka Magodo, Gbagada...)",
+            ha: "Rubuta sunan yankin (misali Magodo, Gbagada...)"
+        }
+    },
 ];
 
 export const AREAS: Area[] = [
@@ -467,7 +486,7 @@ export const AREAS: Area[] = [
         internetFiber: false,
         securityRating: 2,
         genCostEstimate: '₦15k - ₦40k',
-        minPrice: 2500000,
+        minPrice: 250000,
         maxPrice: 500000,
         innerLocalities: ['Ebute', 'Ijede', 'Ogolonto', 'Ibeshe', 'Shagamu Road'],
         subLocalityInsights: {

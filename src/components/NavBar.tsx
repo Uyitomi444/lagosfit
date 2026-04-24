@@ -77,9 +77,9 @@ const NavBar = () => {
                 }}>
                     {/* Logo */}
                     <Link to="/" style={{ flexShrink: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <img src="/logo.png" alt="Logo" style={{ height: '48px', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }} />
-                            <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800, fontSize: '1.3rem', color: 'var(--primary-color)', letterSpacing: '-0.5px' }}>LagosFit</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <img src="/logo.png" alt="Logo" style={{ height: '56px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }} />
+                            <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: '1.5rem', color: 'var(--primary-color)', letterSpacing: '-1px' }}>LagosFit</span>
                         </div>
                     </Link>
 
