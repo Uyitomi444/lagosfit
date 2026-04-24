@@ -332,72 +332,71 @@ const ResultPage = () => {
                                         })()}
                                     </div>
                                 </div>
-                        </div>
+                            </div>
 
-                        {/* Social Buzz section */}
-                        {currentArea.socialBuzz && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 }}
-                                style={{
-                                    background: 'rgba(255,255,255,0.1)',
-                                    borderRadius: '16px',
-                                    padding: '20px',
-                                    border: '1px solid rgba(255,255,255,0.2)',
-                                    marginBottom: '32px'
-                                }}
+                            {/* Social Buzz section */}
+                            {currentArea.socialBuzz && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.8 }}
+                                    style={{
+                                        background: 'rgba(255,255,255,0.1)',
+                                        borderRadius: '16px',
+                                        padding: '20px',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        marginBottom: '32px'
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                                        <MessageSquare size={18} color="var(--accent-color)" />
+                                        <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase' }}>{t('result.street_talk')}</span>
+                                        <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'var(--accent-color)', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>{t('result.trending')}</span>
+                                    </div>
+                                    <p style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '20px', fontStyle: 'italic', color: 'white' }}>"{currentArea.socialBuzz.trending}"</p>
+
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                        <div>
+                                            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.complaints')}</span>
+                                            {currentArea.socialBuzz.complaints.slice(0, 2).map((c, i) => (
+                                                <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
+                                                    <AlertCircle size={14} color="var(--error-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                                    <span>{c}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div>
+                                            <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.compliments')}</span>
+                                            {currentArea.socialBuzz.compliments.slice(0, 2).map((c, i) => (
+                                                <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
+                                                    <ThumbsUp size={14} color="var(--success-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                                    <span>{c}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            <button
+                                className="btn"
+                                onClick={() => navigate('/explore', { state: { selectedId: currentArea.id } })}
+                                style={{ background: 'white', color: 'var(--primary-color)', width: '100%', marginBottom: '12px' }}
                             >
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                                    <MessageSquare size={18} color="var(--accent-color)" />
-                                    <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase' }}>{t('result.street_talk')}</span>
-                                    <span style={{ marginLeft: 'auto', fontSize: '0.75rem', background: 'var(--accent-color)', padding: '2px 8px', borderRadius: '4px', fontWeight: 800 }}>{t('result.trending')}</span>
-                                </div>
-                                <p style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '20px', fontStyle: 'italic', color: 'white' }}>"{currentArea.socialBuzz.trending}"</p>
+                                {t('result.explore_btn').replace('{0}', currentArea.name)}
+                            </button>
 
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                                    <div>
-                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.complaints')}</span>
-                                        {currentArea.socialBuzz.complaints.slice(0, 2).map((c, i) => (
-                                            <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
-                                                <AlertCircle size={14} color="var(--error-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                                                <span>{c}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div>
-                                        <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)', fontWeight: 800, display: 'block', marginBottom: '8px', textTransform: 'uppercase' }}>{t('result.compliments')}</span>
-                                        {currentArea.socialBuzz.compliments.slice(0, 2).map((c, i) => (
-                                            <div key={i} style={{ fontSize: '0.8rem', display: 'flex', gap: '6px', marginBottom: '6px', opacity: 0.9 }}>
-                                                <ThumbsUp size={14} color="var(--success-color)" strokeWidth={1.5} style={{ flexShrink: 0, marginTop: '2px' }} />
-                                                <span>{c}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
+                            <button
+                                className="btn"
+                                onClick={() => navigate('/market', { state: { areaId: currentArea.id } })}
+                                style={{ background: 'var(--accent-color)', color: 'white', width: '100%', fontWeight: 700 }}
+                            >
+                                {t('result.find_apt')}
+                            </button>
+                        </motion.div>
 
-                        <button
-                            className="btn"
-                            onClick={() => navigate('/explore', { state: { selectedId: currentArea.id } })}
-                            style={{ background: 'white', color: 'var(--primary-color)', width: '100%', marginBottom: '12px' }}
-                        >
-                            {t('result.explore_btn').replace('{0}', currentArea.name)}
-                        </button>
-
-                        <button
-                            className="btn"
-                            onClick={() => navigate('/market', { state: { areaId: currentArea.id } })}
-                            style={{ background: 'var(--accent-color)', color: 'white', width: '100%', fontWeight: 700 }}
-                        >
-                            {t('result.find_apt')}
-                        </button>
-                    </div>
-                </motion.div>
-
-                {/* Truth Metrics side column */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        {/* Truth Metrics side column */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <TruthCard area={currentArea} />
                     <SolarSolutions />
 
