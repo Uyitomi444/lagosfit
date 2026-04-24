@@ -21,11 +21,9 @@ function matchesAny<T>(userAnswer: T | T[] | undefined, areaValues: T[]): boolea
 
 export const getRecommendations = (answers: QuizAnswers): { top: Area; others: Area[]; noMatch?: boolean } => {
     // 1. Calculate effective budget
-    let userMin = 0;
     let userMax = 999999999;
 
     if (answers.customBudget) {
-        userMin = answers.customBudget * 0.7; // Allowance for slightly lower
         userMax = answers.customBudget * 1.3; // Allow up to 30% above (very strict)
     } else if (answers.rent) {
         const rents = Array.isArray(answers.rent) ? answers.rent : [answers.rent];

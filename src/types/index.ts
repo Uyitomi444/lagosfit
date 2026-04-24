@@ -116,7 +116,8 @@ export interface Question {
     id: keyof QuizAnswers;
     text: LocalizedString;
     options: QuestionOption[];
-    multiSelect?: boolean;  // New: allow multiple selections on this question
+    multiSelect?: boolean;
+    placeholder?: LocalizedString; 
 }
 
 export interface QuizHistoryItem {
