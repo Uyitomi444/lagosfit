@@ -19,7 +19,16 @@ function matchesAny<T>(userAnswer: T | T[] | undefined, areaValues: T[]): boolea
 }
 
 export const getRecommendations = (answers: QuizAnswers): { top: Area; others: Area[]; noMatch?: boolean } => {
-    // 1. Calculate effective budget
+    // 1. Hard Budget Floor: If below 500k, it's an immediate 'No Match' for Lagos market reality
+    if (answers.customBudget && answers.customBudget < 500000) {
+        const sortedFull = [...AREAS].sort((a, b) => a.minPrice - b.minPrice);
+        return {
+            top: sortedFull[0],
+            others: sortedFull.slice(1, 4),
+            noMatch: true
+        };
+    }
+
     let userMax = 999999999;
 
     if (answers.customBudget) {
