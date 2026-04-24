@@ -43,6 +43,58 @@ const ResultPage = () => {
         return top;
     }, [selectedAreaId, top, others]);
 
+    const [aiSummary, setAiSummary] = useState<string | null>(null);
+    const [isAiLoading, setIsAiLoading] = useState(false);
+
+    // AI "Buddy's Take" Logic
+    useEffect(() => {
+        const fetchAiSummary = async () => {
+            if (noMatch || !currentArea) return;
+            
+            setIsAiLoading(true);
+            try {
+                const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+                if (!apiKey || apiKey.includes('your_groq_key')) return;
+
+                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        model: "llama-3.3-70b-versatile",
+                        messages: [
+                            { 
+                                role: "system", 
+                                content: `You are "Buddy", a Lagos neighborhood expert. Explain why an area is a great match for a user in 2 sentences. 
+                                Tone: Smart, friendly, honest about trade-offs. Language: ${language}`
+                            },
+                            { 
+                                role: "user", 
+                                content: `Why is ${currentArea.name} a match? User Budget: ${answers.customBudget ? '₦' + answers.customBudget.toLocaleString() : 'Standard Tier'}. 
+                                Priority: ${answers.priority || 'None'}. Workplace: ${answers.workLocation || 'Not specified'}.` 
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 150
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setAiSummary(data.choices[0].message.content);
+                }
+            } catch (err) {
+                console.error("Buddy's Take Error:", err);
+            } finally {
+                setIsAiLoading(false);
+            }
+        };
+
+        fetchAiSummary();
+    }, [currentArea, noMatch, answers, language]);
+
     const displayOptions = useMemo(() => {
         const all = [top, ...others];
         // Deduplicate by ID just in case
@@ -194,8 +246,48 @@ const ResultPage = () => {
 
                         <p style={{ fontSize: '1.2rem', opacity: 0.9, lineHeight: 1.6, marginBottom: '32px' }}>{currentArea.description[language]}</p>
 
+                        {/* Buddy's Take (AI Insight) */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            style={{ 
+                                background: 'rgba(255, 255, 255, 0.1)', 
+                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                borderRadius: '16px', 
+                                padding: '20px', 
+                                marginBottom: '32px',
+                                display: 'flex',
+                                gap: '16px',
+                                alignItems: 'flex-start'
+                            }}
+                        >
+                            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'white', flexShrink: 0, overflow: 'hidden', border: '2px solid white' }}>
+                                <img src="/lagosfit_mascot_head.png" alt="Buddy" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            </div>
+                            <div>
+                                <div style={{ fontWeight: 800, fontSize: '0.75rem', color: 'var(--accent-color)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                    <Sparkles size={12} /> {language === 'en' ? "Buddy's Take" : "Buddy's Take"}
+                                </div>
+                                <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'white', fontStyle: 'italic', margin: 0 }}>
+                                    {isAiLoading ? "Buddy is thinking..." : (aiSummary || currentArea.description[language])}
+                                </p>
+                            </div>
+                        </motion.div>
+
                         <div style={{ marginBottom: '32px' }}>
                             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                {/* Priority Badge */}
+                                {answers.priority && (
+                                    <span className="tag" style={{ background: 'var(--accent-color)', color: 'white', borderColor: 'var(--accent-color)' }}>
+                                        Priority: {answers.priority.charAt(0).toUpperCase() + answers.priority.slice(1)}
+                                    </span>
+                                )}
+                                {/* Budget Warning */}
+                                {answers.customBudget && answers.customBudget <= currentArea.minPrice * 1.1 && (
+                                    <span className="tag" style={{ background: '#f59e0b', color: 'white', borderColor: '#f59e0b' }}>
+                                        <AlertCircle size={12} /> Budget Tight
+                                    </span>
+                                )}
                                 {/* Rent */}
                                 {(() => {
                                     const matchedRent = answers.rent && currentArea.attributes.rent.includes(answers.rent) ? answers.rent : null;

@@ -15,6 +15,7 @@ export interface QuizAnswers {
     lifestyle?: LifestylePref | LifestylePref[];
     electricity?: ElectricityPref | ElectricityPref[];
     workLocation?: string;
+    priority?: 'security' | 'commute' | 'electricity' | 'price';
     other_area?: string;
     date?: string; // For history
 }
@@ -93,6 +94,7 @@ export interface Area {
         ha: string;
     };
     matchScore?: number;
+    aiSummary?: string; // Generated Buddy's Take
     coords?: {
         lat: number;
         lng: number;

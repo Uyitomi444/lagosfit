@@ -91,6 +91,20 @@ export const getRecommendations = (answers: QuizAnswers): { top: Area; others: A
         if (matchesAny(answers.noise, area.attributes.noise)) score += 5;
         if (matchesAny(answers.electricity, area.attributes.electricity)) score += 5;
 
+        // --- Priority Boost (Weight: 40 points) ---
+        if (answers.priority) {
+            if (answers.priority === 'security' && (area.securityRating || 0) >= 4) score += 40;
+            if (answers.priority === 'electricity' && (area.powerAvgHours || 0) >= 18) score += 40;
+            if (answers.priority === 'commute') {
+                const loc = answers.workLocation?.toLowerCase();
+                if (loc === 'vi' && area.commuteTo.vi.includes('m') && parseInt(area.commuteTo.vi) < 30) score += 40;
+                if (loc === 'ikeja' && area.commuteTo.ikeja.includes('m') && parseInt(area.commuteTo.ikeja) < 25) score += 40;
+            }
+            if (answers.priority === 'price') {
+                if (answers.customBudget && area.maxPrice < answers.customBudget) score += 40;
+            }
+        }
+
         // --- "Other Area" specify boost ---
         if (answers.other_area && area.name.toLowerCase().includes(answers.other_area.toLowerCase())) {
             score += 100; // If they eye it and it's affordable, it's the TOP choice

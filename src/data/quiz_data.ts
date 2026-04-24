@@ -141,6 +141,22 @@ export const QUESTIONS: Question[] = [
             ha: "Rubuta sunan yankin (misali Magodo, Gbagada...)"
         }
     },
+    {
+        id: 'priority',
+        text: {
+            en: "What is your #1 non-negotiable priority?",
+            pidgin: "Which one be your most important thing for house?",
+            yo: "Kí ni nǹkan àkọ́kọ́ tí o kò le fi tì jẹ́?",
+            ig: "Kedu ihe kacha mkpa gị n’ụlọ?",
+            ha: "Wane abu ne mafi mahimmanci a gare ku a gida?"
+        },
+        options: [
+            { id: 'security', label: { en: "Strict Security", pidgin: "Tight Security", yo: "Aabo Gidi", ig: "Nchebe siri ike", ha: "Tsaro Sosai" }, value: 'security' },
+            { id: 'commute', label: { en: "Short Commute", pidgin: "Near Work", yo: "Ode si Ise", ig: "Nso na ọrụ", ha: "Kusancin Aiki" }, value: 'commute' },
+            { id: 'electricity', label: { en: "20hrs+ Electricity", pidgin: "Light full time", yo: "Iná mọ̀nàmọ́nà", ig: "Ezigbo ọkụ eletrik", ha: "Wutar Lantarki" }, value: 'electricity' },
+            { id: 'price', label: { en: "Lowest Price Possible", pidgin: "Cheapest Deal", yo: "Iye Owó Pọ́kú", ig: "Ego dị ala kpamkpam", ha: "Mafi Sauƙin Farashi" }, value: 'price' }
+        ]
+    }
 ];
 
 export const AREAS: Area[] = [
