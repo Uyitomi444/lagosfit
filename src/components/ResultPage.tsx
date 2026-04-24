@@ -4,7 +4,7 @@ import { useQuiz } from '../context/QuizContext';
 import { getRecommendations } from '../utils/recommendation';
 import type { Area } from '../types';
 import { motion } from 'framer-motion';
-import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp, Heart, Clock } from 'lucide-react';
+import { Star, RefreshCw, ArrowRight, Navigation, MessageSquare, AlertCircle, ThumbsUp, Heart, Clock, Sparkles } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { calculateDistance } from '../utils/distance';
 import { AREAS } from '../data/quiz_data';
