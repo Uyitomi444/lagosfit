@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../config/firebase';
 import { collection, getDocs, deleteDoc, doc, query, orderBy } from 'firebase/firestore';
 import { motion } from 'framer-motion';
-import { MessageSquare, Trash2, MapPin, Briefcase } from 'lucide-react';
+import { MessageSquare, Trash2, MapPin, Briefcase, Sparkles } from 'lucide-react';
 import StarRating from './StarRating';
 
 interface Review {

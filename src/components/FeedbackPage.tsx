@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { db } from '../config/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
-import { useLanguage } from '../context/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, Send, CheckCircle, Sparkles, Star } from 'lucide-react';
+import { MessageSquare, Send, CheckCircle } from 'lucide-react';
 import StarRating from './StarRating';
 import SEO from './SEO';
 
 const FeedbackPage = () => {
     const { user } = useAuth();
-    const { t } = useLanguage();
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
     const [submitting, setSubmitting] = useState(false);
