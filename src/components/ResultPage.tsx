@@ -499,11 +499,46 @@ const ResultPage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+
+                {/* Feedback CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    style={{
+                        marginTop: '80px',
+                        padding: '40px',
+                        background: 'linear-gradient(135deg, var(--secondary-bg) 0%, var(--card-bg) 100%)',
+                        borderRadius: '32px',
+                        textAlign: 'center',
+                        border: '1px solid var(--border-color)',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.05)'
+                    }}
+                >
+                    <div style={{ 
+                        width: '56px', height: '56px', borderRadius: '50%', 
+                        background: 'rgba(var(--primary-rgb), 0.1)', color: 'var(--primary-color)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        margin: '0 auto 24px'
+                    }}>
+                        <MessageSquare size={28} strokeWidth={1.5} />
+                    </div>
+                    <h3 style={{ fontSize: '1.8rem', marginBottom: '12px' }}>Did we get it right?</h3>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', marginBottom: '32px', maxWidth: '500px', margin: '0 auto 32px' }}>
+                        Your feedback helps us improve the recommendation engine for everyone. Share your experience with us!
+                    </p>
+                    <button 
+                        onClick={() => navigate('/feedback')} 
+                        className="btn btn-primary"
+                        style={{ padding: '14px 40px', fontWeight: 700 }}
+                    >
+                        </button>
+                </motion.div>
+                </div>
             </>
-        )}
-    </div>
-);
+            )}
+        </div>
+    );
 };
 
 export default ResultPage;

@@ -10,7 +10,7 @@ interface Review {
     authorId: string;
     authorName: string;
     targetId: string;
-    targetType: 'agent' | 'area';
+    targetType: 'agent' | 'area' | 'platform';
     rating: number;
     comment: string;
     createdAt: any;
@@ -87,9 +87,18 @@ const AdminReviewsTab = () => {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '8px' }}>
                                     <StarRating rating={review.rating} size={12} />
-                                    <span style={{ fontSize: '0.75rem', color: 'var(--primary-color)', background: 'rgba(var(--primary-rgb), 0.1)', padding: '2px 8px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                        {review.targetType === 'area' ? <MapPin size={10} /> : <Briefcase size={10} />}
-                                        {review.targetId}
+                                    <span style={{ 
+                                        fontSize: '0.75rem', 
+                                        color: 'var(--primary-color)', 
+                                        background: 'rgba(var(--primary-rgb), 0.1)', 
+                                        padding: '2px 8px', 
+                                        borderRadius: '4px', 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        gap: '4px' 
+                                    }}>
+                                        {review.targetType === 'area' ? <MapPin size={10} /> : review.targetType === 'agent' ? <Briefcase size={10} /> : <Sparkles size={10} />}
+                                        {review.targetType === 'platform' ? 'LagosFit Platform' : review.targetId}
                                     </span>
                                 </div>
                                 <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: 1.5, wordBreak: 'break-word' }}>

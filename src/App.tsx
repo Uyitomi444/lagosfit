@@ -46,6 +46,7 @@ import PrivacyPage from './components/PrivacyPage';
 import TermsPage from './components/TermsPage';
 import ChatBot from './components/ChatBot';
 import ScrollToTop from './components/ScrollToTop';
+import FeedbackPage from './components/FeedbackPage';
 
 function App() {
   return (
@@ -92,6 +93,7 @@ function App() {
                           <AdminDashboard />
                         </AdminRoute>
                       } />
+                      <Route path="/feedback" element={<FeedbackPage />} />
                     </Routes>
                   </div>
                   <Footer />
