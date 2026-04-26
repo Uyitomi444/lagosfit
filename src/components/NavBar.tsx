@@ -43,8 +43,9 @@ const NavBar = () => {
         navigate('/');
     };
 
-    const displayName = user?.name || user?.email?.split('@')[0] || 'User';
-    const initial = displayName.charAt(0).toUpperCase();
+    const isGuest = user?.uid === 'guest';
+    const displayName = isGuest ? 'Guest Explorer' : (user?.name || user?.email?.split('@')[0] || 'User');
+    const initial = isGuest ? 'G' : displayName.charAt(0).toUpperCase();
 
     const navLinks = [
         { to: '/', label: t('nav.home') },
@@ -162,7 +163,7 @@ const NavBar = () => {
                         </button>
 
                         {/* Auth section */}
-                        {user ? (
+                        {user && !isGuest ? (
                             <div ref={dropdownRef} style={{ position: 'relative' }}>
                                 <button
                                     onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -273,7 +274,7 @@ const NavBar = () => {
                                 boxShadow: '0 2px 8px rgba(56, 102, 104, 0.25)'
                             }}>
                                 <LogIn size={15} />
-                                <span className="nav-hide-xs">{t('nav.signin')}</span>
+                                <span className="nav-hide-xs">{isGuest ? 'Login to Sync' : t('nav.signin')}</span>
                             </Link>
                         )}
 

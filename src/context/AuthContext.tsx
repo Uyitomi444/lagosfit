@@ -146,7 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
                 // Check status from Firestore
                 let isPremium = false;
-                let isAdmin = false; // Added
+                let isAdmin = false; 
                 let favorites: string[] = [];
                 let firestoreData = {};
                 try {
@@ -156,25 +156,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         const adminEmails = ['admin@lagosfit.com', 'uyitomiadebiyi@gmail.com'];
                         const isHardcodedAdmin = !!(firebaseUser.email && adminEmails.includes(firebaseUser.email.toLowerCase()));
                         
-                        // If they are a hardcoded admin but the DB doesn't know it yet, sync it
-                        if (isHardcodedAdmin && data.isAdmin !== true) {
-                            try {
-                                await updateDoc(doc(db, 'users', firebaseUser.uid), { isAdmin: true });
-                                console.log('Admin status synced to Firestore for:', firebaseUser.email);
-                            } catch (err) {
-                                console.error('Failed to sync admin status to Firestore:', err);
-                            }
-                        }
-
-                        const isProMonth = true; // Promotion: Everyone is Pro for 1 month
+                        // Promotion: Everyone is Pro
+                        const isProMonth = true; 
                         isPremium = data.isPremium === true || isHardcodedAdmin || isProMonth;
                         isAdmin = data.isAdmin === true || isHardcodedAdmin;
                         
                         favorites = data.favorites || [];
-                        firestoreData = {
-                            name: data.name,
-                            photoURL: data.photoURL
-                        };
+                        firestoreData = { name: data.name, photoURL: data.photoURL };
                     }
                 } catch (err) {
                     console.error('Failed to check user status:', err);
@@ -182,7 +170,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const updatedUser = mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData);
                 setUser(updatedUser);
             } else {
-                setUser(null);
+                // Promotion: Guest is also Pro for 1 month
+                let favorites: string[] = [];
+                try {
+                    const savedFavs = localStorage.getItem('lagos_guest_favorites');
+                    if (savedFavs) favorites = JSON.parse(savedFavs);
+                } catch (e) {
+                    console.error('Failed to parse guest favorites', e);
+                }
+                
+                setUser({
+                    uid: 'guest',
+                    email: null,
+                    name: 'Guest Explorer',
+                    photoURL: null,
+                    isPremium: true, // PRO PROMOTION
+                    isAdmin: false,
+                    favorites: favorites
+                });
             }
             setLoading(false);
         });
@@ -268,7 +273,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Save quiz result to Firestore
     const saveQuizHistory = useCallback(async (item: QuizHistoryItem) => {
-        if (!user) return;
+        if (!user || user.uid === 'guest') return;
         try {
             const userRef = doc(db, 'users', user.uid);
             await setDoc(userRef, {
@@ -338,20 +343,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Added: Shortlist/Favorites toggle
     const toggleFavorite = useCallback(async (areaId: string) => {
         if (!user) return;
+        
+        const currentFavorites = user.favorites || [];
+        const isFav = currentFavorites.includes(areaId);
+        const newFavorites = isFav
+            ? currentFavorites.filter(id => id !== areaId)
+            : [...currentFavorites, areaId];
+
+        // Update local state for immediate feedback
+        setUser(prev => prev ? { ...prev, favorites: newFavorites } : null);
+
+        // Don't sync to cloud for guests
+        if (user.uid === 'guest') {
+            localStorage.setItem('lagos_guest_favorites', JSON.stringify(newFavorites));
+            return;
+        }
+
         try {
             const userRef = doc(db, 'users', user.uid);
-            const currentFavorites = user.favorites || [];
-            const isFav = currentFavorites.includes(areaId);
-            const newFavorites = isFav
-                ? currentFavorites.filter(id => id !== areaId)
-                : [...currentFavorites, areaId];
-
             await setDoc(userRef, {
                 favorites: newFavorites
             }, { merge: true });
-
-            // Update local state for immediate feedback
-            setUser(prev => prev ? { ...prev, favorites: newFavorites } : null);
         } catch (err) {
             console.error('Failed to toggle favorite:', err);
             throw err;
