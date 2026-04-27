@@ -21,8 +21,8 @@ const PromoBanner = () => (
       boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
     }}
   >
-    🎁 PRO MONTH IS LIVE! All premium features are FREE for 30 days! 
-    <Link to="/pricing" style={{ color: 'white', textDecoration: 'underline', marginLeft: '8px', fontWeight: 800 }}>Learn more</Link>
+    🎁 PRO MONTH IS LIVE! Sign in to get all premium features FREE for 30 days! 
+    <Link to="/register" style={{ color: 'white', textDecoration: 'underline', marginLeft: '8px', fontWeight: 800 }}>Join Now</Link>
   </div>
 );
 

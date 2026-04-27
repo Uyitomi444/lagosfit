@@ -532,7 +532,8 @@ const ResultPage = () => {
                         className="btn btn-primary"
                         style={{ padding: '14px 40px', fontWeight: 700 }}
                     >
-                        </button>
+                        Share Feedback
+                    </button>
                 </motion.div>
                 </div>
             </>

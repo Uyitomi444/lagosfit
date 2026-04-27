@@ -170,24 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 const updatedUser = mapUser(firebaseUser, isPremium, isAdmin, favorites, firestoreData);
                 setUser(updatedUser);
             } else {
-                // Promotion: Guest is also Pro for 1 month
-                let favorites: string[] = [];
-                try {
-                    const savedFavs = localStorage.getItem('lagos_guest_favorites');
-                    if (savedFavs) favorites = JSON.parse(savedFavs);
-                } catch (e) {
-                    console.error('Failed to parse guest favorites', e);
-                }
-                
-                setUser({
-                    uid: 'guest',
-                    email: null,
-                    name: 'Guest Explorer',
-                    photoURL: null,
-                    isPremium: true, // PRO PROMOTION
-                    isAdmin: false,
-                    favorites: favorites
-                });
+                setUser(null);
             }
             setLoading(false);
         });
@@ -273,7 +256,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Save quiz result to Firestore
     const saveQuizHistory = useCallback(async (item: QuizHistoryItem) => {
-        if (!user || user.uid === 'guest') return;
+        if (!user) return;
         try {
             const userRef = doc(db, 'users', user.uid);
             await setDoc(userRef, {
@@ -352,12 +335,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         // Update local state for immediate feedback
         setUser(prev => prev ? { ...prev, favorites: newFavorites } : null);
-
-        // Don't sync to cloud for guests
-        if (user.uid === 'guest') {
-            localStorage.setItem('lagos_guest_favorites', JSON.stringify(newFavorites));
-            return;
-        }
 
         try {
             const userRef = doc(db, 'users', user.uid);
