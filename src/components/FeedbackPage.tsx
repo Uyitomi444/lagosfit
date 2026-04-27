@@ -21,8 +21,8 @@ const FeedbackPage = () => {
         setSubmitting(true);
         try {
             await addDoc(collection(db, 'reviews'), {
-                authorId: user?.uid || 'guest',
-                authorName: user?.name || 'Guest Explorer',
+                authorId: user?.uid,
+                authorName: user?.name || user?.email?.split('@')[0] || 'User',
                 targetId: 'lagosfit_platform',
                 targetType: 'platform',
                 rating,
@@ -111,18 +111,13 @@ const FeedbackPage = () => {
                                     >
                                         {submitting ? 'Submitting...' : (
                                             <>
-                                                Send Review <Send size={20} />
+                                                Submit Feedback <Send size={20} />
                                             </>
                                         )}
                                     </button>
                                 </form>
                                 
-                                {user?.uid === 'guest' && (
-                                    <p style={{ marginTop: '20px', fontSize: '0.85rem', textAlign: 'center', color: 'var(--text-muted)' }}>
-                                        Posting as <strong>Guest Explorer</strong>. <br/>
-                                        Results are public and highly appreciated!
-                                    </p>
-                                )}
+
                             </div>
                         </motion.div>
                     ) : (

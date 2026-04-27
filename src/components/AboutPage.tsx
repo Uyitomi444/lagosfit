@@ -141,8 +141,9 @@ const AboutPage = () => {
 
                 <div 
                     style={{ marginTop: '100px', background: 'var(--secondary-bg)', borderRadius: '24px', padding: '60px 24px' }}
+                    id="contact"
                 >
-                    <div className="grid-responsive" style={{ gap: '60px' }}>
+                    <div className="grid-responsive" style={{ gap: '40px' }}>
                         <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                             <Mail size={48} color="var(--primary-color)" style={{ marginBottom: '24px' }} />
                             <h2 style={{ fontSize: '2.5rem', marginBottom: '16px' }}>{t('about.contact_title')}</h2>
@@ -173,12 +174,12 @@ const AboutPage = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }} className="mobile-stack">
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <div style={{ display: 'flex', gap: '16px' }} className="mobile-stack">
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                                             <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Your Name</label>
                                             <input required type="text" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }} placeholder="John Doe" />
                                         </div>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
                                             <label style={{ fontSize: '0.85rem', fontWeight: 600 }}>Email Address</label>
                                             <input required type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} style={{ padding: '12px', borderRadius: '12px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-main)' }} placeholder="john@example.com" />
                                         </div>

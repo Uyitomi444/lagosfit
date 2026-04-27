@@ -93,7 +93,11 @@ function App() {
                           <AdminDashboard />
                         </AdminRoute>
                       } />
-                      <Route path="/feedback" element={<FeedbackPage />} />
+                      <Route path="/feedback" element={
+                        <ProtectedRoute>
+                          <FeedbackPage />
+                        </ProtectedRoute>
+                      } />
                     </Routes>
                   </div>
                   <Footer />

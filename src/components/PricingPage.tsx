@@ -182,7 +182,7 @@ const PricingPage = () => {
                         Prefer to transfer? Pay directly into our bank account and get activated instantly. No card required.
                     </p>
                     <a 
-                        href={`https://wa.me/2347066684457?text=${encodeURIComponent(`Hello! I want to upgrade to LagosFit Pro via Bank Transfer. Please send me your account details. (User: ${user?.email || 'Guest'})`)}`}
+                        href={`https://wa.me/2347066684457?text=${encodeURIComponent(`Hello! I want to upgrade to LagosFit Pro via Bank Transfer. Please send me your account details. (User: ${user?.email || 'New User'})`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn btn-primary"
