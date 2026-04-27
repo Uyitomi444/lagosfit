@@ -14,7 +14,7 @@ const LoginPage = () => {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { user, login, loginWithGoogle } = useAuth();
+    const { user, login, loginWithGoogle, devLogin } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const redirectTo = (location.state as any)?.from || '/';
@@ -149,6 +149,28 @@ const LoginPage = () => {
                         </>
                     )}
                 </button>
+
+                {(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
+                    <button
+                        onClick={async () => {
+                            await devLogin();
+                            navigate(redirectTo);
+                        }}
+                        style={{
+                            width: '100%', padding: '10px',
+                            borderRadius: '12px',
+                            border: '1px dashed var(--accent-color)',
+                            background: 'rgba(224, 159, 62, 0.05)',
+                            color: 'var(--accent-color)',
+                            fontWeight: 700, fontSize: '0.85rem',
+                            cursor: 'pointer',
+                            marginBottom: '24px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+                        }}
+                    >
+                        ⚡ DEV MODE: Skip Login (Auto-Admin)
+                    </button>
+                )}
 
                 {/* Divider */}
                 <div style={{

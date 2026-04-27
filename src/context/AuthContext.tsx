@@ -39,6 +39,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     register: (name: string, email: string, password: string) => Promise<void>;
     loginWithGoogle: () => Promise<void>;
+    devLogin: () => Promise<void>;
     logout: () => void;
     resetPassword: (email: string) => Promise<void>;
     saveQuizHistory: (item: QuizHistoryItem) => Promise<void>;
@@ -219,6 +220,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Email + Password Login
     const login = async (email: string, password: string) => {
         await signInWithEmailAndPassword(auth, email, password);
+    };
+
+    // Developer bypass for simulators/iframes
+    const devLogin = async () => {
+        if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') return;
+        
+        console.log('Dev Login initiated...');
+        setLoading(true);
+        try {
+            // Mock a successful login with a test user
+            const mockUser: AppUser = {
+                uid: 'dev-user-123',
+                email: 'dev@lagosfit.local',
+                name: 'Developer Admin',
+                photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=dev',
+                isPremium: true,
+                isAdmin: true,
+                favorites: []
+            };
+            setUser(mockUser);
+            // Persistence for dev session
+            localStorage.setItem('lagosfit_user_mock', JSON.stringify(mockUser));
+            console.log('Dev Login Success - Premium Granted');
+        } catch (err) {
+            console.error('Dev Login Failed:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     // Google Sign-In
@@ -431,8 +460,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []); // Removed [user] dependency to avoid stale closure or recreation loops
 
     return (
-        <AuthContext.Provider value={{
-            user, loading, login, register, loginWithGoogle,
+        AuthContext.Provider value={{
+            user, loading, login, register, loginWithGoogle, devLogin,
             logout, resetPassword, saveQuizHistory, getQuizHistory,
             upgradeToPremium, toggleFavorite, updateUserInfo, refreshUserStatus,
             authError
