@@ -7,6 +7,7 @@ import {
     updateProfile,
     sendPasswordResetEmail,
     signInWithPopup,
+    signInWithRedirect,
     getRedirectResult
 } from 'firebase/auth';
 import type { User as FirebaseUser } from 'firebase/auth';
@@ -225,15 +226,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         try {
             setLoading(true);
             setAuthError(null);
-            console.log('Using Popup mode for maximum compatibility...');
-            const result = await signInWithPopup(auth, googleProvider);
-            if (result.user) {
-                await ensureUserDoc(result.user);
-                console.log('Google Sign-In Success');
+            
+            // Check if we are on a mobile device or in an environment that likely blocks popups
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const isSimulator = window.innerWidth <= 900; // Common for simulators
+
+            if (isMobile || isSimulator) {
+                console.log('Mobile/Simulator detected - Using Redirect flow for Google Sign-In...');
+                await signInWithRedirect(auth, googleProvider);
+                // The page will redirect, so no need to handle result here
+                return;
+            }
+
+            console.log('Desktop detected - Using Popup mode...');
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                if (result.user) {
+                    await ensureUserDoc(result.user);
+                    console.log('Google Sign-In (Popup) Success');
+                }
+            } catch (popupErr: any) {
+                console.warn('Popup blocked or failed, falling back to Redirect flow...', popupErr.code);
+                if (popupErr.code === 'auth/popup-blocked' || popupErr.code === 'auth/cancelled-popup-request') {
+                    await signInWithRedirect(auth, googleProvider);
+                } else {
+                    throw popupErr;
+                }
             }
         } catch (err: any) {
             console.error('Google Sign-In Error:', err);
             setAuthError(err.message || 'Failed to initialize Google login');
+            throw err;
         } finally {
             setLoading(false);
         }
