@@ -227,17 +227,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoading(true);
             setAuthError(null);
             
-            // Check if we are on a mobile device or in an environment that likely blocks popups
+            // Detection for environment
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            const isSimulator = window.innerWidth <= 900; // Common for simulators
+            const isIframe = window.self !== window.top; // Critical for IDE simulators
+            
+            console.log('Auth Environment Detection:', { isMobile, isIframe });
 
-            if (isMobile || isSimulator) {
-                console.log('Mobile/Simulator detected - Using Redirect flow for Google Sign-In...');
+            // Google login CANNOT be framed. If we are in an iframe (like the simulator), 
+            // we MUST use Popup mode. Redirect will fail with a 403 or Frame-Ancestors error.
+            if (isIframe) {
+                console.log('IDE Simulator/Iframe detected - Forcing Popup mode...');
+                try {
+                    const result = await signInWithPopup(auth, googleProvider);
+                    if (result.user) {
+                        await ensureUserDoc(result.user);
+                        console.log('Google Sign-In (Popup in Iframe) Success');
+                        return;
+                    }
+                } catch (popupErr: any) {
+                    console.error('Popup failed in iframe:', popupErr);
+                    setAuthError("Login failed: Your browser/simulator blocked the login popup. Please allow popups or open the app in a new tab to sign in.");
+                    throw popupErr;
+                }
+            }
+
+            // Standard Mobile Redirect Flow
+            if (isMobile) {
+                console.log('Mobile device detected - Using Redirect flow...');
                 await signInWithRedirect(auth, googleProvider);
-                // The page will redirect, so no need to handle result here
                 return;
             }
 
+            // Standard Desktop Popup Flow
             console.log('Desktop detected - Using Popup mode...');
             try {
                 const result = await signInWithPopup(auth, googleProvider);
