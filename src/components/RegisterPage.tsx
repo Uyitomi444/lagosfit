@@ -67,14 +67,14 @@ const RegisterPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
-        console.log('Initiating Google Sign-In (Popup)...');
+        console.log('Initiating Google Sign-In...');
 
         try {
             await loginWithGoogle();
-            // Do not stop loading, as the page will redirect to Google
         } catch (err: any) {
             console.error('Google Register Failure:', err);
             setError(getReadableError(err.code));
+        } finally {
             setIsGoogleLoading(false);
         }
     };

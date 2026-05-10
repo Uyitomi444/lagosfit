@@ -6,6 +6,7 @@ import {
     signOut,
     updateProfile,
     sendPasswordResetEmail,
+    signInWithPopup,
     signInWithRedirect,
     getRedirectResult
 } from 'firebase/auth';
@@ -222,17 +223,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Google Sign-In
     const loginWithGoogle = async () => {
+        setLoading(true);
+        setAuthError(null);
+        console.log('Trying Popup mode for Google Sign-In...');
         try {
-            setLoading(true);
-            setAuthError(null);
-            console.log('Using Redirect mode for maximum compatibility...');
-            await signInWithRedirect(auth, googleProvider);
-            // Do not set loading to false here, as the page will redirect away
+            const result = await signInWithPopup(auth, googleProvider);
+            if (result.user) {
+                await ensureUserDoc(result.user);
+                console.log('Google Sign-In Success (Popup)');
+            }
         } catch (err: any) {
-            console.error('Google Sign-In Error:', err);
-            setAuthError(err.message || 'Failed to initialize Google login');
+            console.error('Google Sign-In Popup Error:', err);
+            // If popup is blocked or unsupported (common in mobile in-app browsers like IG/FB)
+            if (
+                err.code === 'auth/popup-blocked' ||
+                err.code === 'auth/popup-closed-by-user' ||
+                err.code === 'auth/unauthorized-domain' ||
+                err.message.toLowerCase().includes('popup')
+            ) {
+                console.log('Popup failed or blocked. Falling back to Redirect mode...');
+                // We do NOT reset loading here, because the page will redirect away
+                await signInWithRedirect(auth, googleProvider);
+                // Return a never-resolving promise so the calling code (LoginPage) doesn't continue executing
+                return new Promise<void>(() => {});
+            } else {
+                setAuthError(err.message || 'Failed to initialize Google login');
+                setLoading(false);
+                throw err;
+            }
+        } finally {
             setLoading(false);
-            throw err;
         }
     };
 

@@ -56,15 +56,16 @@ const LoginPage = () => {
     const handleGoogleSignIn = async () => {
         setIsGoogleLoading(true);
         setError('');
-        console.log('Initiating Google Sign-In (Redirect flow)...');
-        console.log('Current Hostname:', window.location.hostname);
+        console.log('Initiating Google Sign-In...');
 
         try {
             await loginWithGoogle();
-            // Do not stop loading or navigate, as the page will redirect to Google
+            console.log('Google Sign-In successful!');
+            navigate(redirectTo);
         } catch (err: any) {
             console.error('Google Sign-In Failure:', err);
             setError(getReadableError(err.code));
+        } finally {
             setIsGoogleLoading(false);
         }
     };
