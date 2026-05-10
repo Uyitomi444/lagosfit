@@ -14,7 +14,7 @@ const LoginPage = () => {
     const [isGoogleLoading, setIsGoogleLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const { user, login, loginWithGoogle, devLogin } = useAuth();
+    const { user, login, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
     const redirectTo = (location.state as any)?.from || '/';
@@ -34,7 +34,7 @@ const LoginPage = () => {
             case 'auth/too-many-requests': return t('auth.error.too_many_requests');
             case 'auth/popup-closed-by-user': return t('auth.error.popup_closed');
             case 'auth/network-request-failed': return t('auth.error.network_failed');
-            default: return `${t('auth.error.generic')} (${code})`;
+            default: return t('auth.error.generic');
         }
     };
 
@@ -61,12 +61,10 @@ const LoginPage = () => {
 
         try {
             await loginWithGoogle();
-            console.log('Google Sign-In successful!');
-            navigate(redirectTo);
+            // Do not stop loading or navigate, as the page will redirect to Google
         } catch (err: any) {
             console.error('Google Sign-In Failure:', err);
             setError(getReadableError(err.code));
-        } finally {
             setIsGoogleLoading(false);
         }
     };
@@ -108,17 +106,10 @@ const LoginPage = () => {
                         background: 'rgba(var(--secondary-rgb), 0.05)',
                         border: '1px solid var(--border-color)',
                         borderRadius: '12px', color: 'var(--error-color)', fontSize: '0.85rem',
-                        display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '24px'
+                        display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px'
                     }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <AlertCircle size={16} strokeWidth={1.5} />
-                            {error}
-                        </div>
-                        {error.includes('Sign-in failed') && (
-                            <div style={{ fontSize: '0.7rem', opacity: 0.7, paddingLeft: '26px' }}>
-                                Troubleshooting: Ensure you are not in Incognito mode and that your browser allows popups. Check console for error details.
-                            </div>
-                        )}
+                        <AlertCircle size={16} strokeWidth={1.5} />
+                        {error}
                     </div>
                 )}
 
@@ -149,28 +140,6 @@ const LoginPage = () => {
                         </>
                     )}
                 </button>
-
-                {(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && (
-                    <button
-                        onClick={async () => {
-                            await devLogin();
-                            navigate(redirectTo);
-                        }}
-                        style={{
-                            width: '100%', padding: '10px',
-                            borderRadius: '12px',
-                            border: '1px dashed var(--accent-color)',
-                            background: 'rgba(224, 159, 62, 0.05)',
-                            color: 'var(--accent-color)',
-                            fontWeight: 700, fontSize: '0.85rem',
-                            cursor: 'pointer',
-                            marginBottom: '24px',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
-                        }}
-                    >
-                        ⚡ DEV MODE: Skip Login (Auto-Admin)
-                    </button>
-                )}
 
                 {/* Divider */}
                 <div style={{

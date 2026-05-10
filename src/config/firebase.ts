@@ -22,11 +22,17 @@ const sanitize = (val: string | undefined, keyName?: string) => {
 
     // 2. Specialized extraction for authDomain
     if (keyName === 'authDomain') {
-        const projectId = sanitize(import.meta.env.VITE_FIREBASE_PROJECT_ID, 'projectId');
-        if (projectId && !projectId.includes('%') && !projectId.includes('H_')) {
-            cleaned = `${projectId}.firebaseapp.com`;
+        // Find the actual domain part: [project-id].firebaseapp.com
+        const match = cleaned.match(/[a-z0-9-]+\.firebaseapp\.com/i);
+        if (match) {
+            cleaned = match[0];
         } else {
-            cleaned = "lagosfit-ec59a.firebaseapp.com";
+            const projectId = sanitize(import.meta.env.VITE_FIREBASE_PROJECT_ID);
+            if (projectId && !projectId.includes('%') && !projectId.includes('H_')) {
+                cleaned = `${projectId}.firebaseapp.com`;
+            } else {
+                cleaned = "lagosfit-ec59a.firebaseapp.com";
+            }
         }
     }
     return cleaned;

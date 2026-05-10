@@ -71,10 +71,10 @@ const RegisterPage = () => {
 
         try {
             await loginWithGoogle();
+            // Do not stop loading, as the page will redirect to Google
         } catch (err: any) {
             console.error('Google Register Failure:', err);
             setError(getReadableError(err.code));
-        } finally {
             setIsGoogleLoading(false);
         }
     };
