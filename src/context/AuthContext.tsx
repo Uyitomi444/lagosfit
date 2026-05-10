@@ -235,11 +235,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch (err: any) {
             console.error('Google Sign-In Popup Error:', err);
             // If popup is blocked or unsupported (common in mobile in-app browsers like IG/FB)
+            // We explicitly exclude 'auth/popup-closed-by-user' so we don't force a redirect if the user simply cancelled.
             if (
                 err.code === 'auth/popup-blocked' ||
-                err.code === 'auth/popup-closed-by-user' ||
                 err.code === 'auth/unauthorized-domain' ||
-                err.message.toLowerCase().includes('popup')
+                (err.message.toLowerCase().includes('popup') && err.code !== 'auth/popup-closed-by-user')
             ) {
                 console.log('Popup failed or blocked. Falling back to Redirect mode...');
                 // We do NOT reset loading here, because the page will redirect away
