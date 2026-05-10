@@ -12,10 +12,12 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@google/generative-ai": "^0.24.1",
+    "cheerio": "^1.2.0",
     "firebase": "^12.9.0",
     "framer-motion": "^12.27.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.562.0",
+    "node-fetch": "^3.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-helmet-async": "^3.0.0",

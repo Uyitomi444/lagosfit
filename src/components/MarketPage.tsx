@@ -28,6 +28,51 @@ import {
 import ReviewSection from './ReviewSection';
 import SEO from './SEO';
 
+const CATEGORY_IMAGES: Record<string, string[]> = {
+    Food: [
+        'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=800'
+    ],
+    Museum: [
+        'https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=800'
+    ],
+    Art: [
+        'https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1536924940846-227afb31e2a5?auto=format&fit=crop&q=80&w=800'
+    ],
+    Culture: [
+        'https://images.unsplash.com/photo-1533422902779-babd49110a39?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?auto=format&fit=crop&q=80&w=800'
+    ],
+    Beach: [
+        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1520483601560-36ac5e64bd08?auto=format&fit=crop&q=80&w=800'
+    ],
+    Parks: [
+        'https://images.unsplash.com/photo-1498855926480-d98e83099315?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1506477331477-33d5d8b3dc85?auto=format&fit=crop&q=80&w=800'
+    ],
+    Entertainment: [
+        'https://images.unsplash.com/photo-1470229722913-7c090be8bfac?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=800'
+    ],
+    Nightlife: [
+        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&q=80&w=800',
+        'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&q=80&w=800'
+    ]
+};
+
+const getCategoryImage = (category: string, id: string) => {
+    const images = CATEGORY_IMAGES[category] || CATEGORY_IMAGES['Food'];
+    // Deterministic selection based on ID so the same place always gets the same image
+    const sum = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    return images[sum % images.length];
+};
+
 const MarketPage = () => {
     const { language, t } = useLanguage();
     const location = useLocation();
@@ -499,7 +544,9 @@ const MarketPage = () => {
                                 borderBottom: '1px solid var(--border-color)',
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                position: 'relative',
+                                zIndex: 2
                             }}>
                                 <span style={{ 
                                     padding: '4px 12px', 
@@ -519,6 +566,16 @@ const MarketPage = () => {
                                 }}>
                                     {t(`budget.category.${outing.budget}`)}
                                 </span>
+                            </div>
+
+                            <div style={{ width: '100%', height: '200px', overflow: 'hidden' }}>
+                                <img 
+                                    src={(outing as any).imageUrl || getCategoryImage(outing.category, outing.id)} 
+                                    alt={outing.name} 
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.3s ease' }}
+                                    onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                                    onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
+                                />
                             </div>
 
                             <div style={{ padding: '32px' }}>
